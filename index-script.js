@@ -1,5 +1,6 @@
 const logInSection = document.querySelector(".log-in-section");
 const getStartedSection = document.querySelector(".get-started-section");
+const mobileMenu = document.querySelector(".mobile-menu");
 
 document.addEventListener('click', (e) => {
   if(e.target.classList.contains('click-get-started')){
@@ -19,5 +20,14 @@ document.addEventListener('click', (e) => {
     getStartedSection.classList.remove('actived');
     logInSection.classList.remove('actived');
     document.body.classList.remove('body-no-scroll');
+  }
+  if(e.target.classList.contains('hamburger')){
+    if(e.target.classList.contains('actived')){
+      e.target.classList.remove('actived');
+      mobileMenu.classList.remove('actived');
+    }else{
+      e.target.classList.add('actived');
+      mobileMenu.classList.add('actived');
+    }
   }
 });
