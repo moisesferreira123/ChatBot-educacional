@@ -153,7 +153,7 @@
 <footer><p>@ 2025 Kairo. All rights reserved.</p></footer>
 
 <style>
-	:root {
+	:root :global {
 		--color1: #6366f1;
 		--color2: #f7f8f9;
 		--color3: rgb(48, 46, 46);
@@ -168,7 +168,7 @@
 		box-sizing: border-box;
 	}
 
-	html {
+	:global html {
 		scroll-behavior: smooth;
 	}
 
@@ -189,7 +189,7 @@
 		padding-top: 72px;
 	}
 
-	body {
+	:global body {
 		font-size: 15px;
 		font-family: 'Montserrat', serif;
 		font-optical-sizing: auto;
@@ -390,15 +390,6 @@
 		text-align: center;
 	}
 
-	.sign-in-from-get-started {
-		color: var(--color1);
-	}
-
-	.sign-in-from-get-started:hover {
-		text-decoration: underline;
-		cursor: pointer;
-	}
-
 	@media (max-width: 840px) {
 		.presentation img {
 			width: 300px;
@@ -442,10 +433,6 @@
 
 		.navbar .log-in {
 			display: none;
-		}
-
-		.mobile-menu.active {
-			display: flex;
 		}
 	}
 </style>

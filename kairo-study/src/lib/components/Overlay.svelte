@@ -87,13 +87,13 @@
 		font-size: 25px;
 	}
 
-	.overlay-style > p {
-		margin-top: -20px;
-		margin-bottom: 30px;
-		font-size: small;
-		color: var(--color3);
-		text-align: center;
-		font-weight: 500;
-	}
+  .overlay-style {
+  position: relative;
+  background-color: white;
+  border-radius: 20px;
+  margin: 10px;
+  overflow: auto;
+  max-height: 95vh;
+  }
 
 </style>
