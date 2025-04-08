@@ -7,16 +7,17 @@
 </script>
 
 {#snippet form()}
-<form action="#" class="form-style" slot="overlay-form">
-  <label for="email"
-    >Email
-    <input type="email" name="email" placeholder="Enter your email" />
-  </label><br />
-  <label for="password"
-    >Password
-    <input type="password" name="password" placeholder="Enter your password" />
-  </label><br />
-  <button type="submit" class="get-started sign-in">Sign in</button>
+<form action="#" class="form-style">
+  <label for="full-name">Full Name
+    <input type="text" name="full-name" placeholder="Enter your name">
+  </label><br>
+  <label for="email">Email
+    <input type="email" name="email" placeholder="Enter your email">
+  </label><br>
+  <label for="password">Password
+    <input type="password" name="password" placeholder="Create a password">
+  </label><br>
+  <button type="submit" class="get-started create-account">Create Account</button>
 </form>
 {/snippet}
 {#snippet footer()}
