@@ -10,7 +10,7 @@
 		background: none;
 		width: 40px;
 		height: 40px;
-		padding-bottom: 10px;
+		padding-bottom: 5px;
 		border: none;
 		cursor: pointer;
 		color: var(--color4);
@@ -18,7 +18,9 @@
 
 	@media (max-width: 545px) {
     .hamburger {
-			display: block;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
 		}
 
 		.hamburger:hover {

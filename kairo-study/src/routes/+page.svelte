@@ -402,7 +402,7 @@
 		}
 
 		.presentation {
-			padding-top: 80px;
+			padding-top: 50px;
 		}
 	}
 

@@ -17,7 +17,7 @@
   <label for="password">Password
     <input type="password" name="password" placeholder="Create a password">
   </label><br>
-  <button type="submit" class="get-started create-account">Create Account</button>
+  <button type="submit" class="create-account">Create Account</button>
 </form>
 {/snippet}
 {#snippet footer()}
@@ -53,11 +53,25 @@
 		font-size: 16px;
 		margin-bottom: 15px;
 		padding-left: 10px;
+		border: 1px solid var(--color5);
 	}
 
 	.form-style button {
 		width: 100%;
 		margin-top: 10px;
+		border: none;
+		background-color: var(--color1);
+		padding: 10px 16px;
+		font-size: 14px;
+		color: white;
+		font-family: 'Montserrat', serif;
+		font-weight: 600;
+		border-radius: 10px;
+	}
+
+	.form-style button:hover {
+		cursor: pointer;
+		background-color: var(--color6);
 	}
 
   p {
