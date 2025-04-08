@@ -81,7 +81,7 @@
 			</div>
 			<div class="item">
 				<img
-					height="67px"
+					style="height: 67px"
 					src="/images/icon-drive-pdf.png"
 					alt="Google Drive and PDF integration icon"
 				/>
@@ -311,6 +311,9 @@
 	}
 
 	.item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		box-shadow: 0px 6px 12px rgba(1, 1, 44, 0.1);
 		border-radius: 10px;
 		padding: 15px 25px;
@@ -366,12 +369,15 @@
 	}
 
 	.item-flex {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		flex: 1;
 		background-color: white;
 		margin: 0px 10px;
 		box-shadow: 0px 6px 12px rgba(1, 1, 44, 0.1);
 		border-radius: 10px;
 		padding: 15px 25px;
-		flex: 1;
 	}
 
 	.item-flex p {
