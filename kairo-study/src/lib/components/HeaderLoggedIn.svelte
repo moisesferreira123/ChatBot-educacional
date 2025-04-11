@@ -9,19 +9,19 @@
 	</div>
 	<ul>
 		<li>
-      <a href="/Home">
+      <a href="/home">
         <img width="16px" height="16px" src="/images/icons8-home-16.png" alt="Home icon" />
         <p>Home</p>
       </a>
     </li>
 		<li>
-      <a href="/Chat">
+      <a href="/chat">
         <img width="16px" height="16px" src="/images/icons8-chat-16.png" alt="Chat icon" />
         <p>Chat</p>
       </a>
     </li>
 		<li>
-      <a href="/Flashcards">
+      <a href="/flashcards">
         <img width="16px" height="16px" src="/images/icons8-flashcards-16.png" alt="Flashcards icon" />
         <p>Flashcards</p>
       </a>
