@@ -1,1 +1,17 @@
 @import 'tailwindcss';
+
+:root  {
+  --color1: #6366f1;
+  --color2: #f7f8f9;
+  --color3: rgb(48, 46, 46);
+  --color4: rgb(1, 1, 44);
+  --color5: rgb(139, 131, 131);
+  --color6: #7e80f7;
+  --background-nav-logged-in: hsl(210,40%,96.1%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

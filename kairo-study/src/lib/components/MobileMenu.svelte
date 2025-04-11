@@ -1,11 +1,13 @@
 <script lang='ts'>
-  import { menuStore } from "$lib/stores/mobileMenuStore.svelte";
+	import { menuStore } from "$lib/stores/mobileMenuStore.svelte";
+  import { toggleOverlay } from "$lib/stores/overlayStore.svelte";
+	import Overlay from "./Overlay.svelte";
 </script>
 
 <div class="mobile-menu {menuStore.active ? 'active' : ''}">
 	<a class="features-mobile-menu" style="padding-top: 10px;" href="#features">Features</a>
 	<a href="#about">About</a>
-	<div class="log-in">Log in</div>
+	<div class="log-in" onclick={toggleOverlay("login")}>Log in</div>
 </div>
 
 <style>
@@ -45,6 +47,7 @@
 		color: var(--color1);
 		border-bottom-right-radius: 8px;
 		border-bottom-left-radius: 8px;
+		cursor: pointer;
 	}
 
   @media (max-width: 545px) {

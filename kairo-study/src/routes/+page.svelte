@@ -153,20 +153,7 @@
 <footer><p>@ 2025 Kairo. All rights reserved.</p></footer>
 
 <style>
-	:root :global {
-		--color1: #6366f1;
-		--color2: #f7f8f9;
-		--color3: rgb(48, 46, 46);
-		--color4: rgb(1, 1, 44);
-		--color5: rgb(139, 131, 131);
-		--color6: #7e80f7;
-	}
-
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-	}
+	
 
 	:global html {
 		scroll-behavior: smooth;
