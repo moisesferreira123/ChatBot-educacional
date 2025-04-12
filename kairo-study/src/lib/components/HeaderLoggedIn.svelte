@@ -1,5 +1,8 @@
 <script>
-  // import HamburgerMenu from "./HamburgerMenu.svelte";
+	// import HamburgerMenu from "./HamburgerMenu.svelte";
+  import { fullName } from '$lib/stores/userDataStore.svelte';
+
+  $: firstName = $fullName.split(' ')[0];
 </script>
 
 <nav class="navbar">
@@ -27,10 +30,11 @@
       </a>
     </li>
 		<li>
-      <a class="user">
+      <button class="user">
         <img width="16px" height="16px" src="/images/icons8-user-16.png" alt="User icon" />
         <p>User</p>
-      </a>
+				<!-- <p>{firstName}</p> -->
+			</button>
       <!-- Colocar um menu parecido com o do Hanburguer -->
     </li>
 		<!-- <HamburgerMenu/> -->
@@ -73,10 +77,6 @@
 		color: var(--color4);
 	}
 
-	.navbar ul a:hover {
-		background-color: var(--background-nav-logged-in);
-	}
-
   li a {
     display: flex;
     flex-direction: row;
@@ -84,9 +84,28 @@
     padding: 10px 12px;
     margin-left: 16px;
     border-radius: 5px;
+		transition: 125ms;
   }
 
-  
+	.navbar ul a:hover {
+		background-color: var(--color8);
+		transition: 250ms;
+	}
+
+	li button {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-left: 16px;
+    border-radius: 5px;
+		transition: 125ms;
+  }
+
+	.navbar ul button:hover {
+		background-color: var(--color8);
+		transition: 250ms;
+	}
 
   li p {
     line-height: 16px;

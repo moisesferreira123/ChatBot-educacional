@@ -8,8 +8,9 @@
 	// TODO: Entender como que faz pra importar as imagens usando Vite
 	//import icon_kairo from "$app/images/icon-kairo.png"
   import { toggleOverlay } from '$lib/stores/overlayStore.svelte';
-  const sign_in = "sign-in";
+	const sign_in = "sign-in";
   const log_in = "login";
+
 </script>
 
 <nav class="navbar">

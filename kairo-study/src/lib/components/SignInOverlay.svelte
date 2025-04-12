@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { toggleOverlay } from "$lib/stores/overlayStore.svelte";
-  import Overlay from "./Overlay.svelte";
+	import { fullName, email, password } from '$lib/stores/userDataStore.svelte';
+	import Overlay from "./Overlay.svelte";
   const id = 'sign-in';
   const title = 'Get Started Today';
   const subtitle = 'Create your account and start learning smarter';
@@ -9,13 +10,13 @@
 {#snippet form()}
 <form action="#" class="form-style">
   <label for="full-name">Full Name
-    <input type="text" name="full-name" placeholder="Enter your name">
+    <input type="text" bind:value={$fullName} name="full-name" placeholder="Enter your name">
   </label><br>
   <label for="email">Email
-    <input type="email" name="email" placeholder="Enter your email">
+    <input type="email" bind:value={$email} name="email" placeholder="Enter your email">
   </label><br>
   <label for="password">Password
-    <input type="password" name="password" placeholder="Create a password">
+    <input type="password" bind:value={$password} name="password" placeholder="Create a password">
   </label><br>
   <button type="submit" class="create-account">Create Account</button>
 </form>

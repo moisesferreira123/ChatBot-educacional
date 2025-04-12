@@ -7,7 +7,11 @@
   --color4: rgb(1, 1, 44);
   --color5: rgb(139, 131, 131);
   --color6: #7e80f7;
-  --background-nav-logged-in: hsl(210,40%,96.1%);
+  --color7: rgb(75 85 99 / 1);
+  --color8: hsl(210,40%,96.1%);
+  --color9: #6366f11a;
+  --color10: hsl(222.2, 47.4%, 11.2%);
+  --white: #fff;
 }
 
 * {
