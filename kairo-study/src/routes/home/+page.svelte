@@ -22,7 +22,7 @@
   }
 
   main {
-    padding-top: 96px;
+    padding-top: 85px;
     margin: 0 25px;
   }
 </style>
