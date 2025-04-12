@@ -1,5 +1,7 @@
 <script lang="ts">
   import Overlay from "./Overlay.svelte";
+	import {goToHome} from '$lib/stores/overlayStore.svelte';
+
   const id = 'login';
   const title = 'Log in to your account';
   const subtitle = 'Continue where you left off in your learning';
@@ -13,7 +15,7 @@
   <label for="password">Password
     <input type="password" name="password" placeholder="Enter your password">
   </label><br>
-  <button type="submit" class="sign-in">Sign in</button>
+  <button type="submit" class="sign-in" on:click|preventDefault={goToHome}>Sign in</button>
 </form>
 {/snippet}
 

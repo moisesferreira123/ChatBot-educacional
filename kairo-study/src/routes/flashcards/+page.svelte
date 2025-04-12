@@ -8,9 +8,9 @@
   <Intro
     title="Flashcards"
     subtitle="Manage your flashcards for spaced review"
-    firstButtonIcon="/images/icons8-plus-16.png"
+    firstButtonIcon="/images/icons8-plus-math-16.png"
     firstButtonText="Create New Flashcards"
-    secondButtonIcon="/images/icons8-chat-messages-16.png"
+    secondButtonIcon="/images/icons8-view-16.png"
     secondButtonText="Start Review"
   />
 </main>

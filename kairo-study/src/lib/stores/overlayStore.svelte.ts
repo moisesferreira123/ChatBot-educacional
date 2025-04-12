@@ -1,4 +1,6 @@
 // src/lib/stores/overlayStore.ts
+import { goto } from '$app/navigation'
+
 export const overlayStore = $state<{currentOverlay: string | null}>({ 
   currentOverlay: null
 });
@@ -17,3 +19,6 @@ export function closeOverlay() {
   updateBodyScroll();
 }
 
+export function goToHome() {
+  goto('/home');
+}
