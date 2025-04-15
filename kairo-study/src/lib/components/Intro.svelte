@@ -1,7 +1,7 @@
 <script>
   import { fullName } from '$lib/stores/userDataStore.svelte';
 
-  // Colocar isso depois de integrar o banco de dados
+  // TODO: Colocar isso depois de integrar o banco de dados
   $: firstName = $fullName.split(' ')[0];
 
   export let title;
@@ -62,10 +62,6 @@
     font-weight: 500;
   }
 
-  .first-button img {
-    transform: translateY(0.5px);
-  }
-
   .first-button:hover {
     background-color: var(--color6);
     cursor: pointer;
@@ -89,10 +85,6 @@
     line-height: 1.25rem;
     color: var(--color1);
     font-weight: 500;
-  }
-
-  .second-button img {
-    transform: translateY(0.5px);
   }
 
   .second-button:hover {

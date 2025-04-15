@@ -1,5 +1,6 @@
 <script>
 	// import HamburgerMenu from "./HamburgerMenu.svelte";
+	// TODO: Colocar o primeiro nome do usuário para aparecer na navbar.
   import { fullName } from '$lib/stores/userDataStore.svelte';
 
   $: firstName = $fullName.split(' ')[0];
@@ -109,7 +110,7 @@
 
   li p {
     line-height: 16px;
-    font-size: 15px;
+    font-size: 14px;
     padding: 0;
     margin: 0;
     font-weight: 500;
