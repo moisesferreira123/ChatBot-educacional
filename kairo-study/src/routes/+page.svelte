@@ -263,13 +263,14 @@
 		align-items: center;
 		text-align: center;
 		width: 400px;
-		margin-left: 25px;
+		/* margin-left: 25px; */
 		font-size: 16px;
 	}
 
 	.text-presentation h1 {
 		font-size: 40px;
 		margin-bottom: 30px;
+		font-weight: 700;
 	}
 
 	.text-presentation p {
@@ -401,6 +402,7 @@
 
 		.presentation {
 			padding-top: 120px;
+			align-items: center;
 		}
 
 		.flex-container-about {
