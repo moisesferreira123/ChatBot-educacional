@@ -1,23 +1,36 @@
+<script lang="ts">
+	import { selectedChatFeature } from "$lib/stores/chatStore";
+
+  function handleClick(feature: string) {
+    selectedChatFeature.set(feature);
+  }
+</script>
+
 <aside>
   <h2>Features</h2>
   <nav>
-    <button>
+    <button on:click={() => handleClick('Smart Summary')}
+      class:active={'Smart Summary' === $selectedChatFeature}>
       <img src="/images/icons8-brief-gray-24.png" alt="">
       <p>Smart Summary</p>
     </button>
-    <button>
+    <button on:click={() => handleClick('Automatic Flashcards')}
+      class:active={'Automatic Flashcards' === $selectedChatFeature}>
       <img src="/images/icons8-flashcards-gray-24.png" alt="">
       <p>Automatic Flashcards</p>
     </button>
-    <button>
+    <button on:click={() => handleClick('Questions and Answers')}
+      class:active={'Questions and Answers' === $selectedChatFeature}>
       <img src="/images/icons8-faq-gray-24.png" alt="">
       <p>Questions and Answers</p>
     </button>
-    <button>
+    <button on:click={() => handleClick('Content Suggestions')}
+      class:active={'Content Suggestions' === $selectedChatFeature}>
       <img src="/images/icons8-camera-gray-24.png" alt="">
       <p>Content Suggestions</p>
     </button>
-    <button>
+    <button on:click={() => handleClick('Test Simulation')}
+      class:active={'Test Simulation' === $selectedChatFeature}>
       <img src="/images/icons8-exam-gray-24.png" alt="">
       <p>Test Simulation</p>
     </button>
@@ -52,12 +65,17 @@
     transition: 125ms;
   }
 
-  button:hover {
+  button:not(.active):hover {
     background-color: var(--color12);
     transition: 125ms;
   }
 
   img {
     margin-right: 8px;
+  }
+
+  .active {
+    color: var(--white);
+    background-color: var(--color1);
   }
 </style>

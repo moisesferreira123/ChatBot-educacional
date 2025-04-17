@@ -2,12 +2,15 @@
   import AsideChat from "$lib/components/AsideChat.svelte";
 	import Chat from "$lib/components/Chat.svelte";
   import HeaderLoggedIn from "$lib/components/HeaderLoggedIn.svelte";
+	import { selectedChatFeature } from "$lib/stores/chatStore";
+
+  $: feature = $selectedChatFeature;
 </script>
 
 <HeaderLoggedIn/>
 <main>
   <AsideChat/>
-  <Chat/>
+  <Chat title={feature}/>
 </main>
 
 <style>

@@ -1,11 +1,20 @@
 <script>
-  export let icon;
   export let title;
 </script>
 
 <section>
   <div class="title">
-    <img src={icon} alt="">
+    {#if title === "Smart Summary"}
+      <img src="/images/icons8-brief-gray-24.png" alt="Icon">
+    {:else if title === "Automatic Flashcards"}
+      <img src="/images/icons8-flashcards-gray-24.png" alt="Icon">
+    {:else if title === "Questions and Answers"}
+      <img src="/images/icons8-faq-gray-24.png" alt="Icon">
+    {:else if title === "Content Suggestions"}
+      <img src="/images/icons8-camera-gray-24.png" alt="Icon">
+    {:else if title === "Test Simulation"}
+      <img src="/images/icons8-exam-gray-24.png" alt="Icon">
+    {/if}
     <h2>{title}</h2>
   </div>
   {#if title === "Smart Summary"}
