@@ -24,5 +24,7 @@
     padding-top: 96px;
     margin: 0 25px;
     gap: 1rem;
+    /* TODO: Caso queiramos colocar mais coisas no Aside, retirar isso. */
+    height: calc(100vh - 32px);
   }
 </style>
