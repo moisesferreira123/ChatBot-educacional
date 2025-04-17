@@ -27,7 +27,6 @@
 <style>
   aside {
     background-color: var(--white);
-    max-width: 256px;
     padding: 16px;
     border-radius: 0.5rem;
   }
@@ -50,10 +49,12 @@
     line-height: 20px;
     cursor: pointer;
     border-radius: calc(0.5rem - 2px);
+    transition: 125ms;
   }
 
   button:hover {
     background-color: var(--color12);
+    transition: 125ms;
   }
 
   img {
