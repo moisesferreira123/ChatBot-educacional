@@ -11,9 +11,60 @@
 	const sign_in = "sign-in";
   const log_in = "login";
 
+  const gridItems = [
+    {
+      src: "/images/icon-AI-powers-summaries.png",
+      title: "AI-Powered Summaries",
+      subtitle: "Get help from advanced AI to master any subject with smart summaries of complex topics.",
+    },
+    {
+      src: "/images/icon-flashcards.png",
+      title: "Flashcards Generation",
+      subtitle: "Automatic generation of flashcards by reading texts and PDFs.",
+    },
+    {
+      src: "/images/icon-Q&A.png",
+      title: "Q&A Support",
+      subtitle: "Ask questions and receive clear, concise answers to help you understand difficult concepts.",
+    },
+    {
+      src: "/images/icon-track-progress.png",
+      title: "Track Progress",
+      subtitle: "Monitor your improvement and achieve your study goals with detailed analytics.",
+    },
+    {
+      src: "/images/icon-drive-pdf.png",
+      title: "Drive and PDF Integration",
+      subtitle: "Upload study materials directly from Google Drive or PDFs to generate summaries and flashcards.",
+    },
+    {
+      src: "/images/icon-study-scheduler.png",
+      title: "Study Scheduler",
+      subtitle: "Plan your study sessions with smart reminders and optimized scheduling.",
+    },
+    {
+      src: "/images/icon-personalized-summaries.png",
+      title: "Personalized Summaries",
+      subtitle: "Choose your preferred style of summaries: technical, casual, analogies or mind maps.",
+    },
+    {
+      src: "/images/icon-test-simulation.png",
+      title: "Test Simulation",
+      subtitle: "Test your knowledge with timed mock exams to prepare you for real exams.",
+    },
+  ]
+
 </script>
 
-<nav class="navbar">
+{#snippet gridElement({src,title,subtitle})}
+<div class="item">
+  <img style="height: 67px" src={ src } alt={ title+" icon" }>
+  <h3>{ title }</h3>
+  <p> { subtitle } </p>
+</div>
+{/snippet}
+
+<nav class="navbar flex fixed justify-between items-center w-screen h-20 bg-neutral-50 border-b-neutral-50 border-solid">
 	<div class="kairo">
 		<img width="36px" height="36px" src="/images/icon-kairo.png" alt="Kairo icon" />
 		<p>Kairo</p>
@@ -32,13 +83,13 @@
 	</ul>
 </nav>
 <MobileMenu/>
-<main>
+<main class="!pt-20">
   <LoginOverlay />
 	<SignInOverlay />
 	<section class="presentation">
 		<div class="text-presentation">
-			<h1 class="color4">Your AI-Powered <br /> Study Companion</h1>
-			<p class="color3">
+			<h1 class="text-[var(--color4)]">Your AI-Powered <br /> Study Companion</h1>
+			<p class="text-[var(--color3)]">
 				Ace your exams with personalized AI-quizzes and flashcards, tailored just for you. Transform
 				your learning experience with Kairo.
 			</p>
@@ -47,85 +98,32 @@
 				onclick={() => {toggleOverlay(sign_in)}}>Get Started</button
 			>
 		</div>
-		<img width="400px" src="/images/Kairo-image.png" alt="Kairo image" />
+		<img width="400px" src="/images/Kairo-image.png" alt="Kairo Robot" />
 	</section>
 	<section id="features" class="features">
-		<h2 class="color4">Powerful Learning Features</h2>
+		<h2 class="text-[var(--color4)]">Powerful Learning Features</h2>
 		<p class="color3" style="margin-bottom: 40px;">
 			Kairo offers a comprehensive suite of tools designed to transform how you study and learn.
 		</p>
 		<div class="grid-container">
-			<div class="item">
-				<img src="/images/icon-AI-powers-summaries.png" alt="summaries icon" />
-				<h3>AI-Powered Summaries</h3>
-				<p>
-					Get help from advanced AI to master any subject with smart summaries of complex topics.
-				</p>
-			</div>
-			<div class="item">
-				<img height="67px" src="/images/icon-flashcards.png" alt="flashcards icon" />
-				<h3>Flashcards Generation</h3>
-				<p>Automatic generation of flashcards by reading texts and PDFs.</p>
-			</div>
-			<div class="item">
-				<img height="67px" src="/images/icon-Q&A.png" alt="Q&A icon" />
-				<h3>Q&A Support</h3>
-				<p>
-					Ask questions and receive clear, concise answers to help you understand difficult
-					concepts.
-				</p>
-			</div>
-			<div class="item">
-				<img height="67px" src="/images/icon-track-progress.png" alt="track progress icon" />
-				<h3>Track Progress</h3>
-				<p>Monitor your improvement and achieve your study goals with detailed analytics.</p>
-			</div>
-			<div class="item">
-				<img
-					style="height: 67px"
-					src="/images/icon-drive-pdf.png"
-					alt="Google Drive and PDF integration icon"
-				/>
-				<h3>Drive and PDF Integration</h3>
-				<p>
-					Upload study materials directly from Google Drive or PDFs to generate summaries and
-					flashcards.
-				</p>
-			</div>
-			<div class="item">
-				<img height="67px" src="/images/icon-study-scheduler.png" alt="study scheduler icon" />
-				<h3>Study Scheduler</h3>
-				<p>Plan your study sessions with smart reminders and optimized scheduling.</p>
-			</div>
-			<div class="item">
-				<img
-					height="67px"
-					src="/images/icon-personalized-summaries.png"
-					alt="personalized summaries icon"
-				/>
-				<h3>Personalized Summaries</h3>
-				<p>Choose your preferred style of summaries: technical, casual, analogies or mind maps.</p>
-			</div>
-			<div class="item">
-				<img height="67px" src="/images/icon-test-simulation.png" alt="test simulation icon" />
-				<h3>Test Simulation</h3>
-				<p>Test your knowledge with timed mock exams to prepare you for real exams.</p>
-			</div>
+      {#each gridItems as Item}
+        {@render gridElement(Item)}
+      {/each}
 		</div>
 	</section>
 	<section id="about" class="about">
-		<h2 class="color4">About Kairo</h2>
-		<p class="color3" style="margin-bottom: 40px;">
+		<h2 class="text-[var(--color4)]">About Kairo</h2>
+		<p class="text-[var(--color3)]" style="margin-bottom: 40px;">
 			Transforming education with AI-powered learning assistance
 		</p>
 		<div class="our-mission">
-			<h3 class="color4">Our Mission</h3>
-			<p class="color3">
+			<h3 class="text-[var(--color4)]">Our Mission</h3>
+			<p class="text-[var(--color3)]">
 				Kairo was created with a simple but powerful mission: to make learning more effective,
 				efficient, and accessible for everyone. We believe that with the right tools, anyone can
 				master complex subjects and achieve academic excellence.
 			</p>
-			<p class="color3" style="margin-bottom: 0;">
+			<p class="text-[var(--color3)]" style="margin-bottom: 0;">
 				By combining cutting-edge AI technology with proven educational methods, we've built a
 				platform that adapts to your unique learning style and helps you overcome academic
 				challenges. Whether you're preparing for exams, trying to understand difficult concepts, or
@@ -159,42 +157,16 @@
 	:global html {
 		scroll-behavior: smooth;
 	}
-
-	.color3 {
-		color: var(--color3);
-	}
-
-	.color4 {
-		color: var(--color4);
-	}
-
-	a {
-		text-decoration: none;
-		color: inherit;
-	}
-
-	main {
-		padding-top: 72px;
-	}
-
-	:global body {
-		font-size: 15px;
-		font-family: 'Montserrat', serif;
-		font-optical-sizing: auto;
-		font-weight: 600px;
-		font-style: normal;
-	}
-
-	.navbar {
-		position: fixed;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-		height: 72px;
-		background-color: rgb(255, 255, 255);
-		border-bottom: 1px solid rgb(224, 219, 219);
-	}
+  
+  :global body {
+    font-size: 15px;
+    font-family: 'Montserrat', serif;
+    font-optical-sizing: auto;
+    font-weight: 600px;
+    font-style: normal;
+  }
+  /* flex fixed justify-between items-center w-screen h-20 bg-neutral-50 border-b-neutral-50 border-solid*/
+	
 
 	.kairo {
 		display: flex;

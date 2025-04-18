@@ -4,46 +4,52 @@
   function handleClick(feature: string) {
     selectedChatFeature.set(feature);
   }
+
+  const asideElements = [
+    {
+      actionName: 'Smart Summary',
+      iconInactive: '/images/icons8-brief-gray-24.png',
+      iconActive: '/images/icons8-brief-white-24.png',
+    },
+    {
+      actionName: 'Automatic Flashcards',
+      iconInactive: '/images/icons8-flashcards-gray-24.png',
+      iconActive: '/images/icons8-flashcards-white-24.png',
+    },
+    {
+      actionName: 'Questions and Answers',
+      iconInactive: '/images/icons8-faq-gray-24.png',
+      iconActive: '/images/icons8-faq-white-24.png',
+    },
+    {
+      actionName: 'Content Suggestions',
+      iconInactive: '/images/icons8-camera-gray-24.png',
+      iconActive: '/images/icons8-camera-white-24.png',
+    },
+    {
+      actionName: 'Test Simulation',
+      iconInactive: '/images/icons8-exam-gray-24.png',
+      iconActive: '/images/icons8-exam-white-24.png',
+    },
+  ]
 </script>
+
+{#snippet asideElement({actionName, iconInactive, iconActive})}
+  <button on:click={() => handleClick(actionName)}
+    class:active={actionName === $selectedChatFeature}>
+    <img src={actionName === $selectedChatFeature
+      ? iconActive
+      : iconInactive} alt="">
+    <p>{actionName}</p>
+  </button>
+{/snippet}
 
 <aside>
   <h2>Features</h2>
   <nav>
-    <button on:click={() => handleClick('Smart Summary')}
-      class:active={'Smart Summary' === $selectedChatFeature}>
-      <img src={'Smart Summary' === $selectedChatFeature
-        ? "/images/icons8-brief-white-24.png"
-        : "/images/icons8-brief-gray-24.png"} alt="">
-      <p>Smart Summary</p>
-    </button>
-    <button on:click={() => handleClick('Automatic Flashcards')}
-      class:active={'Automatic Flashcards' === $selectedChatFeature}>
-      <img src={'Automatic Flashcards' === $selectedChatFeature 
-        ? "/images/icons8-flashcards-white-24.png"
-        : "/images/icons8-flashcards-gray-24.png"} alt="">
-      <p>Automatic Flashcards</p>
-    </button>
-    <button on:click={() => handleClick('Questions and Answers')}
-      class:active={'Questions and Answers' === $selectedChatFeature}>
-      <img src={'Questions and Answers' === $selectedChatFeature
-        ? "/images/icons8-faq-white-24.png"
-        : "/images/icons8-faq-gray-24.png"} alt="">
-      <p>Questions and Answers</p>
-    </button>
-    <button on:click={() => handleClick('Content Suggestions')}
-      class:active={'Content Suggestions' === $selectedChatFeature}>
-      <img src={'Content Suggestions' === $selectedChatFeature
-        ? "/images/icons8-camera-white-24.png"
-        : "/images/icons8-camera-gray-24.png"} alt="">
-      <p>Content Suggestions</p>
-    </button>
-    <button on:click={() => handleClick('Test Simulation')}
-      class:active={'Test Simulation' === $selectedChatFeature}>
-      <img src={'Test Simulation' === $selectedChatFeature
-        ? "/images/icons8-exam-white-24.png"
-        : "/images/icons8-exam-gray-24.png"} alt="">
-      <p>Test Simulation</p>
-    </button>
+    {#each asideElements as Element} 
+      {@render asideElement(Element)} 
+    {/each}
   </nav>
 </aside>
 
