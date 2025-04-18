@@ -53,6 +53,7 @@
     padding: 16px;
     border-radius: 0.5rem;
     align-self: flex-start;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
   }
 
   h2 {

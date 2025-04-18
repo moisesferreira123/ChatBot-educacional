@@ -6,7 +6,7 @@
 
 <div class="message">
   <form action="">
-    {#if $selectedChatFeature === 'Automatic Flashcards'}
+    {#if $selectedChatFeature === 'Smart Summary' || $selectedChatFeature === 'Automatic Flashcards'}
     <button class="send-file"><img src="/images/icons8-upload-file-20.png" alt=""></button>
     {/if}
     <textarea bind:value={message} wrap="soft" placeholder="Type your message..."></textarea>
