@@ -36,21 +36,21 @@
   ];
 </script>
 
-{#snippet navIcon({icon,text,href})}
-<li>
-  <a href={ href } class="flex flex-row gap-3 px-3 py-2.5 ml-4 rounded transition-all duration-200 hover:bg-[var(--color8)]">
-    <svelte:component this={icon} size={16} />      
-    <p class="leading-4 text-sm p-0 m-0 font-medium"> { text } </p>
-  </a>
-</li>
-{/snippet}
 
-<nav class="fixed flex justify-between items-center w-full h-[72px] bg-white border-b border-gray-200">
+<nav class="fixed flex justify-between !px-20 items-center w-full h-20 bg-white border-b border-gray-200">
   <div class="flex items-center">
-    <img class="ml-[25px] mr-[10px]" width="36px" height="36px" src="/images/icon-kairo.png" alt="Kairo icon" />
+    <img class="!ml-[25px] !mr-[10px]" width="36px" height="36px" src="/images/icon-kairo.png" alt="Kairo icon" />
     <p class="font-bold text-[18px] text-[var(--color4)]">Kairo</p>
   </div>
   <ul class="flex items-center mr-[30px] text-[var(--color4)] list-none">
+    {#snippet navIcon({icon,text,href})}
+    <li>
+      <a href={ href } class="flex flex-row gap-3 px-3 py-2.5 ml-4 rounded transition-all duration-200 hover:bg-[var(--color8)]">
+        <svelte:component this={icon} size={16} />      
+        <p class="leading-4 text-sm p-0 m-0 font-medium"> { text } </p>
+      </a>
+    </li>
+    {/snippet}
     {#each navItems as Item}
       {@render navIcon(Item)}      
     {/each}
