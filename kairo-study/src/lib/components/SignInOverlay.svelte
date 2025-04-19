@@ -5,25 +5,47 @@
   const id = 'sign-in';
   const title = 'Get Started Today';
   const subtitle = 'Create your account and start learning smarter';
+
+	async function handleSubmit(event: Event) {
+		event.preventDefault();
+		const response = await fetch('http://localhost:8080/user', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				fullName: $fullName,
+				email: $email,
+				password: $password
+			})
+		});
+
+		if(response.ok) {
+			alert('User registered successfully!');
+		} else {
+			alert('Error registering user.');
+			console.error( await response.text());
+		}
+	}
 </script>
 
 {#snippet form()}
-<form action="#" class="form-style">
+<form action="#" class="form-style" on:submit={handleSubmit}>
   <label for="full-name">Full Name
-    <input type="text" bind:value={$fullName} name="full-name" placeholder="Enter your name">
+    <input type="text" bind:value={$fullName} name="full-name" placeholder="Enter your name" required>
   </label><br>
   <label for="email">Email
-    <input type="email" bind:value={$email} name="email" placeholder="Enter your email">
+    <input type="email" bind:value={$email} name="email" placeholder="Enter your email" required>
   </label><br>
   <label for="password">Password
-    <input type="password" bind:value={$password} name="password" placeholder="Create a password">
+    <input type="password" bind:value={$password} name="password" placeholder="Create a password" required>
   </label><br>
   <button type="submit" class="create-account">Create Account</button>
 </form>
 {/snippet}
 {#snippet footer()}
 <p>
-  Already have an account? <a class="sign-in-from-get-started" onclick={() => {toggleOverlay('login')}}>Sign in</a>
+  Already have an account? <a class="sign-in-from-get-started" on:click={() => {toggleOverlay('login')}}>Sign in</a>
 </p>
 {/snippet}
 

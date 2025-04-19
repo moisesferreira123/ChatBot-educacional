@@ -20,7 +20,7 @@
     },
     {
       icon: BookOpen,
-      text: "Home",
+      text: "Flashcards",
       href: "/flashcards"
     },
     {
@@ -69,4 +69,6 @@
     border-radius: 5px;
 		transition: 125ms;
   }
+
+
 </style>
