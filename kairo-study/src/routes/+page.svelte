@@ -4,51 +4,48 @@
 	import MobileMenu from '$lib/components/MobileMenu.svelte';
 	import SignInOverlay from '$lib/components/SignInOverlay.svelte';
 
-	//Images - TODO: Mudar pra webp no lugar de png
-	// TODO: Entender como que faz pra importar as imagens usando Vite
-	//import icon_kairo from "$app/images/icon-kairo.png"
   import { toggleOverlay } from '$lib/stores/overlayStore.svelte';
 	const sign_in = "sign-in";
   const log_in = "login";
 
   const gridItems = [
     {
-      src: "/images/icon-AI-powers-summaries.png",
+	  src: "/images/icon-AI-powers-summaries-removebg-preview.webp",
       title: "AI-Powered Summaries",
       subtitle: "Get help from advanced AI to master any subject with smart summaries of complex topics.",
     },
     {
-      src: "/images/icon-flashcards.png",
+	  src: "/images/icon-flashcards-removebg-preview.webp",
       title: "Flashcards Generation",
       subtitle: "Automatic generation of flashcards by reading texts and PDFs.",
     },
     {
-      src: "/images/icon-Q&A.png",
+	  src: "/images/icon-Q_A-removebg-preview.webp",
       title: "Q&A Support",
       subtitle: "Ask questions and receive clear, concise answers to help you understand difficult concepts.",
     },
     {
-      src: "/images/icon-track-progress.png",
+	  src: "/images/icon-track-progress-removebg-preview.webp",
       title: "Track Progress",
       subtitle: "Monitor your improvement and achieve your study goals with detailed analytics.",
     },
     {
-      src: "/images/icon-drive-pdf.png",
+	  src: "/images/icon-drive-pdf-removebg-preview.webp",
       title: "Drive and PDF Integration",
       subtitle: "Upload study materials directly from Google Drive or PDFs to generate summaries and flashcards.",
     },
     {
-      src: "/images/icon-study-scheduler.png",
+	  src: "/images/icon-study-scheduler-removebg-preview.webp",
       title: "Study Scheduler",
       subtitle: "Plan your study sessions with smart reminders and optimized scheduling.",
     },
     {
-      src: "/images/icon-personalized-summaries.png",
+	  src: "/images/icon-personalized-summaries-removebg-preview.webp",
       title: "Personalized Summaries",
       subtitle: "Choose your preferred style of summaries: technical, casual, analogies or mind maps.",
     },
     {
-      src: "/images/icon-test-simulation.png",
+	  src: "/images/icon-test-simulation-removebg-preview.webp",
       title: "Test Simulation",
       subtitle: "Test your knowledge with timed mock exams to prepare you for real exams.",
     },
@@ -66,7 +63,7 @@
 
 <nav class="navbar flex fixed justify-between items-center w-screen h-20 bg-neutral-50 border-b-neutral-50 border-solid">
 	<div class="kairo">
-		<img width="36px" height="36px" src="/images/icon-kairo.png" alt="Kairo icon" />
+		<img width="36px" height="36px" src="/images/icon-kairo-removebg-preview.webp" alt="Kairo icon" />
 		<p>Kairo</p>
 	</div>
 	<ul>
@@ -98,7 +95,7 @@
 				onclick={() => {toggleOverlay(sign_in)}}>Get Started</button
 			>
 		</div>
-		<img width="400px" src="/images/Kairo-image.png" alt="Kairo Robot" />
+		<img width="400px" src="/images/Kairo-image-removebg-preview.webp" alt="Kairo Robot" />
 	</section>
 	<section id="features" class="features">
 		<h2 class="text-[var(--color4)]">Powerful Learning Features</h2>
@@ -132,17 +129,17 @@
 		</div>
 		<div class="flex-container-about">
 			<div class="item-flex">
-				<img height="67px" src="/images/icon-smart-ai.png" alt="track progress icon" />
+				<img height="67px" src="/images/icon-smart-ai-removebg-preview.webp" alt="track progress icon" />
 				<h3>Smart AI</h3>
 				<p>Powered by advanced algorithms that understand your learning patterns</p>
 			</div>
 			<div class="item-flex">
-				<img height="67px" src="/images/icon-research-beckend.png" alt="track progress icon" />
+				<img height="67px" src="/images/icon-research-beckend-removebg-preview.webp" alt="track progress icon" />
 				<h3>Research-Backed</h3>
 				<p>Built on proven educational methodologies for effective learning</p>
 			</div>
 			<div class="item-flex">
-				<img height="67px" src="/images/icon-data-driven.png" alt="track progress icon" />
+				<img height="67px" src="/images/icon-data-driven-removebg-preview.webp" alt="track progress icon" />
 				<h3>Data-Driven</h3>
 				<p>Continuously improving based on student usage and feedback</p>
 			</div>
@@ -162,7 +159,7 @@
     font-size: 15px;
     font-family: 'Montserrat', serif;
     font-optical-sizing: auto;
-    font-weight: 600px;
+	font-weight: 600;
     font-style: normal;
   }
   /* flex fixed justify-between items-center w-screen h-20 bg-neutral-50 border-b-neutral-50 border-solid*/
@@ -224,8 +221,6 @@
 		justify-content: space-evenly;
 		align-items: center;
 		background-color: var(--color2);
-		/* width: 100vw; */
-		/*height: 100vh; */
 		padding: 20px 20px 80px 20px;
 	}
 
