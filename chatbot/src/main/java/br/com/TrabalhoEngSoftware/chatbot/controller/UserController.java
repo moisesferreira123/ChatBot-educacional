@@ -22,18 +22,18 @@ import br.com.TrabalhoEngSoftware.chatbot.service.UserService;
 @RequestMapping(value = "/user")
 public class UserController {
 	
-	@Autowired
+	@Autowired	
 	private UserService userService;
 	
-	@GetMapping
-	public List<UserDTO> listAll() {
-		return userService.listAll();
-	}
+//	@GetMapping
+//	public List<UserDTO> listAll() {
+//		return userService.listAll();
+//	}
 	
-	@PostMapping
-	public void insert(@RequestBody UserDTO user) {
-		userService.insert(user);
-	}
+//	@PostMapping
+//	public void insert(@RequestBody UserDTO user) {
+//		userService.insert(user);
+//	}
 	
 	@PutMapping
 	public UserDTO update(@RequestBody UserDTO user) {

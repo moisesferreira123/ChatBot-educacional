@@ -1,8 +1,13 @@
 package br.com.TrabalhoEngSoftware.chatbot.entity;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.UserDTO;
 import jakarta.persistence.Column;
@@ -14,7 +19,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_user")
-public class UserEntity {
+public class UserEntity implements UserDetails{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +40,12 @@ public class UserEntity {
 	
 	public UserEntity() {
 		
+	}
+	
+	public UserEntity(String email, String fullName, String password) {
+		this.email = email;
+		this.fullName = fullName;
+		this.password = password;
 	}
 	
 	@Override
@@ -85,4 +96,34 @@ public class UserEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+	
+	 @Override
+	 public boolean isAccountNonExpired() {
+		 return true;
+	 }
+
+	 @Override
+	 public boolean isAccountNonLocked() {
+	     return true;
+	 }
+
+	 @Override
+	 public boolean isCredentialsNonExpired() {
+		 return true;
+     }
+
+	 @Override
+	 public boolean isEnabled() {
+	     return true;
+	 }
 }

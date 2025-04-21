@@ -1,29 +1,30 @@
 <script lang="ts">
 	import { toggleOverlay } from "$lib/stores/overlayStore.svelte";
-	import { fullName, email, password } from '$lib/stores/userDataStore.svelte';
 	import Overlay from "./Overlay.svelte";
   const id = 'sign-in';
   const title = 'Get Started Today';
   const subtitle = 'Create your account and start learning smarter';
 
+	let fullName: string, email: string, password: string;
+
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
-		const response = await fetch('http://localhost:8080/user', {
+		const response = await fetch('http://localhost:8080/auth/register', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				fullName: $fullName,
-				email: $email,
-				password: $password
+				fullName: fullName,
+				email: email,
+				password: password
 			})
 		});
 
 		if(response.ok) {
 			alert('User registered successfully!');
 		} else {
-			alert('Error registering user.');
+			alert('Error registering user. Email already registered.');
 			console.error( await response.text());
 		}
 	}
@@ -32,13 +33,13 @@
 {#snippet form()}
 <form action="#" class="form-style" on:submit={handleSubmit}>
   <label for="full-name">Full Name
-    <input type="text" bind:value={$fullName} name="full-name" placeholder="Enter your name" required>
+    <input type="text" bind:value={fullName} name="full-name" placeholder="Enter your name" required>
   </label><br>
   <label for="email">Email
-    <input type="email" bind:value={$email} name="email" placeholder="Enter your email" required>
+    <input type="email" bind:value={email} name="email" placeholder="Enter your email" required>
   </label><br>
   <label for="password">Password
-    <input type="password" bind:value={$password} name="password" placeholder="Create a password" required>
+    <input type="password" bind:value={password} name="password" placeholder="Create a password" required>
   </label><br>
   <button type="submit" class="create-account">Create Account</button>
 </form>

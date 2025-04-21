@@ -2,6 +2,31 @@
   import Overlay from "./Overlay.svelte";
 	import {goToHome} from '$lib/stores/overlayStore.svelte';
 
+	let email: string, password:string;
+
+	async function handleLogin() {
+		const response = await fetch('http://localhost:8080/auth/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+        email: email,
+        password: password
+      })
+		});
+
+		if (response.ok) {
+      const data = await response.json();
+      // Armazena o token no localStorage ou em um store
+      localStorage.setItem('token', data.token);
+      goToHome(); // Navegar para a home
+    } else {
+      alert('Invalid email or password');
+    }
+	}
+	
+
   const id = 'login';
   const title = 'Log in to your account';
   const subtitle = 'Continue where you left off in your learning';
@@ -10,12 +35,12 @@
 {#snippet form()}
 <form action="#" class="form-style">
   <label for="email">Email
-    <input type="email" name="email" placeholder="Enter your email">
+    <input type="email" name="email" bind:value={email} placeholder="Enter your email" required>
   </label><br>
   <label for="password">Password
-    <input type="password" name="password" placeholder="Enter your password">
+    <input type="password" name="password" bind:value={password} placeholder="Enter your password" required>
   </label><br>
-  <button type="submit" class="sign-in" on:click|preventDefault={goToHome}>Sign in</button>
+  <button type="submit" class="sign-in" on:click|preventDefault={handleLogin}>Sign in</button>
 </form>
 {/snippet}
 
