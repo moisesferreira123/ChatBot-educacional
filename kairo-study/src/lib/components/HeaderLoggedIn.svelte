@@ -41,7 +41,7 @@
 
 <nav class="fixed flex justify-between !px-20 items-center w-full h-20 bg-white border-b border-gray-200">
   <div class="flex items-center">
-    <img class="!ml-[25px] !mr-[10px]" width="36px" height="36px" src="/images/icon-kairo.png" alt="Kairo icon" />
+    <img class="!ml-[25px] !mr-[10px]" width="36px" height="36px" src="images/icon-kairo-removebg-preview.webp" alt="Kairo icon" />
     <p class="font-bold text-[18px] text-[var(--color4)]">Kairo</p>
   </div>
   <ul class="flex items-center mr-[30px] text-[var(--color4)] list-none">
