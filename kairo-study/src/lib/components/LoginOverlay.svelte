@@ -40,7 +40,7 @@
   <label for="password">Password
     <input type="password" name="password" bind:value={password} placeholder="Enter your password" required>
   </label><br>
-  <button type="submit" class="sign-in" on:click|preventDefault={handleLogin}>Sign in</button>
+  <button type="submit" class="sign-in" on:click={handleLogin}>Sign in</button>
 </form>
 {/snippet}
 

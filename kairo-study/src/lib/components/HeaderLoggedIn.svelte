@@ -4,6 +4,8 @@
   import { fullName } from '$lib/stores/userDataStore.svelte';
   //Icons from Lucide
   import { House, MessageSquare, BookOpen ,FileText, User } from '@lucide/svelte';
+  import { isMenuMyAccountOpen } from '$lib/stores/menuMyAccountStore';
+  import MenuMyAccount from './MenuMyAccount.svelte';
 
   $: firstName = $fullName.split(' ')[0];
 
