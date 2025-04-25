@@ -3,17 +3,17 @@
 	import Intro from "$lib/components/Intro.svelte";
   //TODO: Deixar o HearderLoggedIn mais modular, permitindo a inserção de ícones e textos diferentes
 </script>
-<div class="flex flex-col">
+<div class="flex flex-col pointer-events-auto">
   <HeaderLoggedIn/>
   <!-- Trocar User pelo primeiro nome -->
-  <main class="!p-20">
+  <main class="p-20">
     <Intro
       title="Hello, User!"
       subtitle="Welcome! What would you like to study with Kairo today?"
       firstButtonIcon="/images/icons8-plus-16.png"
-      firstButtonText="New Chat"
+      firstButtonText="New Note"
       secondButtonIcon="/images/icons8-chat-messages-16.png"
-      secondButtonText="Personalized Chat"
+      secondButtonText="Personalized Note"
     />
   </main>
 </div>

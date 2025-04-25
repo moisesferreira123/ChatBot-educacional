@@ -4,7 +4,7 @@
 </script>
 
 <HeaderLoggedIn/>
-<main>
+<main class="p-20">
   <Intro
     title="Flashcards"
     subtitle="Manage your flashcards for spaced review"
@@ -20,8 +20,4 @@
     background-color: var(--color2);
   }
 
-  main {
-    padding-top: 85px;
-    margin: 0 25px;
-  }
 </style>
