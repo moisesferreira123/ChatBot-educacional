@@ -48,6 +48,10 @@ public class UserEntity implements UserDetails{
 		this.password = password;
 	}
 	
+	public UserEntity(Long id) {
+		this.id = id;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
