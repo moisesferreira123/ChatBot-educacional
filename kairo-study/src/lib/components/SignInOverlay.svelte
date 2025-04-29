@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { toggleOverlay } from "$lib/stores/overlayStore.svelte";
+  import { goto } from '$app/navigation';
 	import Overlay from "./Overlay.svelte";
-  const id = 'sign-in';
+  
+	const id = 'sign-in';
   const title = 'Get Started Today';
   const subtitle = 'Create your account and start learning smarter';
 
@@ -22,7 +24,7 @@
 		});
 
 		if(response.ok) {
-			alert('User registered successfully!');
+			goto('/home');
 		} else {
 			alert('Error registering user. Email already registered.');
 			console.error( await response.text());

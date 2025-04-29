@@ -33,7 +33,9 @@
     {
       icon: User,
       text: "User",
-      href: "/home"
+      onclick: () => {
+        isMenuMyAccountOpen.update(open => !open);
+      }
     }
   ];
 </script>
@@ -45,12 +47,20 @@
     <p class="font-bold text-[18px] text-[var(--color4)]">Kairo</p>
   </div>
   <ul class="flex items-center mr-[30px] text-[var(--color4)] list-none">
-    {#snippet navIcon({icon,text,href})}
+    {#snippet navIcon({icon,text,href=null, onclick=null})}
     <li>
-      <a href={ href } class="flex flex-row gap-3 px-3 py-2.5 ml-4 rounded transition-all duration-200 hover:bg-[var(--color8)]">
-        <svelte:component this={icon} size={16} />      
-        <p class="leading-4 text-sm p-0 m-0 font-medium"> { text } </p>
-      </a>
+      {#if href}
+        <a href={ href } class="flex flex-row gap-3 px-3 py-2.5 ml-4 rounded transition-all duration-200 hover:bg-[var(--color8)]">
+          <svelte:component this={icon} size={16} />      
+          <p class="leading-4 text-sm p-0 m-0 font-medium"> { text } </p>
+        </a>
+      {:else if onclick}
+        <button onclick={ onclick } data-user-button class="flex flex-row gap-3 px-3 py-2.5 ml-4 rounded transition-all duration-200 hover:bg-[var(--color8)] cursor-pointer">
+          <svelte:component this={icon} size={16} />      
+          <p class="leading-4 text-sm p-0 m-0 font-medium"> { text } </p>
+        </button>
+        <MenuMyAccount />
+      {/if}
     </li>
     {/snippet}
     {#each navItems as Item}
@@ -71,6 +81,4 @@
     border-radius: 5px;
 		transition: 125ms;
   }
-
-
 </style>

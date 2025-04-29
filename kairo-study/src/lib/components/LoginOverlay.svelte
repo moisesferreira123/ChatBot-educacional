@@ -1,8 +1,8 @@
 <script lang="ts">
   import Overlay from "./Overlay.svelte";
-	import {goToHome} from '$lib/stores/overlayStore.svelte';
+	import { goto } from "$app/navigation";
 
-	let email: string, password:string;
+	let email: string, password: string;
 
 	async function handleLogin() {
 		const response = await fetch('http://localhost:8080/auth/login', {
@@ -16,11 +16,14 @@
       })
 		});
 
+		email = '';
+		password = '';
+
 		if (response.ok) {
       const data = await response.json();
       // Armazena o token no localStorage ou em um store
       localStorage.setItem('token', data.token);
-      goToHome(); // Navegar para a home
+      goto('/home');
     } else {
       alert('Invalid email or password');
     }
