@@ -53,12 +53,24 @@ public class NoteService {
 	}
 	
 	@Transactional
-	public NoteDTO updateNote(Long noteId, String newContent, Long userId) {
+	public NoteDTO updateNoteTitle(Long noteId, String newTitle, Long userId) {
 		// TODO: Trocar por Exceptions criados por nós
 		NoteEntity note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
 		if(!note.getUserEntity().getId().equals(userId)) {
 			// TODO: Trocar por Exceptions criados por nós
-			throw new RuntimeException("Unauthorized to edit this note");
+			throw new RuntimeException("Unauthorized to edit title this note");
+		}
+		note.setTitle(newTitle);
+		return new NoteDTO(noteRepository.save(note));
+	}
+	
+	@Transactional
+	public NoteDTO updateNoteContent(Long noteId, String newContent, Long userId) {
+		// TODO: Trocar por Exceptions criados por nós
+		NoteEntity note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
+		if(!note.getUserEntity().getId().equals(userId)) {
+			// TODO: Trocar por Exceptions criados por nós
+			throw new RuntimeException("Unauthorized to edit content this note");
 		}
 		note.setContent(newContent);
 		return new NoteDTO(noteRepository.save(note));
