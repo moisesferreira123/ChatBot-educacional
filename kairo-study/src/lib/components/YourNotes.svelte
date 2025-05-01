@@ -13,7 +13,7 @@
   let hasMore = true;
   let displayCount = 10;
 
-  const token = localStorage.getItem("token");
+  let token;
 
   async function loadNotes() {
     if(!hasMore) return;
@@ -61,6 +61,7 @@
   }
 
   onMount(() => {
+    token = localStorage.getItem("token");
     loadNotes();
   });
 
@@ -73,8 +74,8 @@
     <p class="font-semibold text-sm text-(--color14)">Sort</p>
   </button>
 </div>
-  <div class="bg-white rounded-lg shadow overflow-hidden">
-  <div class="relative p-4 border-b border-b-(--color13)">
+<div class="bg-white rounded-lg shadow">
+  <div class="relative p-4">
     <Search class="absolute left-7 top-1/2 transform -translate-y-1/2" size={16} color="var(--color16)" />
     <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md focus:outline-offset-2 focus:outline-black-500 focus:outline-2" placeholder="Search notes..."
            bind:value={titleFilter} on:input={updateTitleFilter}>
