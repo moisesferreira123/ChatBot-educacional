@@ -11,6 +11,7 @@ public class NoteDTO {
 
 	private Long id;
 	private String title;
+	private String subtitle;
 	private String content;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
@@ -39,6 +40,15 @@ public class NoteDTO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getSubtitle() {
+		return subtitle;
+	}
+
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
+
 
 	public String getContent() {
 		return content;

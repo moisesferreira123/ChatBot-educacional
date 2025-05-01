@@ -32,6 +32,9 @@ public class NoteEntity {
 	private String title;
 	
 	@Column
+	private String subtitle;
+
+	@Column
 	private String content;
 	
 	@CreatedDate
@@ -85,6 +88,14 @@ public class NoteEntity {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getSubtitle() {
+		return subtitle;
+	}
+
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
 	}
 
 	public String getContent() {

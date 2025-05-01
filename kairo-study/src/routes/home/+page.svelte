@@ -1,6 +1,7 @@
 <script>
   import HeaderLoggedIn from "$lib/components/HeaderLoggedIn.svelte";
 	import Intro from "$lib/components/Intro.svelte";
+	import YourNotes from "$lib/components/YourNotes.svelte";
   //TODO: Deixar o HearderLoggedIn mais modular, permitindo a inserção de ícones e textos diferentes
 </script>
 <div class="flex flex-col pointer-events-auto">
@@ -15,6 +16,7 @@
       secondButtonIcon="/images/icons8-chat-messages-16.png"
       secondButtonText="Personalized Note"
     />
+    <YourNotes />
   </main>
 </div>
 

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.NoteDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.NoteSummaryDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.NoteUpdateDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
 import br.com.TrabalhoEngSoftware.chatbot.service.NoteService;
 
@@ -25,8 +27,14 @@ public class NoteController {
 	@Autowired
 	private NoteService noteService;
 	
+	@GetMapping("/{noteId}")
+	public NoteDTO getNoteById(@PathVariable long noteId, Authentication authentication) {
+		UserEntity user = (UserEntity) authentication.getPrincipal();
+		return noteService.getNoteById(noteId, user.getId());
+	}
+	
 	@GetMapping
-	public Page<NoteDTO> listNotes(
+	public Page<NoteSummaryDTO> listNotes(
 			@RequestParam(required = false) String title, 
 			@RequestParam(defaultValue = "updatedAtDesc") String sortType,
 			Pageable pageable,
@@ -41,22 +49,13 @@ public class NoteController {
 		noteService.createNote(noteDTO, user.getId());
 	}
 	
-	@PutMapping("/title/{noteId}")
-	public NoteDTO updateNoteTitle(
+	@PutMapping("/{noteId}")
+	public NoteDTO updateNote(
 			@PathVariable Long noteId,
-			@RequestBody String newTitle,
+			@RequestBody NoteUpdateDTO updateDTO,
 			Authentication authentication) {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
-		return noteService.updateNoteTitle(noteId, newTitle, user.getId());
-	}
-	
-	@PutMapping("/content/{noteId}")
-	public NoteDTO updateNoteContent(
-			@PathVariable Long noteId,
-			@RequestBody String newContent,
-			Authentication authentication) {
-		UserEntity user = (UserEntity) authentication.getPrincipal();
-		return noteService.updateNoteContent(noteId, newContent, user.getId());
+		return noteService.updateNote(noteId, updateDTO, user.getId());
 	}
 	
 	@DeleteMapping("/{noteId}")

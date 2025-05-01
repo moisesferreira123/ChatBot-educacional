@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.NoteDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.NoteSummaryDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.NoteUpdateDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
 import br.com.TrabalhoEngSoftware.chatbot.repository.NoteRepository;
@@ -29,12 +31,13 @@ public class NoteService {
 	public void createNote(NoteDTO noteDTO, Long userId) {
 		NoteEntity note = new NoteEntity();
 		note.setTitle(noteDTO.getTitle());
+		note.setSubtitle(noteDTO.getSubtitle());
 		note.setContent(noteDTO.getContent());
 		note.setUserEntity(new UserEntity(userId));
 		noteRepository.save(note);
 	}
 	
-	public Page<NoteDTO> listNotes(String title, Long userId, String sortType, Pageable pageable) {
+	public Page<NoteSummaryDTO> listNotes(String title, Long userId, String sortType, Pageable pageable) {
 		NoteSpecificationBuilder builder = new NoteSpecificationBuilder().withTitle(title, userId);
 		
 		if ("createdAtAsc".equalsIgnoreCase(sortType)) {
@@ -49,30 +52,34 @@ public class NoteService {
 		
 		Specification<NoteEntity> specification = builder.build();
 		
-		return noteRepository.findAll(specification, pageable).map(NoteDTO::new);
+		return noteRepository.findAll(specification, pageable).map(NoteSummaryDTO::new);
 	}
 	
 	@Transactional
-	public NoteDTO updateNoteTitle(Long noteId, String newTitle, Long userId) {
+	public NoteDTO updateNote(Long noteId, NoteUpdateDTO updateDTO, Long userId) {
 		// TODO: Trocar por Exceptions criados por nós
 		NoteEntity note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
+		
 		if(!note.getUserEntity().getId().equals(userId)) {
 			// TODO: Trocar por Exceptions criados por nós
-			throw new RuntimeException("Unauthorized to edit title this note");
+			throw new RuntimeException("Unauthorized to edit this note");
 		}
-		note.setTitle(newTitle);
-		return new NoteDTO(noteRepository.save(note));
-	}
-	
-	@Transactional
-	public NoteDTO updateNoteContent(Long noteId, String newContent, Long userId) {
-		// TODO: Trocar por Exceptions criados por nós
-		NoteEntity note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
-		if(!note.getUserEntity().getId().equals(userId)) {
-			// TODO: Trocar por Exceptions criados por nós
-			throw new RuntimeException("Unauthorized to edit content this note");
-		}
-		note.setContent(newContent);
+		
+		if (updateDTO.getTitle() != null) {
+			if(updateDTO.getTitle().trim().isEmpty()) {
+				throw new IllegalArgumentException("Title can't be empty");
+			}
+	        note.setTitle(updateDTO.getTitle());
+	    }
+
+	    if (updateDTO.getContent() != null) {
+	        note.setContent(updateDTO.getContent());
+	    }
+
+	    if (updateDTO.getSubtitle() != null) {
+	        note.setSubtitle(updateDTO.getSubtitle());
+	    }
+	    
 		return new NoteDTO(noteRepository.save(note));
 	}
 	
@@ -85,6 +92,15 @@ public class NoteService {
 			throw new RuntimeException("Unauthorized to delete this note");
 		}
 		noteRepository.delete(note);
+	}
+	
+	@Transactional(readOnly = true)
+	public NoteDTO getNoteById(Long noteId, Long userId) {
+		NoteEntity note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException("Note not found"));
+		if(!note.getUserEntity().getId().equals(userId)) {
+			throw new RuntimeException("Unauthorized to view this note");
+		}
+		return new NoteDTO(note);
 	}
 	
 }

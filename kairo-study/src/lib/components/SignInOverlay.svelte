@@ -24,6 +24,8 @@
 		});
 
 		if(response.ok) {
+			const data = await response.json();
+			localStorage.setItem('token', data.token);
 			goto('/home');
 		} else {
 			alert('Error registering user. Email already registered.');

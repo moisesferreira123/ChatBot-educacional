@@ -18,7 +18,7 @@
 
 <h1 class="text-[var(--color4)] text-[1.875rem] font-bold">{title}</h1>
   <p class="text-[var(--color7)] mt-2 mb-8 subtitle">{subtitle}</p>
-  <div class="grid grid-cols-2 gap-4">
+  <div class="grid grid-cols-2 gap-4 mb-[32px]">
     <button class="flex justify-center items-center gap-2 min-h-[44px] rounded-[calc(0.5rem-2px)] bg-[var(--color1)] transition-colors duration-250 hover:bg-[var(--color6)] hover:cursor-pointer">
       <img width="16px" height="16px" src={firstButtonIcon} alt="">
       <p class="text-sm text-[var(--color2)] font-medium">{firstButtonText}</p>
