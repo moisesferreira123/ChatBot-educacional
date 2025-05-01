@@ -1,5 +1,8 @@
 // src/lib/stores/overlayStore.ts
 import { goto } from '$app/navigation'
+import { writable } from 'svelte/store';
+
+export const newNoteOverlay = writable(false);
 
 export const overlayStore = $state<{currentOverlay: string | null}>({ 
   currentOverlay: null

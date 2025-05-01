@@ -1,6 +1,7 @@
 <script>
   import { Search, ArrowUpDown } from '@lucide/svelte';
-	import { fetchNotes } from '$lib/api/notes/fetchNotes';
+	import { fetchListNotes } from '$lib/api/notes/fetchListNotes';
+  import { onMount } from 'svelte';
   import NotesHome from './NotesHome.svelte';
 
   let allNotes = [];
@@ -16,7 +17,7 @@
 
   async function loadNotes() {
     if(!hasMore) return;
-    const data = await fetchNotes(currentPage, pageSize, titleFilter, sortType, token);
+    const data = await fetchListNotes(currentPage, pageSize, titleFilter, sortType, token);
     allNotes = [...allNotes, ...data.content];
     updateVisibleNotes();
     hasMore = !data.last;
@@ -36,7 +37,7 @@
   }
 
   function showLess() {
-    displayCount = max(5, displayCount-5);
+    displayCount = Math.max(5, displayCount-5);
     updateVisibleNotes();
   }
 
@@ -59,6 +60,10 @@
     hasMore = true;
   }
 
+  onMount(() => {
+    loadNotes();
+  });
+
 </script>
 
 <div class="flex justify-between items-center mb-[16px]">
@@ -71,7 +76,10 @@
   <div class="bg-white rounded-lg shadow overflow-hidden">
   <div class="relative p-4 border-b border-b-(--color13)">
     <Search class="absolute left-7 top-1/2 transform -translate-y-1/2" size={16} color="var(--color16)" />
-    <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md focus:outline-offset-2 focus:outline-black-500 focus:outline-2" placeholder="Search notes...">
+    <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md focus:outline-offset-2 focus:outline-black-500 focus:outline-2" placeholder="Search notes..."
+           bind:value={titleFilter} on:input={updateTitleFilter}>
   </div>
-  <NotesHome />
+  {#each visibleNotes as note}
+    <NotesHome id={note.id} title={note.title} subtitle={note.subtitle} updatedAt={new Date(note.updatedAt).toLocaleString()} />
+  {/each}
 </div>

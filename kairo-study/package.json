@@ -54,7 +54,7 @@
 		"@tiptap/suggestion": "^2.11.7",
 		"katex": "^0.16.22",
 		"lowlight": "^3.3.0",
-		"openai": "^4.96.0",
+		"openai": "^4.96.2",
 		"prosemirror-inputrules": "^1.5.0",
 		"svelte-tiptap": "^2.1.0"
 	}

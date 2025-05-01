@@ -9,9 +9,10 @@
     title="Flashcards"
     subtitle="Manage your flashcards for spaced review"
     firstButtonIcon="/images/icons8-plus-math-16.png"
-    firstButtonText="Create New Flashcards"
+    firstButtonText="Create New Deck"
     secondButtonIcon="/images/icons8-view-16.png"
     secondButtonText="Start Review"
+    buttonClick1="flashcards"
   />
 </main>
 

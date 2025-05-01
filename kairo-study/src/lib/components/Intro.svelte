@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { fullName } from '$lib/stores/userDataStore.svelte';
-
+  import { newNoteOverlay } from '$lib/stores/overlayStore.svelte';
   // TODO: Colocar isso depois de integrar o banco de dados
   let firstName = $derived($fullName.split(' ')[0]);
 
@@ -11,15 +11,28 @@
     firstButtonText: string;
     secondButtonIcon: string;
     secondButtonText: string;
+    buttonClick1: string;
   };
 
-  let { title, subtitle, firstButtonIcon, firstButtonText, secondButtonIcon, secondButtonText } = $props();
+  let { title, subtitle, firstButtonIcon, firstButtonText, secondButtonIcon, secondButtonText, buttonClick1 } = $props();
+
+
+
+  function handleClick() {
+    if(buttonClick1 === "home") {
+      newNoteOverlay.set(true);
+    } else if(buttonClick1 === "flashcards") {
+
+    } else {
+      console.warn('buttonClick with unexpected value:', buttonClick1);
+    }
+  }
 </script>
 
 <h1 class="text-[var(--color4)] text-[1.875rem] font-bold">{title}</h1>
   <p class="text-[var(--color7)] mt-2 mb-8 subtitle">{subtitle}</p>
   <div class="grid grid-cols-2 gap-4 mb-[32px]">
-    <button class="flex justify-center items-center gap-2 min-h-[44px] rounded-[calc(0.5rem-2px)] bg-[var(--color1)] transition-colors duration-250 hover:bg-[var(--color6)] hover:cursor-pointer">
+    <button class="flex justify-center items-center gap-2 min-h-[44px] rounded-[calc(0.5rem-2px)] bg-[var(--color1)] transition-colors duration-250 hover:bg-[var(--color6)] hover:cursor-pointer" onclick={handleClick}>
       <img width="16px" height="16px" src={firstButtonIcon} alt="">
       <p class="text-sm text-[var(--color2)] font-medium">{firstButtonText}</p>
     </button>
