@@ -31,4 +31,11 @@
     background-color: var(--color2);
   }
 
+  :global(html, body) {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+  }
+
+
 </style>

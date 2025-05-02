@@ -2,11 +2,37 @@
   import HeaderLoggedIn from "$lib/components/HeaderLoggedIn.svelte";
   import WYSIWYGEditor from "$lib/components/WYSIWYGEditor.svelte";
   import { ChevronLeft, Pencil, Plus, Clock, Save, Settings, FileText, MessageSquare, BookCheck } from "@lucide/svelte";
+	import { onMount } from "svelte";
+	import { fetchGetNoteById } from '$lib/api/notes/fetchGetNoteById';
+  import { page } from "$app/stores";
+	import { goto } from "$app/navigation";
 
-  //TODO: Pegar o titulo da nota do banco de dados
-  let noteTitle = "Untitled Note";
-  let noteContent = "";
-  let lastUpdated = "10:35 AM";
+  $: id = $page.params.id;
+
+  interface Note {
+    id: number;
+    title: string;
+    subtitle: string;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+  }
+
+  let note: Note | null = null;
+  let token;
+
+  // Para usar title, subtitle, content, updatedAt, etc... Basta colocar note.<aquilo que vc quer>
+  // Exemplo: <p>Last updated: { note.updatedAt }</p>
+  onMount(async () => {
+    token = localStorage.getItem("token");
+    try {
+      note = await fetchGetNoteById(id, token);
+      console.log(note);
+    } catch(e: unknown) {
+      alert("Erro");
+      goto('/home');
+    }
+  });
 
   /* TODO: Implementar o onclick desse botões */
   const footerButtons = [{
@@ -32,6 +58,7 @@
 </script>
 
 <div class="flex flex-col h-screen">
+  {#if note}
   <HeaderLoggedIn />
   <div class="flex flex-1 flex-col !pt-20">
     <header class="bg-white border-b border-neutral-300 p-3 flex items-center justify-between">
@@ -40,7 +67,7 @@
           <ChevronLeft size=5 />
         </button>
   
-        <h1 class="text-xl font-semibold truncate max-w-[300px] cursor-pointer">{ noteTitle }</h1>
+        <h1 class="text-xl font-semibold truncate max-w-[300px] cursor-pointer">{ note.title }</h1>
         <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-neutral-300/50 hover:text-accent-foreground h-8 w-8">
           <Pencil size=4 />
         </button>
@@ -53,7 +80,7 @@
       <div class="flex items-center gap-2">
         <div class="flex items-center text-xs text-gray-500">
           <Clock size=12 class="!mr-1"/>
-          <p>Last updated: { lastUpdated }</p>
+          <p>Last updated: { new Date(note.updatedAt).toLocaleString() }</p>
         </div>
         <button class="border-neutral-300 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-neutral-300/50 hover:text-accent-foreground h-9 rounded-md px-3 ml-4">
           <Save size=4 />
@@ -78,6 +105,11 @@
       {/each}
     </footer>
   </div>
+  {:else}
+  <div class="flex flex-1 items-center justify-center">
+    <p>Loading note...</p>
+  </div>
+  {/if}
 </div>
 
 <style lang="postcss">

@@ -1,23 +1,25 @@
 <script>
-  import { Search, ArrowUpDown } from '@lucide/svelte';
+  import { Search, ArrowUpDown, ArrowUp, ArrowDown } from '@lucide/svelte';
 	import { fetchListNotes } from '$lib/api/notes/fetchListNotes';
   import { onMount } from 'svelte';
+  import { sortNotesOverlay } from '$lib/stores/overlayStore.svelte';
+  import { sortTypeNotes } from '$lib/stores/sortType';
   import NotesHome from './NotesHome.svelte';
+  import SortNotesOverlay from './SortNotesOverlay.svelte';
 
   let allNotes = [];
   let visibleNotes = [];
   let currentPage = 0;
   let pageSize = 5;
   let titleFilter = "";
-  let sortType = "updateAtDesc";
   let hasMore = true;
-  let displayCount = 10;
+  let displayCount = 5;
 
   let token;
 
   async function loadNotes() {
     if(!hasMore) return;
-    const data = await fetchListNotes(currentPage, pageSize, titleFilter, sortType, token);
+    const data = await fetchListNotes(currentPage, pageSize, titleFilter, $sortTypeNotes, token);
     allNotes = [...allNotes, ...data.content];
     updateVisibleNotes();
     hasMore = !data.last;
@@ -42,7 +44,7 @@
   }
 
   function changeSort(newSort) {
-    sortType = newSort;
+    sortTypeNotes.set(newSort);
     resetPages();
     loadNotes();
   }
@@ -67,18 +69,21 @@
 
 </script>
 
-<div class="flex justify-between items-center mb-[16px]">
+<div class="relative flex justify-between items-center mb-[16px]">
   <h2 class="text-[var(--color15)] font-semibold text-2xl">Your Notes</h2>
-  <button class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
+  <button data-user-button onclick={() => sortNotesOverlay.update(open => !open)} class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
     <ArrowUpDown size={16} color="var(--color14)" />
     <p class="font-semibold text-sm text-(--color14)">Sort</p>
   </button>
+  {#if $sortNotesOverlay}
+    <SortNotesOverlay changeSort={(newSort) => changeSort(newSort)}/>
+  {/if}
 </div>
 <div class="bg-white rounded-lg shadow">
-  <div class="relative p-4">
+  <div class="relative p-4 border-b border-b-(--color13)">
     <Search class="absolute left-7 top-1/2 transform -translate-y-1/2" size={16} color="var(--color16)" />
     <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md focus:outline-offset-2 focus:outline-black-500 focus:outline-2" placeholder="Search notes..."
-           bind:value={titleFilter} on:input={updateTitleFilter}>
+           bind:value={titleFilter} oninput={updateTitleFilter}>
   </div>
   {#each visibleNotes as note}
     <NotesHome 
@@ -92,4 +97,18 @@
       }}
     />
   {/each}
+</div>
+<div class="flex justify-center gap-2 py-2">
+  <button 
+    onclick={showLess} 
+    class="flex h-10 w-10 justify-center items-center rounded-full border border-(--color13) bg-white shadow cursor-pointer hover:bg-gray-50 disabled:bg-white disabled:opacity-50 disabled:cursor-default" 
+    disabled={displayCount <= 5}>
+    <ArrowUp size={20} />
+  </button>
+  <button 
+    onclick={showMore} 
+    class="flex h-10 w-10 justify-center items-center rounded-full border border-(--color13) bg-white shadow cursor-pointer hover:bg-gray-50 disabled:bg-white disabled:opacity-50 disabled:cursor-default" 
+    disabled={!hasMore && displayCount >= allNotes.length}>
+    <ArrowDown size={20} />
+  </button>   
 </div>

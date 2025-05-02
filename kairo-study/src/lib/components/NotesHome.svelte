@@ -2,6 +2,7 @@
   import { Trash2 } from '@lucide/svelte';
   import { fetchDeleteNote } from '$lib/api/notes/fetchDeleteNote';
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
 
   export let id;
   export let title;
@@ -10,6 +11,10 @@
   export let onDelete;
 
   let token;
+
+  async function openNote() {
+    goto(`/notes/${id}`);
+  }
 
   async function deleteNote() {
     try {
@@ -26,8 +31,8 @@
 
 </script>
 
-<div class="flex p-4 hover:bg-gray-50 transition-colors border-t border-t-(--color13)">
-  <button class="flex flex-col items-start flex-1 cursor-pointer">
+<div class="flex p-4 hover:bg-gray-50 transition-colors border-b border-b-(--color13)">
+  <button onclick={openNote} class="flex flex-col items-start flex-1 cursor-pointer">
     <h3 class="text-start font-semibold text-gray-900 break-all">{title}</h3>
     <p class="text-start text-sm text-gray-500 mt-1 break-word">{subtitle}</p>
     <p class="text-xs text-gray-400 mt-2">{updatedAt}</p>
