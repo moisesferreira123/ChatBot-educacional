@@ -1,10 +1,29 @@
 <script>
-  import { Trash2 } from '@lucide/svelte'
+  import { Trash2 } from '@lucide/svelte';
+  import { fetchDeleteNote } from '$lib/api/notes/fetchDeleteNote';
+  import { onMount } from 'svelte';
 
   export let id;
   export let title;
   export let subtitle;
   export let updatedAt;
+  export let onDelete;
+
+  let token;
+
+  async function deleteNote() {
+    try {
+      await fetchDeleteNote(id, token);
+      onDelete(id);
+    } catch(e) {
+      alert(e.message);
+    }
+  }
+
+  onMount(() => {
+    token = localStorage.getItem("token");
+  });
+
 </script>
 
 <div class="flex p-4 hover:bg-gray-50 transition-colors border-t border-t-(--color13)">
@@ -13,7 +32,7 @@
     <p class="text-start text-sm text-gray-500 mt-1 break-word">{subtitle}</p>
     <p class="text-xs text-gray-400 mt-2">{updatedAt}</p>
   </button>
-  <button class="flex  h-10 w-10 items-center justify-center cursor-pointer hover:bg-red-50 rounded-md shrink-0">
+  <button class="flex h-10 w-10 items-center justify-center cursor-pointer hover:bg-red-50 rounded-md shrink-0" onclick={deleteNote}>
     <Trash2 size={16} color="red" />
   </button>
 </div>

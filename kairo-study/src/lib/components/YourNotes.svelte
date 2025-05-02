@@ -81,6 +81,15 @@
            bind:value={titleFilter} on:input={updateTitleFilter}>
   </div>
   {#each visibleNotes as note}
-    <NotesHome id={note.id} title={note.title} subtitle={note.subtitle} updatedAt={new Date(note.updatedAt).toLocaleString()} />
+    <NotesHome 
+      id={note.id} 
+      title={note.title} 
+      subtitle={note.subtitle} 
+      updatedAt={new Date(note.updatedAt).toLocaleString()} 
+      onDelete={() => {
+        resetPages();
+        loadNotes();
+      }}
+    />
   {/each}
 </div>
