@@ -1,6 +1,7 @@
 <script lang="ts">
   import Overlay from "./Overlay.svelte";
 	import { goto } from "$app/navigation";
+	import { closeOverlay } from '$lib/stores/overlayStore.svelte';
 
 	let email: string, password: string;
 
@@ -23,6 +24,7 @@
       const data = await response.json();
       // Armazena o token no localStorage ou em um store
       localStorage.setItem('token', data.token);
+			closeOverlay();
       goto('/home');
     } else {
       alert('Invalid email or password');

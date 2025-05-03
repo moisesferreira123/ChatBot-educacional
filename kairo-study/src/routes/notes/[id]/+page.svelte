@@ -4,6 +4,7 @@
   import { ChevronLeft, Pencil, Plus, Clock, Save, Settings, FileText, MessageSquare, BookCheck } from "@lucide/svelte";
 	import { onMount } from "svelte";
 	import { fetchGetNoteById } from '$lib/api/notes/fetchGetNoteById';
+  import { fetchUpdateNote } from "$lib/api/notes/fetchUpdateNote";
   import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
 
@@ -19,7 +20,22 @@
   }
 
   let note: Note | null = null;
-  let token;
+  let token: string | null;
+  let saveTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  function autoSave(content: string) {
+    if(saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(async () => {
+      if(!token || !note) return;
+      note.content = content;
+      try {
+        note = await fetchUpdateNote(note.id, note.title, note.subtitle, content, token);
+        console.log('Note saved automatically');
+      } catch (e) {
+        console.error("Error saving note:", e);
+      }
+    }, 1000);
+  }
 
   // Para usar title, subtitle, content, updatedAt, etc... Basta colocar note.<aquilo que vc quer>
   // Exemplo: <p>Last updated: { note.updatedAt }</p>
@@ -27,7 +43,6 @@
     token = localStorage.getItem("token");
     try {
       note = await fetchGetNoteById(id, token);
-      console.log(note);
     } catch(e: unknown) {
       alert("Erro");
       goto('/home');
@@ -92,7 +107,7 @@
   
       </div>
     </header>
-    <WYSIWYGEditor />
+    <WYSIWYGEditor content={note.content} onContentChange={autoSave} />
     <footer class="fixed bottom-0 w-screen bg-white border-t border-neutral-300 p-2 flex items-center justify-around">
       {#snippet footerButton(icon, text, action)}
         <button onclick={action} class="border-neutral-300 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background hover:bg-neutral-300/50 hover:text-accent-foreground h-10 !px-4 !py-2">

@@ -30,12 +30,16 @@
   let aiPrompt = '';
   let isLoading = false;
   let editorPos = 0;
-  
+
+	export let onContentChange: (html: string) => void = () => {};
+  export let content: string;
+
   //TODO: Use a sanitizer for the HTML output
   //TODO: Use a Markdown parser for the AI output
 	onMount(() => {
 		editor = new Editor({
 			element: element,
+			content,
 			extensions: [
 				StarterKit,
 				Mathematics,
@@ -52,6 +56,9 @@
 			onTransaction: () => {
 				// force re-render so `editor.isActive` works as expected
 				editor = editor;
+			},
+			onUpdate: ({editor}) => {
+				onContentChange(editor.getHTML());
 			}
 		});
 	});
