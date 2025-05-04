@@ -22,7 +22,12 @@
 	} from '@lucide/svelte';
 	import handleAISubmit from '$lib/extensions/handleAISubmit.svelte';
   //TODO: import { EditorContent } from '@tiptap/svelte';
-  let content = $props();
+  interface Props {
+    content: string | undefined,
+    onContentChange: (html: string) => void,
+  }
+  
+  let {content, onContentChange = () => {}}: Props = $props();
 	let element: Element | undefined;
   let editor = $state.raw<Editor | undefined>();
   let editorBox = $state.raw({current: editor});
@@ -36,6 +41,7 @@
 	onMount(() => {
 		editor = new Editor({
 			element: element,
+			content,
 			extensions: [
 				StarterKit,
 				Mathematics,
@@ -51,7 +57,10 @@
 			],
 			onTransaction: () => {
 				// force re-render so `editor.isActive` works as expected
-				editor = editor;
+				editorBox = {current: editor};
+			},
+			onUpdate: ({editor}) => {
+				onContentChange(editor.getHTML());
 			}
 		});
 	});

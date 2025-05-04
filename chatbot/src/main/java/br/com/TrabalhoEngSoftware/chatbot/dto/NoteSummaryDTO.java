@@ -10,12 +10,14 @@ public class NoteSummaryDTO {
 	private String title;
     private String subtitle;
     private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
     public NoteSummaryDTO(NoteEntity entity) {
     	this.id = entity.getId();
         this.title = entity.getTitle();
         this.subtitle = entity.getSubtitle();
         this.updatedAt = entity.getUpdatedAt();
+        this.createdAt = entity.getCreatedAt();
     }
 
 	public Long getId() {
@@ -49,6 +51,13 @@ public class NoteSummaryDTO {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-    
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
     
 }
