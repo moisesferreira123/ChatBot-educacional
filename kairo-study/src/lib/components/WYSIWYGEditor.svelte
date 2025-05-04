@@ -1,16 +1,14 @@
 
 <script lang="ts">
-  // P.S.A.: DO NOT use runes mode, the compiler breaks the code (10/10 compiler)
   import 'katex/dist/katex.min.css';
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
-  //TODO: import { EditorContent } from '@tiptap/svelte';
 	import StarterKit from '@tiptap/starter-kit';
 	import Mathematics from '@tiptap-pro/extension-mathematics';
 	import AiComplete from '$lib/extensions/AiComplete';
 	import Placeholder from '@tiptap/extension-placeholder';
 	import {
-    Bold,
+	Bold,
 		Italic,
 		Code,
 		Strikethrough,
@@ -23,12 +21,14 @@
 		Redo
 	} from '@lucide/svelte';
 	import handleAISubmit from '$lib/extensions/handleAISubmit.svelte';
-  
+  //TODO: import { EditorContent } from '@tiptap/svelte';
+  let content = $props();
 	let element: Element | undefined;
-	let editor: Editor;
-	let showAIPrompt = false;
-  let aiPrompt = '';
-  let isLoading = false;
+  let editor = $state.raw<Editor | undefined>();
+  let editorBox = $state.raw({current: editor});
+  let showAIPrompt = $state(false);
+  let aiPrompt = $state('');
+  let isLoading = $state(false);
   let editorPos = 0;
   
   //TODO: Use a sanitizer for the HTML output
