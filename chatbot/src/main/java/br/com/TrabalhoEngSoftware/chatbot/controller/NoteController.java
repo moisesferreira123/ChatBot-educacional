@@ -44,9 +44,9 @@ public class NoteController {
 	}
 	
 	@PostMapping
-	public void createNote(@RequestBody NoteDTO noteDTO, Authentication authentication) {
+	public Long createNote(@RequestBody NoteDTO noteDTO, Authentication authentication) {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
-		noteService.createNote(noteDTO, user.getId());
+		return noteService.createNote(noteDTO, user.getId());
 	}
 	
 	@PutMapping("/{noteId}")

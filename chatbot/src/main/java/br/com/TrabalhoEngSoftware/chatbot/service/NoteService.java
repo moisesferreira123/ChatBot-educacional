@@ -28,7 +28,7 @@ public class NoteService {
 	}
 	
 	@Transactional
-	public void createNote(NoteDTO noteDTO, Long userId) {
+	public Long createNote(NoteDTO noteDTO, Long userId) {
 		NoteEntity note = new NoteEntity();
 		if(noteDTO.getTitle().trim().isEmpty()) {
 			throw new IllegalArgumentException("Title can't be empty");
@@ -37,7 +37,7 @@ public class NoteService {
 		note.setSubtitle(noteDTO.getSubtitle());
 		note.setContent(noteDTO.getContent());
 		note.setUserEntity(new UserEntity(userId));
-		noteRepository.save(note);
+		return noteRepository.save(note).getId();
 	}
 	
 	public Page<NoteSummaryDTO> listNotes(String title, Long userId, String sortType, Pageable pageable) {

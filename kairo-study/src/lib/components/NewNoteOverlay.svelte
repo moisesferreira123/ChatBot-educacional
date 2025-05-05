@@ -1,19 +1,23 @@
 <script>
+	import { goto } from "$app/navigation";
   import { fetchCreateNote } from "$lib/api/notes/fetchCreateNote";
 	import { newNoteOverlay } from "$lib/stores/overlayStore.svelte";
   import { X } from '@lucide/svelte';
 
   let noteTitle='';
   let noteSubtitle='';
+  let createdNoteId;
 
   const token = localStorage.getItem("token");
 
   async function createNote() {
     try {
-      await fetchCreateNote(noteTitle, noteSubtitle, token);
+      createdNoteId = await fetchCreateNote(noteTitle, noteSubtitle, token);
       noteTitle = '';
       noteSubtitle = '';
       newNoteOverlay.set(false);
+      console.log(createdNoteId);
+      goto(`/notes/${createdNoteId}`);
     } catch(e) {
       alert(e.message);
     }

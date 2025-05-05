@@ -13,4 +13,5 @@ export async function fetchCreateNote(title, subtitle, token) {
   if(!response.ok){
     throw new Error("Error creating note: Title not provided");
   }
+  return response.json();
 }

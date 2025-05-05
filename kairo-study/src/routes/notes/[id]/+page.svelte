@@ -23,6 +23,7 @@
   let token: string | null;
   let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
+  // TODO: Não fazer o fetchUpdateNote retornar o conteúdo da nota (Isso vai ter que mudar no back-end) 
   function autoSave(content: string) {
     if(saveTimeout) clearTimeout(saveTimeout);
     saveTimeout = setTimeout(async () => {

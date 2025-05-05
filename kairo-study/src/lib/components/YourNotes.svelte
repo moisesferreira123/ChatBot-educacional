@@ -108,7 +108,7 @@
   <button 
     onclick={showMore} 
     class="flex h-10 w-10 justify-center items-center rounded-full border border-(--color13) bg-white shadow cursor-pointer hover:bg-gray-50 disabled:bg-white disabled:opacity-50 disabled:cursor-default" 
-    disabled={!hasMore && displayCount >= allNotes.length}>
+    disabled={allNotes.length === 0 || (!hasMore && displayCount >= allNotes.length)}>
     <ArrowDown size={20} />
   </button>   
 </div>
