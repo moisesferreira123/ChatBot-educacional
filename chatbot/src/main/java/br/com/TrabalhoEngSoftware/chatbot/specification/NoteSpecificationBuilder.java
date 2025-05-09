@@ -12,8 +12,8 @@ public class NoteSpecificationBuilder {
         this.specification = Specification.where(null);  // Começa com uma especificação vazia
     }
 
-    public NoteSpecificationBuilder withTitle(String title, Long userId) {
-        this.specification = this.specification.and(NoteSpecification.filterByTitle(title, userId));
+    public NoteSpecificationBuilder filterByTitle(String title) {
+        this.specification = this.specification.and(NoteSpecification.filterByTitle(title));
         return this;
     }
 
@@ -37,8 +37,10 @@ public class NoteSpecificationBuilder {
         return this;
     }
 
-    // Retorna a especificação construída
-    public Specification<NoteEntity> build() {
-        return specification;
+    // Retorna a especificação construída, filtrando por ID do usuário
+    public Specification<NoteEntity> build(Long userId) {
+        return this.specification.and((root, query, criteriaBuilder) ->
+            criteriaBuilder.equal(root.get("userEntity").get("id"), userId)
+        );
     }
 }

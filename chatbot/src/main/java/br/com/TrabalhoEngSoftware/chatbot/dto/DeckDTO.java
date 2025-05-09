@@ -1,10 +1,13 @@
 package br.com.TrabalhoEngSoftware.chatbot.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
 import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
+import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
 
 public class DeckDTO {
@@ -15,6 +18,7 @@ public class DeckDTO {
 	private LocalDateTime createdAt;
 	private LocalDateTime lastReviewedAt;
 	private UserEntity userEntity;
+	private List<FlashcardEntity> flashcards = new ArrayList<>();
 	
 	public DeckDTO(DeckEntity deck) {
 		BeanUtils.copyProperties(deck, this);
@@ -70,6 +74,14 @@ public class DeckDTO {
 
 	public void setUserEntity(UserEntity userEntity) {
 		this.userEntity = userEntity;
+	}
+
+	public List<FlashcardEntity> getFlashcards() {
+		return flashcards;
+	}
+
+	public void setFlashcards(List<FlashcardEntity> flashcards) {
+		this.flashcards = flashcards;
 	}
 	
 	

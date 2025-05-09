@@ -2,8 +2,8 @@ package br.com.TrabalhoEngSoftware.chatbot.dto;
 
 public class NoteUpdateDTO {
 	private String title;
-    private String content;
-    private String subtitle;
+  private String content;
+  private String subtitle;
     
 	public String getTitle() {
 		return title;

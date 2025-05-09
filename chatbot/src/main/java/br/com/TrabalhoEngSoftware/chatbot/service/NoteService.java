@@ -1,7 +1,5 @@
 package br.com.TrabalhoEngSoftware.chatbot.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +29,7 @@ public class NoteService {
 	public Long createNote(NoteDTO noteDTO, Long userId) {
 		NoteEntity note = new NoteEntity();
 		if(noteDTO.getTitle().trim().isEmpty()) {
-			throw new IllegalArgumentException("Title can't be empty");
+			throw new IllegalArgumentException("Note title can't be empty");
 		}
 		note.setTitle(noteDTO.getTitle());
 		note.setSubtitle(noteDTO.getSubtitle());
@@ -41,19 +39,19 @@ public class NoteService {
 	}
 	
 	public Page<NoteSummaryDTO> listNotes(String title, Long userId, String sortType, Pageable pageable) {
-		NoteSpecificationBuilder builder = new NoteSpecificationBuilder().withTitle(title, userId);
+		NoteSpecificationBuilder builder = new NoteSpecificationBuilder().filterByTitle(title);
 		
 		if ("createdAtAsc".equalsIgnoreCase(sortType)) {
-            builder.sortByCreatedAtAsc();
-        } else if ("createdAtDesc".equalsIgnoreCase(sortType)) {
-            builder.sortByCreatedAtDesc();
-        } else if ("updatedAtAsc".equalsIgnoreCase(sortType)) {
-            builder.sortByUpdatedAtAsc();
-        } else if ("updatedAtDesc".equalsIgnoreCase(sortType)) {
-            builder.sortByUpdatedAtDesc();
-        }
+      builder.sortByCreatedAtAsc();
+    } else if ("createdAtDesc".equalsIgnoreCase(sortType)) {
+      builder.sortByCreatedAtDesc();
+    } else if ("updatedAtAsc".equalsIgnoreCase(sortType)) {
+      builder.sortByUpdatedAtAsc();
+    } else if ("updatedAtDesc".equalsIgnoreCase(sortType)) {
+      builder.sortByUpdatedAtDesc();
+    }
 		
-		Specification<NoteEntity> specification = builder.build();
+		Specification<NoteEntity> specification = builder.build(userId);
 		
 		return noteRepository.findAll(specification, pageable).map(NoteSummaryDTO::new);
 	}

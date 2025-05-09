@@ -8,14 +8,13 @@ import jakarta.persistence.criteria.Predicate;
 public class NoteSpecification {
 	
 	// Filtro por título
-	public static Specification<NoteEntity> filterByTitle(String title, Long userId) {
+	public static Specification<NoteEntity> filterByTitle(String title) {
 		return (root, query, criteriaBuilder)-> {
 			Predicate titlePredicate = criteriaBuilder.conjunction();
 			if(title != null && !title.isEmpty()) {
 				titlePredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), "%" + title.toLowerCase() + "%");
 			}
-			Predicate userPredicate = criteriaBuilder.equal(root.get("userEntity").get("id"), userId);
-			return criteriaBuilder.and(titlePredicate, userPredicate);
+			return criteriaBuilder.and(titlePredicate);
 		};
 	}
 	

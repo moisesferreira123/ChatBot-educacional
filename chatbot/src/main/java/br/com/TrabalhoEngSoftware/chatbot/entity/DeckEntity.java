@@ -1,6 +1,8 @@
 package br.com.TrabalhoEngSoftware.chatbot.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
@@ -8,14 +10,17 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -39,6 +44,9 @@ public class DeckEntity {
 	
 	@Column
 	private LocalDateTime lastReviewedAt;
+
+	@OneToMany(mappedBy = "deckEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<FlashcardEntity> flashcards = new ArrayList<>();
 	
 // TODO: Verificar se vai precisar desses campos no Entity
 //	@Column(nullable = false)
@@ -118,6 +126,14 @@ public class DeckEntity {
 
 	public void setLastReviewedAt(LocalDateTime lastReviewedAt) {
 		this.lastReviewedAt = lastReviewedAt;
+	}
+
+	public List<FlashcardEntity> getFlashcards() {
+		return flashcards;
+	}
+
+	public void setFlashcards(List<FlashcardEntity> flashcards) {
+		this.flashcards = flashcards;
 	}
 
 	public UserEntity getUserEntity() {

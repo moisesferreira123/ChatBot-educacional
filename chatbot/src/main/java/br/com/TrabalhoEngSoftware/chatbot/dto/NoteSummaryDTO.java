@@ -3,22 +3,21 @@ package br.com.TrabalhoEngSoftware.chatbot.dto;
 import java.time.LocalDateTime;
 
 import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
-import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
 
 public class NoteSummaryDTO {
 	private Long id;
 	private String title;
-    private String subtitle;
-    private LocalDateTime updatedAt;
-    private LocalDateTime createdAt;
+  private String subtitle;
+  private LocalDateTime updatedAt;
+  private LocalDateTime createdAt;
 
-    public NoteSummaryDTO(NoteEntity entity) {
-    	this.id = entity.getId();
-        this.title = entity.getTitle();
-        this.subtitle = entity.getSubtitle();
-        this.updatedAt = entity.getUpdatedAt();
-        this.createdAt = entity.getCreatedAt();
-    }
+  public NoteSummaryDTO(NoteEntity entity) {
+  	this.id = entity.getId();
+    this.title = entity.getTitle();
+    this.subtitle = entity.getSubtitle();
+    this.updatedAt = entity.getUpdatedAt();
+    this.createdAt = entity.getCreatedAt();
+  }
 
 	public Long getId() {
 		return id;
