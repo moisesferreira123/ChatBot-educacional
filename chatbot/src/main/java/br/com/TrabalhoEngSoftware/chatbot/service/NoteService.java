@@ -28,7 +28,7 @@ public class NoteService {
 	@Transactional
 	public Long createNote(NoteDTO noteDTO, Long userId) {
 		NoteEntity note = new NoteEntity();
-		if(noteDTO.getTitle().trim().isEmpty()) {
+		if(noteDTO.getTitle() == null || noteDTO.getTitle().trim().isEmpty()) {
 			throw new IllegalArgumentException("Note title can't be empty");
 		}
 		note.setTitle(noteDTO.getTitle());

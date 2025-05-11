@@ -41,18 +41,18 @@ public class DeckSpecificationBuilder {
     return this;
   }
 
-  public DeckSpecificationBuilder sortByTotalFlashcardsDesc() {
-    this.specification = this.specification.and(DeckSpecification.sortByTotalFlashcardsDesc());
+  public DeckSpecificationBuilder sortByFlashcardsTotalDesc() {
+    this.specification = this.specification.and(DeckSpecification.sortByFlashcardsTotalDesc());
     return this;
   }
 
-  public DeckSpecificationBuilder sortByTotalDueFlashcardsDesc() {
-    this.specification = this.specification.and(DeckSpecification.sortByTotalDueFlashcardsDesc());
+  public DeckSpecificationBuilder sortByDueFlashcardsTotalDesc() {
+    this.specification = this.specification.and(DeckSpecification.sortByDueFlashcardsTotalDesc());
     return this;
   }
 
-  public DeckSpecificationBuilder sortByTotalDueFlashcardsAsc() {
-    this.specification = this.specification.and(DeckSpecification.sortByTotalDueFlashcardsAsc());
+  public DeckSpecificationBuilder sortByDueFlashcardsTotalAsc() {
+    this.specification = this.specification.and(DeckSpecification.sortByDueFlashcardsTotalAsc());
     return this;
   }
 

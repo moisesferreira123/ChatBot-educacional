@@ -68,7 +68,7 @@ public class DeckSpecification {
 	}
 	
 	// Ordenação pela quantidade total de cards do deck (maior quantidade)
-	public static Specification<DeckEntity> sortByTotalFlashcardsDesc() {
+	public static Specification<DeckEntity> sortByFlashcardsTotalDesc() {
 		return (root, query, criteriaBuilder) -> {
 			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
 			query.groupBy(root.get("id"));
@@ -78,7 +78,7 @@ public class DeckSpecification {
 	}
 	
 	// Ordenação pela quantidade de cards pendentes para hoje (maior quantidade)
-	public static Specification<DeckEntity> sortByTotalDueFlashcardsDesc() {
+	public static Specification<DeckEntity> sortByDueFlashcardsTotalDesc() {
 		return (root, query, criteriaBuilder) -> {
 			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
 
@@ -96,7 +96,7 @@ public class DeckSpecification {
 	}
 
 	// Ordenação pela quantidade de cards pendentes para hoje (menor quantidade)
-	public static Specification<DeckEntity> sortByTotalDueFlashcardsAsc() {
+	public static Specification<DeckEntity> sortByDueFlashcardsTotalAsc() {
 		return (root, query, criteriaBuilder) -> {
 			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
 
