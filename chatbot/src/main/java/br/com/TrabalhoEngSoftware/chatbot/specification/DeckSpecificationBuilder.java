@@ -56,6 +56,16 @@ public class DeckSpecificationBuilder {
     return this;
   }
 
+  public DeckSpecificationBuilder sortByMasteryLevelDesc() {
+    this.specification = this.specification.and(DeckSpecification.sortByMasteryLevelDesc());
+    return this;
+  }
+  
+  public DeckSpecificationBuilder sortByMasteryLevelAsc() {
+    this.specification = this.specification.and(DeckSpecification.sortByMasteryLevelAsc());
+    return this;
+  }
+
   public Specification<DeckEntity> build(Long userId) {
     return this.specification.and((root, query, criteriaBuilder) -> 
       criteriaBuilder.equal(root.get("userEntity").get("id"), userId)

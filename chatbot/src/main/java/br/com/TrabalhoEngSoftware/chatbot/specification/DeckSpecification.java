@@ -113,5 +113,39 @@ public class DeckSpecification {
 		};
 	}
 
-	// TODO: Fazer as ordenações do nível de domínio
+	// Ordenação por nível de domínio (maior)
+	public static Specification<DeckEntity> sortByMasteryLevelDesc() {
+		return (root, query, criteriaBuilder) -> {
+			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
+			int repetitionMastery = 3;
+			Expression<Long> dominatedFlashcards = criteriaBuilder.sum(
+				criteriaBuilder.<Long>selectCase()
+				.when(criteriaBuilder.greaterThan(flashcardJoin.get("repetition"), repetitionMastery), 1L)
+				.otherwise(0L)
+			);
+			Expression<Long> flashcardsTotal = criteriaBuilder.count(flashcardJoin);
+			Expression<Number> masteryLevel = criteriaBuilder.quot(criteriaBuilder.toDouble(dominatedFlashcards), criteriaBuilder.toDouble(flashcardsTotal));
+			query.groupBy(root.get("id"));
+			query.orderBy(criteriaBuilder.desc(masteryLevel));
+			return null;
+		};
+	}
+
+	// Ordenação por nível de domínio (menor)
+	public static Specification<DeckEntity> sortByMasteryLevelAsc() {
+		return (root, query, criteriaBuilder) -> {
+			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
+			int repetitionMastery = 3;
+			Expression<Long> dominatedFlashcards = criteriaBuilder.sum(
+				criteriaBuilder.<Long>selectCase()
+				.when(criteriaBuilder.greaterThan(flashcardJoin.get("repetition"), repetitionMastery), 1L)
+				.otherwise(0L)
+			);
+			Expression<Long> flashcardsTotal = criteriaBuilder.count(flashcardJoin);
+			Expression<Number> masteryLevel = criteriaBuilder.quot(criteriaBuilder.toDouble(dominatedFlashcards), criteriaBuilder.toDouble(flashcardsTotal));
+			query.groupBy(root.get("id"));
+			query.orderBy(criteriaBuilder.asc(masteryLevel));
+			return null;
+		};
+	}
 }
