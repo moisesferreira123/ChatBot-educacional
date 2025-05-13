@@ -3,6 +3,7 @@ package br.com.TrabalhoEngSoftware.chatbot.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckSummaryDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
-import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
 import br.com.TrabalhoEngSoftware.chatbot.repository.DeckRepository;
 import br.com.TrabalhoEngSoftware.chatbot.specification.DeckSpecificationBuilder;
@@ -32,7 +33,7 @@ public class DeckService {
   @Transactional
   public void createDeck(DeckDTO deckDTO, Long userId) {
     DeckEntity deck = new DeckEntity();
-    if(deckDTO.getTitle() == null && deckDTO.getTitle().trim().isEmpty()) {
+    if(deckDTO.getTitle() == null || deckDTO.getTitle().trim().isEmpty()) {
       throw new IllegalArgumentException("Deck title can't be empty");
     }
     deck.setTitle(deckDTO.getTitle());
@@ -80,7 +81,7 @@ public class DeckService {
 	    deck.setTitle(deckSummaryDTO.getTitle());
     }
 
-    if(!deckSummaryDTO.getTopic().equals(null)){
+    if(deckSummaryDTO.getTopic() != null){
       deck.setTopic(deckSummaryDTO.getTopic());
     }
 
@@ -111,13 +112,18 @@ public class DeckService {
     return dueFlashcardsTotal;
   }
 
-  public List<FlashcardEntity> getDueFlashcards(Long deckId, Long userId) {
+  public List<FlashcardDTO> getDueFlashcards(Long deckId, Long userId) {
     DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
     if(!deck.getUserEntity().getId().equals(userId)) {
 			// TODO: Trocar por Exceptions criados por nós
 			throw new RuntimeException("Unauthorized to see due flashcards this deck");
 		}
-    return deck.getFlashcards();
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+    List<FlashcardDTO> dueFlashcards = deck.getFlashcards().stream()
+                                  .filter(flashcard -> flashcard.getNextReview().isBefore(tomorrow))
+                                  .map(flashcard -> new FlashcardDTO(flashcard))
+                                  .collect(Collectors.toList());
+    return dueFlashcards;
   }
 
   public double getMasteryLevel(Long deckId, Long userId) {
@@ -135,7 +141,7 @@ public class DeckService {
     int totalFlashcards = deck.getFlashcards().size();
     if (totalFlashcards == 0) return 0.0; 
 
-    double masteryLevel = dominatedFlashcards/totalFlashcards;
+    double masteryLevel = (double) dominatedFlashcards/totalFlashcards;
     return masteryLevel;
   } 
 }

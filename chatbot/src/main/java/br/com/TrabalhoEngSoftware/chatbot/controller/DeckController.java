@@ -1,5 +1,7 @@
 package br.com.TrabalhoEngSoftware.chatbot.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckSummaryDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
 import br.com.TrabalhoEngSoftware.chatbot.service.DeckService;
 
 @RestController
-@RequestMapping("api/deck")
+@RequestMapping("api/decks")
 public class DeckController {
 
   @Autowired
@@ -60,5 +63,21 @@ public class DeckController {
     deckService.deleteDeck(deckId, user.getId());
   }
 
-  
+  @GetMapping("/get-due-flashcards-total/{deckId}")
+  public long getDueFlashcardsTotal(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return deckService.getDueFlashcardsTotal(deckId, user.getId());
+  }
+
+  @GetMapping("/get-due-flashcards/{deckId}")
+  public List<FlashcardDTO> getDueFlashcards(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return deckService.getDueFlashcards(deckId, user.getId());
+  }
+
+  @GetMapping("/get-mastery-level/{deckId}")
+  public double getMasteryLevel(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return deckService.getMasteryLevel(deckId, user.getId());
+  }
 }

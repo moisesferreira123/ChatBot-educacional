@@ -117,10 +117,10 @@ public class DeckSpecification {
 	public static Specification<DeckEntity> sortByMasteryLevelDesc() {
 		return (root, query, criteriaBuilder) -> {
 			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
-			int repetitionMastery = 3;
+			int repetitionMastery = 4;
 			Expression<Long> dominatedFlashcards = criteriaBuilder.sum(
 				criteriaBuilder.<Long>selectCase()
-				.when(criteriaBuilder.greaterThan(flashcardJoin.get("repetition"), repetitionMastery), 1L)
+				.when(criteriaBuilder.greaterThanOrEqualTo(flashcardJoin.get("repetition"), repetitionMastery), 1L)
 				.otherwise(0L)
 			);
 			Expression<Long> flashcardsTotal = criteriaBuilder.count(flashcardJoin);
@@ -135,10 +135,10 @@ public class DeckSpecification {
 	public static Specification<DeckEntity> sortByMasteryLevelAsc() {
 		return (root, query, criteriaBuilder) -> {
 			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
-			int repetitionMastery = 3;
+			int repetitionMastery = 4;
 			Expression<Long> dominatedFlashcards = criteriaBuilder.sum(
 				criteriaBuilder.<Long>selectCase()
-				.when(criteriaBuilder.greaterThan(flashcardJoin.get("repetition"), repetitionMastery), 1L)
+				.when(criteriaBuilder.greaterThanOrEqualTo(flashcardJoin.get("repetition"), repetitionMastery), 1L)
 				.otherwise(0L)
 			);
 			Expression<Long> flashcardsTotal = criteriaBuilder.count(flashcardJoin);
