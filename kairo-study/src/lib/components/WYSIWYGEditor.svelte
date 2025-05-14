@@ -25,9 +25,10 @@
   interface Props {
     content: string | undefined,
     onContentChange: (html: string) => void,
+	token: string | null,
   }
   
-  let {content, onContentChange = () => {}}: Props = $props();
+  let {content, onContentChange = () => {}, token}: Props = $props();
 	let element: Element | undefined;
   let editor = $state.raw<Editor | undefined>();
   let editorBox = $state.raw({current: editor});
@@ -73,7 +74,8 @@
 
   async function generateButtonClicked() {
     isLoading = true;
-    await handleAISubmit(aiPrompt, editorPos, editor);
+    await handleAISubmit(aiPrompt, editorPos, editor, token);
+    console.log(content);
     isLoading = false;
     showAIPrompt = false;
     aiPrompt = '';
