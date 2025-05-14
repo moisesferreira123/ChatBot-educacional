@@ -44,7 +44,7 @@ public class AiController {
      * @return A sugestão da LLM.
      */
     @PostMapping("/complete") // Handles POST requests to /api/ai/complete
-    public Flux<String> complete(@RequestBody CompletionRequest request) {
+    public String complete(@RequestBody CompletionRequest request) {
         // Call the AiService to get the completion
         return aiService.getCompletion(request.getSystemPrompt(), request.getUserPrompt());
     }

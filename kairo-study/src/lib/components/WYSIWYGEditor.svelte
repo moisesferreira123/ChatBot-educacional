@@ -75,6 +75,7 @@
   async function generateButtonClicked() {
     isLoading = true;
     await handleAISubmit(aiPrompt, editorPos, editor, token);
+    console.log(content);
     isLoading = false;
     showAIPrompt = false;
     aiPrompt = '';

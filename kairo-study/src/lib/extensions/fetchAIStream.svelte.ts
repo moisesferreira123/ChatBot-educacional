@@ -35,12 +35,15 @@ export async function fetchAIStream(userPrompt: string, onChunk: (chunk: string)
       throw new Error('Response body is not a readable stream.');
     }
 
-    // Use a TextDecoderStream to decode the byte chunks into strings
-    const reader = response.body
-      .pipeThrough(new TextDecoderStream())
-      .getReader();
-
+    
+    onChunk(await response.text());
     let buffer = ''; // Buffer to hold incomplete lines
+    
+      /* TODO: Descobrir como receber o Flux<String> como um ssse no client side
+       // Use a TextDecoderStream to decode the byte chunks into strings
+         const reader = response.body 
+        .pipeThrough(new TextDecoderStream())
+        .getReader();
 
     // Read the stream chunk by chunk
     while (true) {
@@ -98,7 +101,7 @@ export async function fetchAIStream(userPrompt: string, onChunk: (chunk: string)
           onChunk(data);
         }
       }
-    }
+    } */
 
   } catch (error) {
     console.error('Error fetching AI completion from backend:', error);

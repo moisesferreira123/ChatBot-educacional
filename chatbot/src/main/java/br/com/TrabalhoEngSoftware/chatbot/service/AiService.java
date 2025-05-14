@@ -32,7 +32,7 @@ public class AiService {
      * @param userPrompt   O prompt de entrada do usuário.
      * @return A sugestão do LLM.
      */
-    public Flux<String> getCompletion(String systemPrompt, String userPrompt) {
+    public String getCompletion(String systemPrompt, String userPrompt) {
         // Create a list to hold the messages
         List<Message> messages = new ArrayList<>();
 
@@ -48,7 +48,7 @@ public class AiService {
         Prompt prompt = new Prompt(messages);
 
         // Chama o LLM usando o ChatClient
-        return chatClient.prompt(prompt).stream().content();
+        return chatClient.prompt(prompt).call().content();
     }
 }
 
