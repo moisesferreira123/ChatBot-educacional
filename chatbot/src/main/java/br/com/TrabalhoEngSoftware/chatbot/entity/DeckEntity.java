@@ -48,17 +48,6 @@ public class DeckEntity {
 	@OneToMany(mappedBy = "deckEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FlashcardEntity> flashcards = new ArrayList<>();
 	
-// TODO: Verificar se vai precisar desses campos no Entity
-//	@Column(nullable = false)
-//	private double mastery;
-//	
-//	@Column(nullable = false)
-//	private Long totalCards;
-//	
-//	@Column(nullable = false)
-//	private Long dueCards;
-// ---
-	
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private UserEntity userEntity;
@@ -69,6 +58,10 @@ public class DeckEntity {
 	
 	public DeckEntity() {
 		
+	}
+
+	public DeckEntity(Long id) {
+		this.id = id;
 	}
 
 	@Override

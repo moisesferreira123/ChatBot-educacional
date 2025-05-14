@@ -2,14 +2,11 @@ package br.com.TrabalhoEngSoftware.chatbot.dto;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.BeanUtils;
-
-import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
 
-public class FlashcardDTO {
-	
-	private Long id;
+public class FlashcardSummaryDTO {
+
+  private Long id;
 	private String front;
 	private String back;
 	private LocalDateTime createdAt;
@@ -18,17 +15,20 @@ public class FlashcardDTO {
 	private int repetition;
 	private double easeFactor;
 	private int interval;
-	private DeckEntity deckEntity;
-	
-	public FlashcardDTO(FlashcardEntity flashcard) {
-		BeanUtils.copyProperties(flashcard, this);
-	}
-	
-	public FlashcardDTO() {
-		
-	}
-	
-	public Long getId() {
+
+  public FlashcardSummaryDTO(FlashcardEntity flashcard) {
+    this.id = flashcard.getId();
+    this.front = flashcard.getFront();
+    this.back = flashcard.getBack();
+    this.createdAt = flashcard.getCreatedAt();
+    this.lastReviewAt = flashcard.getLastReviewedAt();
+    this.nextReview = flashcard.getNextReview();
+    this.repetition = flashcard.getRepetition();
+    this.easeFactor = flashcard.getEaseFactor();
+    this.interval = flashcard.getInterval();
+  }
+
+  public Long getId() {
 		return id;
 	}
 	
@@ -98,13 +98,5 @@ public class FlashcardDTO {
 	
 	public void setInterval(int interval) {
 		this.interval = interval;
-	}
-	
-	public DeckEntity getDeckEntity() {
-		return deckEntity;
-	}
-	
-	public void setFlashcardEntity(DeckEntity deckEntity) {
-		this.deckEntity = deckEntity;
 	}
 }

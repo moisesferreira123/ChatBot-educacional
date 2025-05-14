@@ -2,8 +2,6 @@ package br.com.TrabalhoEngSoftware.chatbot.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckSummaryDTO;
-import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
 import br.com.TrabalhoEngSoftware.chatbot.repository.DeckRepository;
@@ -45,7 +42,6 @@ public class DeckService {
   public Page<DeckSummaryDTO> listDecks(String title, String topic, Long userId, String sortType, Pageable pageable) {
     DeckSpecificationBuilder builder = new DeckSpecificationBuilder().filterByTitle(title).filterByTopic(topic);
 
-    // TODO: Colocar as ordenações do nível de domínio.
     if ("createdAtAsc".equalsIgnoreCase(sortType)) {
       builder.sortByCreatedAtAsc();
     } else if ("createdAtDesc".equalsIgnoreCase(sortType)) {
@@ -60,6 +56,10 @@ public class DeckService {
       builder.sortByDueFlashcardsTotalAsc();
     } else if("totalDueFlashcardsDesc".equalsIgnoreCase(sortType)) {
       builder.sortByDueFlashcardsTotalDesc();
+    } else if("masteryLevelAsc".equalsIgnoreCase(sortType)) {
+      builder.sortByMasteryLevelAsc();
+    } else if("masteryLevelDesc".equalsIgnoreCase(sortType)) {
+      builder.sortByMasteryLevelDesc();
     }
 
     Specification<DeckEntity> specification = builder.build(userId);
@@ -110,20 +110,6 @@ public class DeckService {
                                   .filter(flashcard -> flashcard.getNextReview().isBefore(tomorrow))
                                   .count();
     return dueFlashcardsTotal;
-  }
-
-  public List<FlashcardDTO> getDueFlashcards(Long deckId, Long userId) {
-    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
-    if(!deck.getUserEntity().getId().equals(userId)) {
-			// TODO: Trocar por Exceptions criados por nós
-			throw new RuntimeException("Unauthorized to see due flashcards this deck");
-		}
-    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
-    List<FlashcardDTO> dueFlashcards = deck.getFlashcards().stream()
-                                  .filter(flashcard -> flashcard.getNextReview().isBefore(tomorrow))
-                                  .map(flashcard -> new FlashcardDTO(flashcard))
-                                  .collect(Collectors.toList());
-    return dueFlashcards;
   }
 
   public double getMasteryLevel(Long deckId, Long userId) {
