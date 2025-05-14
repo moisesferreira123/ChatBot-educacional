@@ -1,6 +1,6 @@
 import Sysprompt from '$lib/extensions/sysprompt.txt?raw';
 
-export async function fetchAIStream(userPrompt: string, onChunk: (chunk: string) => void) {
+export async function fetchAIStream(userPrompt: string, onChunk: (chunk: string) => void, token: string) {
   try {
     const apiEndpoint = 'http://localhost:8080/api/ai/complete'; // Use relative path if frontend and backend are served from the same origin
 
@@ -10,11 +10,14 @@ export async function fetchAIStream(userPrompt: string, onChunk: (chunk: string)
       userPrompt: userPrompt
     };
 
+    console.log("Token:", token);
+
     // Make the POST request to the backend
     const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
         // Add Accept header for SSE
         // 'Accept': 'text/event-stream' // While good practice, fetch often handles this for streams
       },
