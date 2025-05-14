@@ -175,20 +175,23 @@
 		outline: none;
 	}
 	:global .rich-editor h1 {
-		font-size: 2em;
+		font-size: 1.7em;
 		font-weight: bold;
-		margin: 0;
+		margin-top: 1.5em;
+		margin-bottom: 0.2em;
 	}
 
 	:global .rich-editor h2 {
 		font-size: 1.5em;
 		font-weight: bold;
-		margin: 0;
+		margin-top: 1.2em;
+		margin-bottom: 0.2em;
 	}
 	:global .rich-editor h3 {
 		font-size: 1.17em;
 		font-weight: bold;
-		margin: 0;
+		margin-top: 1em;
+		margin-bottom: 0.2em;
 	}
 	:global .rich-editor p {
 		font-size: 1em;

@@ -1,5 +1,6 @@
 import { fetchAIStream } from './fetchAIStream.svelte';
 import { Editor } from '@tiptap/core';
+import { marked } from 'marked';
 
 export default async function handleAISubmit(userPrompt: string, insertPos: number, editor: Editor, token: string) {
   if (!userPrompt) return;
@@ -9,14 +10,14 @@ export default async function handleAISubmit(userPrompt: string, insertPos: numb
   try {   
     await fetchAIStream(userPrompt, (chunk: string) => {
       if (!isStreaming) return; // Handle cancellation
-      //console.log(chunk);
-      //let overrideOptions = {updateSelection: true, applyPasteRules: true, applyInputRules: true};
-      if (firstInsertion) editor.chain().insertContentAt(insertPos, chunk).focus().run();
-      else editor.chain().insertContent(chunk).focus().run();
+      const htmlChunk = marked.parse(chunk, {breaks: true, gfm: true});
+      if (firstInsertion) editor.chain().insertContentAt(insertPos, htmlChunk).focus().run();
+      else editor.chain().insertContent(htmlChunk).focus().run();
       firstInsertion = false;
     }, token);
   } catch (error) {
     prompt('Error fetching AI response:', (error as Error).message);
+    console.error('Error fetching AI response:', error);
   }
 
   isStreaming = false;
