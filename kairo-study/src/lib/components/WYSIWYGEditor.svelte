@@ -25,9 +25,10 @@
   interface Props {
     content: string | undefined,
     onContentChange: (html: string) => void,
+	token: string | null,
   }
   
-  let {content, onContentChange = () => {}}: Props = $props();
+  let {content, onContentChange = () => {}, token}: Props = $props();
 	let element: Element | undefined;
   let editor = $state.raw<Editor | undefined>();
   let editorBox = $state.raw({current: editor});
@@ -73,7 +74,8 @@
 
   async function generateButtonClicked() {
     isLoading = true;
-    await handleAISubmit(aiPrompt, editorPos, editor);
+    await handleAISubmit(aiPrompt, editorPos, editor, token);
+    console.log(content);
     isLoading = false;
     showAIPrompt = false;
     aiPrompt = '';
@@ -173,20 +175,23 @@
 		outline: none;
 	}
 	:global .rich-editor h1 {
-		font-size: 2em;
+		font-size: 1.7em;
 		font-weight: bold;
-		margin: 0;
+		margin-top: 1.5em;
+		margin-bottom: 0.2em;
 	}
 
 	:global .rich-editor h2 {
 		font-size: 1.5em;
 		font-weight: bold;
-		margin: 0;
+		margin-top: 1.2em;
+		margin-bottom: 0.2em;
 	}
 	:global .rich-editor h3 {
 		font-size: 1.17em;
 		font-weight: bold;
-		margin: 0;
+		margin-top: 1em;
+		margin-bottom: 0.2em;
 	}
 	:global .rich-editor p {
 		font-size: 1em;

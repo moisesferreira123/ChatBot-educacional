@@ -74,7 +74,3 @@ Three dashes create a separator:
 - Use \* for asterisks, \_ for underscores
 - Escape backslashes: `print("\\n")` → `\n`
 - Avoid invalid math delimiters (see above)!
-
-<USER_PROMPT>
-{{prompt}}
-</USER_PROMPT>
