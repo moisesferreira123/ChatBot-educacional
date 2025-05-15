@@ -79,6 +79,7 @@
     isLoading = false;
     showAIPrompt = false;
     aiPrompt = '';
+	element?.scroll
   }
 </script>
 
@@ -158,14 +159,14 @@
 		{/each}
 	</div>
 {/if}
-<div class="rich-editor overflow-scroll p-5" bind:this={element}></div>
+<div class="rich-editor overflow-y-auto h-full p-5" bind:this={element} onclick={editor.chain().focus().run()}></div>
 
 <style>
 	:global .rich-editor {
 		border: 1px solid #ccc;
 		border-radius: 4px;
 		padding: 10px;
-		min-height: 100%;
+		height: 100%;
 		background-color: white;
 		font-family: 'Montserrat', sans-serif;
 		font-size: 16px;
