@@ -3,7 +3,7 @@
 	// TODO: Colocar o primeiro nome do usuário para aparecer na navbar.
   import { fullName } from '$lib/stores/userDataStore.svelte';
   //Icons from Lucide
-  import { House, MessageSquare, BookOpen ,FileText, User } from '@lucide/svelte';
+  import { House, MessageSquare, BookOpen, User } from '@lucide/svelte';
   import { isMenuMyAccountOpen } from '$lib/stores/menuMyAccountStore';
   import MenuMyAccount from './MenuMyAccount.svelte';
 
@@ -26,11 +26,6 @@
       href: "/flashcards"
     },
     {
-      icon: FileText,
-      text: "Notes",
-      href: "/notes"
-    },
-    {
       icon: User,
       text: "User",
       onclick: () => {
@@ -40,10 +35,10 @@
   ];
 </script>
 
-
+<!-- TODO: arrumar os overflows do editor e da pagina -->
 <nav class="fixed flex justify-between !px-20 items-center z-10  w-full h-20 bg-white border-b border-gray-200">
   <div class="flex items-center">
-    <img class="!ml-[25px] !mr-[10px]" width="36px" height="36px" src="images/icon-kairo-removebg-preview.webp" alt="Kairo icon" />
+    <img class="!ml-[25px] !mr-[10px]" width="36px" height="36px" src="/images/icon-kairo-removebg-preview.webp" alt="Kairo icon" />
     <p class="font-bold text-[18px] text-[var(--color4)]">Kairo</p>
   </div>
   <ul class="flex items-center mr-[30px] text-[var(--color4)] list-none">
