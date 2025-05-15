@@ -52,6 +52,7 @@
 		"@tiptap/pm": "^2.11.7",
 		"@tiptap/starter-kit": "^2.11.7",
 		"@tiptap/suggestion": "^2.11.7",
+		"dayjs": "^1.11.13",
 		"katex": "^0.16.22",
 		"lowlight": "^3.3.0",
 		"openai": "^4.96.2",

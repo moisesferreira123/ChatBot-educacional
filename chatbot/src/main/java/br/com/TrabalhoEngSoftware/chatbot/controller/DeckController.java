@@ -3,6 +3,7 @@ package br.com.TrabalhoEngSoftware.chatbot.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckSummaryDTO;
@@ -40,6 +42,9 @@ public class DeckController {
 
   @PostMapping
   public void createDeck(@RequestBody DeckDTO deckDTO, Authentication authentication) {
+    if(deckDTO.getTitle() == null || deckDTO.getTitle().trim().isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Deck title can't be empty");
+    }
     UserEntity user = (UserEntity) authentication.getPrincipal();
     deckService.createDeck(deckDTO, user.getId());
   }

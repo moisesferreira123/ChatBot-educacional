@@ -11,7 +11,8 @@ export async function fetchCreateNote(title, subtitle, token) {
     })
   });
   if(!response.ok){
-    throw new Error("Error creating note: Title not provided");
+    const errorMessage = response.message || 'Unknown error creating note';
+    throw new Error(errorMessage);
   }
   return response.json();
 }

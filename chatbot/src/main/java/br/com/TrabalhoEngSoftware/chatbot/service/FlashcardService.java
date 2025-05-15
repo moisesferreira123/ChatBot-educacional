@@ -151,6 +151,7 @@ public class FlashcardService {
     flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
 
     flashcard.setLastReviewedAt(LocalDateTime.now());
+    flashcard.getDeckEntity().setLastReviewedAt(LocalDateTime.now());
     flashcardRepository.save(flashcard);
   }
 
