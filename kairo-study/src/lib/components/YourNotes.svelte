@@ -58,7 +58,7 @@
   function resetPages() {
     currentPage = 0;
     displayCount = 5;
-    allNotes= [];
+    allNotes = [];
     hasMore = true;
   }
 

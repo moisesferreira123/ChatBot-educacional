@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { fullName } from '$lib/stores/userDataStore.svelte';
-  import { newNoteOverlay } from '$lib/stores/overlayStore.svelte';
+  import { newNoteOverlay, newDeckOverlay } from '$lib/stores/overlayStore.svelte';
   // TODO: Colocar isso depois de integrar o banco de dados
   let firstName = $derived($fullName.split(' ')[0]);
 
@@ -22,9 +22,9 @@
     if(buttonClick1 === "home") {
       newNoteOverlay.set(true);
     } else if(buttonClick1 === "flashcards") {
-
+      newDeckOverlay.set(true);
     } else {
-      console.warn('buttonClick with unexpected value:', buttonClick1);
+      console.warn('buttonClick1 with unexpected value:', buttonClick1);
     }
   }
 </script>

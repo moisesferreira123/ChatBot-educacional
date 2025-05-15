@@ -1,6 +1,9 @@
 <script>
   import HeaderLoggedIn from "$lib/components/HeaderLoggedIn.svelte";
   import Intro from "$lib/components/Intro.svelte";
+  import NewDeckOverlay from "$lib/components/NewDeckOverlay.svelte";
+  import Decks from "$lib/components/Decks.svelte";
+  import { newDeckOverlay } from "$lib/stores/overlayStore.svelte";
 </script>
 
 <HeaderLoggedIn/>
@@ -14,6 +17,10 @@
     secondButtonText="Start Review"
     buttonClick1="flashcards"
   />
+  {#if $newDeckOverlay}
+    <NewDeckOverlay />
+  {/if}
+  <Decks />
 </main>
 
 <style>
