@@ -5,7 +5,9 @@
   import { topicFilter } from '$lib/stores/filter';
   import { sortTypeDecks } from '$lib/stores/sortType';
   import { deckCreated } from '$lib/stores/deckStore';
+  import { deckManagementOverlay } from '$lib/stores/overlayStore.svelte';
   import Deck from './Deck.svelte';
+  import DeckManagementOverlay from './DeckManagementOverlay.svelte';
 
   let allDecks = [];
   let visibleDecks = [];
@@ -140,3 +142,11 @@
     <ArrowDown size={20} />
   </button>   
 </div>
+
+{#if $deckManagementOverlay !== null}
+  <DeckManagementOverlay 
+    id={$deckManagementOverlay.id}
+    title={$deckManagementOverlay.title}
+    topic={$deckManagementOverlay.topic}
+  />
+{/if}
