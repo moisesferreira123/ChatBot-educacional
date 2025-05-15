@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { X, } from '@lucide/svelte';
+  import { FileText, X, } from '@lucide/svelte';
 
   // Props to control visibility and handle closing
   let {show = $bindable(), onClose} = $props();
@@ -15,8 +15,12 @@
     </header>
     <div class="p-4">
       <div class="flex flex-col items-center justify-center h-64 border border-dashed border-neutral-300 rounded-md text-gray-500">
+        <FileText size = 50 class="pb-2"/>
         <strong>No documents attached</strong>
         <p class="text-sm text-center">Upload documents to get context for your notes</p>
+        <button class="mt-4 bg-[var(--color1)] text-white px-4 py-2 rounded hover:bg-[var(--color1)]/90">
+          + Add Documents
+        </button>
         </div>
     </div>
   </aside>
