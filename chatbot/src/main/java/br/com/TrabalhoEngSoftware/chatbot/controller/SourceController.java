@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/notes/{noteId}/sources") // URL base para o controlador, endpoint para a nota específica
 public class SourceController {

@@ -1,6 +1,6 @@
 <script>
   import { Search, ArrowUpDown, ArrowUp, ArrowDown } from '@lucide/svelte';
-	import { fetchListNotes } from '$lib/api/notes/fetchListNotes';
+	import { fetchListNotes } from '$lib/api/notes';
   import { onMount } from 'svelte';
   import { sortNotesOverlay } from '$lib/stores/overlayStore.svelte';
   import { sortTypeNotes } from '$lib/stores/sortType';

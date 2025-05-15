@@ -1,5 +1,5 @@
 <script>
-	import { fetchCreateDeck } from "$lib/api/decks/fetchCreateDeck";
+	import { fetchCreateDeck } from "$lib/api/decks";
   import { newDeckOverlay } from "$lib/stores/overlayStore.svelte";
   import { deckCreated } from "$lib/stores/deckStore";
   import { X } from '@lucide/svelte';

@@ -3,8 +3,8 @@
   import WYSIWYGEditor from "$lib/components/WYSIWYGEditor.svelte";
   import { ChevronLeft, Pencil, Plus, Clock, Save, Settings, FileText, MessageSquare, BookCheck } from "@lucide/svelte";
 	import { onMount } from "svelte";
-	import { fetchGetNoteById } from '$lib/api/notes/fetchGetNoteById';
-  import { fetchUpdateNote } from "$lib/api/notes/fetchUpdateNote";
+	import { fetchGetNoteById } from '$lib/api/notes';
+  import { fetchUpdateNote } from "$lib/api/notes";
   import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import SourcesOverlay from "$lib/components/SourcesOverlay.svelte";
@@ -121,8 +121,10 @@
       </div>
     </header>
     <div class="flex flex-1 overflow-y-hidden">
+      {#if showSourcesOverlay}
       <SourcesOverlay bind:show={showSourcesOverlay} onClose={() => {showSourcesOverlay = false}} />
-      <div class="w-full">
+      {/if}
+        <div class="w-full">
         <WYSIWYGEditor content={note.content} onContentChange={autoSave} token={token} />
       </div>
       <FlashcardsOverlay bind:show={showFlashcardsOverlay} onClose={() => {showFlashcardsOverlay = false}} />

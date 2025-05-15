@@ -2,8 +2,8 @@
   import { Clock, Folder, Settings } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import { formatDate } from '$lib/stores/formatDate';
-	import { fetchGetDueFlashcardsTotal } from '$lib/api/decks/fetchGetDueFlashcardsTotal';
-	import { fetchGetMasteryLevel } from '$lib/api/decks/fetchGetMasteryLevel';
+	import { fetchGetDueFlashcardsTotal } from '$lib/api/decks';
+	import { fetchGetMasteryLevel } from '$lib/api/decks';
 
   export let id;
   export let title;

@@ -1,6 +1,6 @@
 <script>
   import { Search, Funnel, ArrowUpDown, ArrowUp, ArrowDown } from '@lucide/svelte';
-  import { fetchListDecks } from '$lib/api/decks/fetchListDecks';
+  import { fetchListDecks } from '$lib/api/decks';
   import { onMount } from 'svelte';
   import { topicFilter } from '$lib/stores/filter';
   import { sortTypeDecks } from '$lib/stores/sortType';
