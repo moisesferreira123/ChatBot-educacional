@@ -33,15 +33,16 @@ public class FlashcardController {
     @RequestParam(required = false) boolean dominatedFlashcards,
     @RequestParam(required = false) boolean undominatedFlashcards,
     @RequestParam(defaultValue = "lastReviewedAtDesc") String sortType,
+    @RequestParam(required = true) Long deckId,
     Pageable pageable,
     Authentication authentication
   ) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
-    return flashcardService.listFlashcards(word, dominatedFlashcards, undominatedFlashcards, user.getId(), sortType, pageable);
+    return flashcardService.listFlashcards(word, dominatedFlashcards, undominatedFlashcards, user.getId(), deckId, sortType, pageable);
   }
 
-  @PostMapping
-  public void createFlashcard(@RequestBody FlashcardDTO flashcardDTO, Long deckId) {
+  @PostMapping("/{deckId}")
+  public void createFlashcard(@RequestBody FlashcardDTO flashcardDTO, @PathVariable Long deckId) {
     flashcardService.createFlashcard(flashcardDTO, deckId);
   }
 

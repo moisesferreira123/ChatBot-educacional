@@ -65,6 +65,12 @@ public class DeckController {
     deckService.deleteDeck(deckId, user.getId());
   }
 
+  @GetMapping("/get-flashcards-total/{deckId}")
+  public long geFlashcardsTotal(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return deckService.getFlashcardsTotal(deckId, user.getId());
+  }
+
   @GetMapping("/get-due-flashcards-total/{deckId}")
   public long getDueFlashcardsTotal(@PathVariable Long deckId, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();

@@ -4,10 +4,11 @@
   import { onMount } from 'svelte';
   import { topicFilter } from '$lib/stores/filter';
   import { sortTypeDecks } from '$lib/stores/sortType';
-  import { createdDeck, deletedDeck } from '$lib/stores/deckStore';
-  import { deckManagementOverlay } from '$lib/stores/overlayStore.svelte';
+  import { createdDeck, deletedDeck, updatedDeck } from '$lib/stores/deckStore';
+  import { deckManagementOverlay, sortDecksOverlay } from '$lib/stores/overlayStore.svelte';
   import Deck from './Deck.svelte';
   import DeckManagementOverlay from './DeckManagementOverlay.svelte';
+	import SortDecksOverlay from './SortDecksOverlay.svelte';
 
   let allDecks = [];
   let visibleDecks = [];
@@ -94,6 +95,13 @@
       }
     });
 
+    updatedDeck.subscribe(async (value) => {
+      if (value) {
+        reloadDecks();
+        updatedDeck.set(false);
+      }
+    });
+
   onMount(() => {
     token = localStorage.getItem("token");
     loadDecks();
@@ -110,8 +118,8 @@
   <div class="inline-flex ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap justify-center items-center h-9 border-(--color13)">
     <p class="font-semibold text-sm text-(--color14) cursor-default">Decks</p>
   </div>
-  <div>
-    <button data-user-button onclick={() => filterTopicOverlay.update(open => !open)} class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
+  <div class="relative">
+    <button filter-button onclick={() => filterTopicOverlay.update(open => !open)} class="inline-flex mr-1 transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
       <Funnel size={16} color="var(--color14)" />
       <p class="font-semibold text-sm text-(--color14)">Filter</p>
     </button>
@@ -119,6 +127,11 @@
       <ArrowUpDown size={16} color="var(--color14)" />
       <p class="font-semibold text-sm text-(--color14)">Sort</p>
     </button>
+    {#if $sortDecksOverlay}
+      <SortDecksOverlay
+        changeSort={(newSort) => changeSort(newSort)}
+      />
+    {/if}
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

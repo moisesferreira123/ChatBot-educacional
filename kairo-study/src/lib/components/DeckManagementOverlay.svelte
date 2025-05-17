@@ -1,11 +1,14 @@
 <script>
-  import { deckManagementOverlay, deleteWarningOverlay, editDeckOverlay } from "$lib/stores/overlayStore.svelte";
-  import { X, Settings, Search, Trash2, Plus } from "@lucide/svelte";
+  import { deckManagementOverlay, deleteWarningOverlay, editDeckOverlay, newFlashcardOverlay } from "$lib/stores/overlayStore.svelte";
+  import { X, Settings, Trash2, Plus } from "@lucide/svelte";
   import { fetchDeleteDeck } from "$lib/api/decks/fetchDeleteDeck";
 	import { onMount } from "svelte";
-	import DeleteWarningOverlay from "./DeleteWarningOverlay.svelte";
 	import { deletedDeck } from "$lib/stores/deckStore";
+	import { fetchGetFlashcardsTotal } from "$lib/api/decks/fetchGetFlashcardsTotal";
 	import EditDeckOverlay from "./EditDeckOverlay.svelte";
+	import DeleteWarningOverlay from "./DeleteWarningOverlay.svelte";
+	import NewFlashcardOverlay from "./NewFlashcardOverlay.svelte";
+  
   export let id;
   export let title;
   export let topic;
@@ -13,6 +16,7 @@
   let alertTitle = "Are you sure?";
   let alertMessage = `This action cannot be undone. It will permanently delete the "${title}" deck and all of its flashcards.`;
   let word;
+  let flashcards = 0;
   let token;
 
   function updateDeckTitleAndTopic(deckTitle, deckTopic) {
@@ -31,8 +35,17 @@
     }
   }
 
+  async function getFlashcardsTotal() {
+    try {
+      flashcards = await fetchGetFlashcardsTotal(id, token);
+    } catch(e) {
+      alert(e.message);
+    }
+  }
+
   onMount(() => {
     token = localStorage.getItem("token");
+    getFlashcardsTotal();
   });
 
 </script>
@@ -51,6 +64,10 @@
     title={title}
     topic={topic}
     updateDeckInformations={(deckTitle, deckTopic) => updateDeckTitleAndTopic(deckTitle, deckTopic)}
+  />
+{:else if $newFlashcardOverlay} 
+  <NewFlashcardOverlay 
+    deckId={id}
   />
 {:else}
   <div class="fixed inset-0 z-50 bg-black/80">
@@ -75,8 +92,8 @@
       </div>
       <div class="flex-grow">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="text-lg font-medium">Flashcards in this deck(5)</h3>
-          <button class="flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
+          <h3 class="text-lg font-medium">Flashcards in this deck ({flashcards})</h3>
+          <button onclick={() => newFlashcardOverlay.set(true)} class="flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
             <Plus size={16} color="var(--color14)" />
             Add Flashcards
           </button>

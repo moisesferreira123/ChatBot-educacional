@@ -82,7 +82,7 @@
     </div>
     <div class="mt-3 pt-3 border-t border-t-(--color13) flex justify-between">
       <button class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color1) hover:bg-(--color8)">Review</button>
-      <button class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color14) hover:bg-(--color8)">Add Card</button>
+      <button class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color14) hover:bg-(--color8)">Add Flashcard</button>
     </div>
   </div>
 </div>

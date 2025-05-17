@@ -3,6 +3,7 @@
   import { editDeckOverlay } from "$lib/stores/overlayStore.svelte";
 	import { onMount } from "svelte";
   import { X } from "@lucide/svelte";
+	import { updatedDeck } from "$lib/stores/deckStore";
 
   export let id;
   export let title;
@@ -15,6 +16,7 @@
     try {
       await fetchUpdateDeck(id, title, topic, token);
       editDeckOverlay.set(false);
+      updatedDeck.set(true);
     } catch(e) {
       alert(e.message);
     }
@@ -33,12 +35,12 @@
     </button>
     <h2 class="text-xl font-bold text-(--color14) mb-2">Update deck</h2>
     <div>
-      <label for="title" class="text-sm font-semibold mb-1">Deck Title</label>
-      <input id="title" placeholder="Title" bind:value={title} class="mb-4 w-full h-10 rounded-md border border-(--color13) text-(--color14) px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-black-500 text-base font-medium" required/>
+      <label for="title" class="text-sm font-semibold">Deck Title</label>
+      <input id="title" placeholder="Title" bind:value={title} class="mt-1 mb-4 w-full h-10 rounded-md border border-(--color13) text-(--color14) px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-black-500 text-base font-medium" required/>
     </div>
     <div>
-      <label for="topic" class="text-sm font-semibold mb-1">Topic</label>
-      <input id=topic placeholder="Topic (E.g.: Biology)" bind:value={topic} class="mb-6 w-full h-10 rounded-md border border-(--color13) text-(--color14) px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-black-500 text-base font-medium" />
+      <label for="topic" class="text-sm font-semibold">Topic</label>
+      <input id=topic placeholder="Topic (E.g.: Biology)" bind:value={topic} class="mt-1 mb-6 w-full h-10 rounded-md border border-(--color13) text-(--color14) px-3 py-2 focus:outline-2 focus:outline-offset-2 focus:outline-black-500 text-base font-medium" />
     </div>
     <div class="flex justify-end gap-3">
       <button onclick={() => editDeckOverlay.set(false)} class="bg-white text-(--color14) outline outline-offset-[-1px] outline-(--color13) px-3 py-2 rounded transition-colors duration-250 hover:bg-[var(--color12)] hover:cursor-pointer">Cancel</button>
