@@ -5,6 +5,8 @@ import { writable } from 'svelte/store';
 export const newNoteOverlay = writable(false);
 export const sortNotesOverlay = writable(false);
 export const newDeckOverlay = writable(false);
+export const deleteWarningOverlay = writable(false);
+export const editDeckOverlay = writable(false);
 export const deckManagementOverlay = writable(null);
 
 export const overlayStore = $state<{currentOverlay: string | null}>({ 

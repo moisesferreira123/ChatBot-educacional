@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import { topicFilter } from '$lib/stores/filter';
   import { sortTypeDecks } from '$lib/stores/sortType';
-  import { deckCreated } from '$lib/stores/deckStore';
+  import { createdDeck, deletedDeck } from '$lib/stores/deckStore';
   import { deckManagementOverlay } from '$lib/stores/overlayStore.svelte';
   import Deck from './Deck.svelte';
   import DeckManagementOverlay from './DeckManagementOverlay.svelte';
@@ -80,10 +80,17 @@
     currentPage = 1;
   }
 
-  deckCreated.subscribe(async (value) => {
+  createdDeck.subscribe(async (value) => {
       if (value) {
         reloadDecks();
-        deckCreated.set(false);
+        createdDeck.set(false);
+      }
+    });
+
+    deletedDeck.subscribe(async (value) => {
+      if (value) {
+        reloadDecks();
+        deletedDeck.set(false);
       }
     });
 
@@ -121,10 +128,6 @@
       title={deck.title} 
       topic={deck.topic} 
       lastReviewedAt={new Date(deck.lastReviewedAt)} 
-      onDelete={() => {
-        resetPages();
-        loadNotes();
-      }}
     />
   {/each}
 </div>

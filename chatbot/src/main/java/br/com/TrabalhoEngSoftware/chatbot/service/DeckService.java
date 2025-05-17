@@ -69,18 +69,18 @@ public class DeckService {
   @Transactional 
   public DeckSummaryDTO updateDeck(Long deckId, DeckSummaryDTO deckSummaryDTO, Long userId) {
     DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
-    
+    System.out.println("oi");
     if(!deck.getUserEntity().getId().equals(userId)) {
       throw new RuntimeException("Unauthorized to edit this deck");
     }
-
+    System.out.println("oi");
     if(deckSummaryDTO.getTitle() != null) {
       if(deckSummaryDTO.getTitle().trim().isEmpty()) {
 				throw new IllegalArgumentException("Title deck can't be empty");
 			}
 	    deck.setTitle(deckSummaryDTO.getTitle());
     }
-
+    System.out.println("oi");
     if(deckSummaryDTO.getTopic() != null){
       deck.setTopic(deckSummaryDTO.getTopic());
     }

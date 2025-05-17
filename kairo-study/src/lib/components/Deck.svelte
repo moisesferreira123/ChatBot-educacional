@@ -10,7 +10,6 @@
   export let title;
   export let topic;
   export let lastReviewedAt;
-  export let onDelete;
 
   let token;
   let dueFlashcards = 0;

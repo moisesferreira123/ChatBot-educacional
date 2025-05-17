@@ -1,7 +1,7 @@
 <script>
 	import { fetchCreateDeck } from "$lib/api/decks/fetchCreateDeck";
   import { newDeckOverlay } from "$lib/stores/overlayStore.svelte";
-  import { deckCreated } from "$lib/stores/deckStore";
+  import { createdDeck } from "$lib/stores/deckStore";
   import { X } from '@lucide/svelte';
 
   let deckTitle='';
@@ -15,7 +15,7 @@
       deckTitle = '';
       deckTopic = '';
       newDeckOverlay.set(false);
-      deckCreated.set(true);
+      createdDeck.set(true);
     } catch(e) {
       alert(e.message);
     }

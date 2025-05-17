@@ -34,6 +34,10 @@ public class SecurityConfiguration {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
 		                .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
+										.requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+    								.requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+    								.requestMatchers(HttpMethod.PUT, "/api/**").authenticated()   // ✅ isso aqui resolve
+    								.requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
 						.anyRequest().authenticated()
 				)
 				.authenticationProvider(authenticationProvider())
