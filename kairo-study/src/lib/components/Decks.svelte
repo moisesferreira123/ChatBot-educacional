@@ -5,10 +5,12 @@
   import { topicFilter } from '$lib/stores/filter';
   import { sortTypeDecks } from '$lib/stores/sortType';
   import { createdDeck, deletedDeck, updatedDeck } from '$lib/stores/deckStore';
-  import { deckManagementOverlay, sortDecksOverlay } from '$lib/stores/overlayStore.svelte';
+  import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay, sortDecksOverlay } from '$lib/stores/overlayStore.svelte';
+	import { createdFlashcard } from '$lib/stores/flashcardStore';
   import Deck from './Deck.svelte';
   import DeckManagementOverlay from './DeckManagementOverlay.svelte';
 	import SortDecksOverlay from './SortDecksOverlay.svelte';
+	import NewFlashcardOverlay from './NewFlashcardOverlay.svelte';
 
   let allDecks = [];
   let visibleDecks = [];
@@ -67,12 +69,12 @@
   function resetPages() {
     currentPage = 0;
     displayCount = 12;
+    visibleDecks = [];
     allDecks = [];
     hasMore = true;
   }
 
   async function reloadDecks() {
-    visibleDecks = [];
     resetPages();
     const data = await fetchListDecks(0, pageSize, titleFilter, $topicFilter, $sortTypeDecks, token);
     allDecks = data.content;
@@ -102,6 +104,13 @@
       }
     });
 
+    createdFlashcard.subscribe(async (value) => {
+      if(value) {
+        reloadDecks();
+        createdFlashcard.set(false);
+      }
+    });
+
   onMount(() => {
     token = localStorage.getItem("token");
     loadDecks();
@@ -109,6 +118,11 @@
 
 </script>
 
+{#if $newFlashcardInDeckInterfaceOverlay !== null}
+  <NewFlashcardOverlay 
+    deckId={$newFlashcardInDeckInterfaceOverlay.id}
+  />
+{/if}
 <div class="relative mb-4">
   <Search class="absolute left-3 top-1/2 transform -translate-y-1/2" size={16} color="var(--color16)" />
   <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md focus:outline-offset-2 focus:outline-black-500 focus:outline-2 bg-white" placeholder="Search decks..."

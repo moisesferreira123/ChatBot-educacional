@@ -5,9 +5,11 @@
 	import { onMount } from "svelte";
 	import { deletedDeck } from "$lib/stores/deckStore";
 	import { fetchGetFlashcardsTotal } from "$lib/api/decks/fetchGetFlashcardsTotal";
+	import { createdFlashcardInManagement } from "$lib/stores/flashcardStore";
 	import EditDeckOverlay from "./EditDeckOverlay.svelte";
 	import DeleteWarningOverlay from "./DeleteWarningOverlay.svelte";
 	import NewFlashcardOverlay from "./NewFlashcardOverlay.svelte";
+	import Flashcards from "./Flashcards.svelte";
   
   export let id;
   export let title;
@@ -15,7 +17,6 @@
 
   let alertTitle = "Are you sure?";
   let alertMessage = `This action cannot be undone. It will permanently delete the "${title}" deck and all of its flashcards.`;
-  let word;
   let flashcards = 0;
   let token;
 
@@ -42,6 +43,13 @@
       alert(e.message);
     }
   }
+
+  createdFlashcardInManagement.subscribe(async (value) => {
+    if(value) {
+      getFlashcardsTotal();
+      createdFlashcardInManagement.set(false);
+    }
+  });
 
   onMount(() => {
     token = localStorage.getItem("token");
@@ -91,7 +99,7 @@
         </div>
       </div>
       <div class="flex-grow">
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-0">
           <h3 class="text-lg font-medium">Flashcards in this deck ({flashcards})</h3>
           <button onclick={() => newFlashcardOverlay.set(true)} class="flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
             <Plus size={16} color="var(--color14)" />
@@ -99,9 +107,9 @@
           </button>
         </div>
       </div>
-      <div class="overflow-hidden h-full pr-4">
-
-      </div>
+      <Flashcards 
+        deckId={id}
+      />
     </div>
   </div>
 {/if}

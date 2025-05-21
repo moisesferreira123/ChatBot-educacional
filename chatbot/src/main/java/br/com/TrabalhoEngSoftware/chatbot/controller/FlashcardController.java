@@ -30,15 +30,15 @@ public class FlashcardController {
   @GetMapping
   public Page<FlashcardSummaryDTO> listFlashcards(
     @RequestParam(required = false) String word,
-    @RequestParam(required = false) boolean dominatedFlashcards,
-    @RequestParam(required = false) boolean undominatedFlashcards,
+    @RequestParam(required = false) boolean dominatedFlashcard,
+    @RequestParam(required = false) boolean undominatedFlashcard,
     @RequestParam(defaultValue = "lastReviewedAtDesc") String sortType,
     @RequestParam(required = true) Long deckId,
     Pageable pageable,
     Authentication authentication
   ) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
-    return flashcardService.listFlashcards(word, dominatedFlashcards, undominatedFlashcards, user.getId(), deckId, sortType, pageable);
+    return flashcardService.listFlashcards(word, dominatedFlashcard, undominatedFlashcard, user.getId(), deckId, sortType, pageable);
   }
 
   @PostMapping("/{deckId}")

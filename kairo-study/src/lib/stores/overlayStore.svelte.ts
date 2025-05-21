@@ -10,6 +10,8 @@ export const sortDecksOverlay = writable(false);
 export const deleteWarningOverlay = writable(false);
 export const editDeckOverlay = writable(false);
 export const deckManagementOverlay = writable(null);
+export const newFlashcardInDeckInterfaceOverlay = writable(null);
+
 
 export const overlayStore = $state<{currentOverlay: string | null}>({ 
   currentOverlay: null
