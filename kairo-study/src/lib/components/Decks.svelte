@@ -6,7 +6,7 @@
   import { sortTypeDecks } from '$lib/stores/sortType';
   import { createdDeck, deletedDeck, updatedDeck } from '$lib/stores/deckStore';
   import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay, sortDecksOverlay } from '$lib/stores/overlayStore.svelte';
-	import { createdFlashcard } from '$lib/stores/flashcardStore';
+	import { createdFlashcard, deletedFlashcard } from '$lib/stores/flashcardStore';
   import Deck from './Deck.svelte';
   import DeckManagementOverlay from './DeckManagementOverlay.svelte';
 	import SortDecksOverlay from './SortDecksOverlay.svelte';
@@ -111,8 +111,16 @@
       }
     });
 
+    deletedFlashcard.subscribe(async (value) => {
+      if(value) {
+        reloadDecks();
+        deletedFlashcard.set(false);
+      }
+    });
+
   onMount(() => {
     token = localStorage.getItem("token");
+    sortTypeDecks.set("lastReviewedAtDesc");
     loadDecks();
   });
 

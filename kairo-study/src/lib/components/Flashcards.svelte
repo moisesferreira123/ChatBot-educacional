@@ -3,7 +3,10 @@
 	import { sortTypeFlashcards } from "$lib/stores/sortType";
   import { Search, ArrowUpDown, SquarePen, Trash2 } from "@lucide/svelte";
 	import { onMount } from "svelte";
+	import { sortFlashcardsOverlay } from "$lib/stores/overlayStore.svelte";
 	import Flashcard from "./Flashcard.svelte";
+	import SortFlashcardsOverlay from "./SortFlashcardsOverlay.svelte";
+	import { deletedFlashcard } from "$lib/stores/flashcardStore";
 
   export let deckId;
 
@@ -19,7 +22,7 @@
 
   let token;
 
-  async function loadMore() {
+  async function loadFlashcards() {
     if(finished) return;
     try{
       const newFlashcards = await fetchListFlashcards(currentPage, pageSize, wordFilter, dominatedFlashcardFilter, undominatedFlashcardFilter, deckId, $sortTypeFlashcards, token);
@@ -34,14 +37,37 @@
     }
   }
 
-  function updateWordFilter() {
-
+  function updateWordFilter(event) {
+    wordFilter = event.target.value;
+    resetPages();
+    loadFlashcards();
   }
+
+  function changeSort(newSort) {
+    sortTypeFlashcards.set(newSort);
+    resetPages();
+    loadFlashcards();
+  }
+
+  function resetPages() {
+    currentPage = 0;
+    flashcards = [];
+    finished = false;
+  }
+
+  deletedFlashcard.subscribe(async (value) => {
+    if(value) {
+      resetPages();
+      loadFlashcards();
+      deletedFlashcard.set(false);
+    }
+  });
 
   onMount(() => {
     token = localStorage.getItem("token");
+    sortTypeFlashcards.set("lastReviewedAtDesc")
     const observer = new IntersectionObserver(async ([entry]) => {
-      if(entry.isIntersecting) await loadMore();
+      if(entry.isIntersecting) await loadFlashcards();
     }, {
       root: null,
       threshold: 0
@@ -60,11 +86,18 @@
       <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md bg-white focus:outline-none focus:border-gray-400" placeholder="Search flashcards..."
              bind:value={wordFilter} oninput={updateWordFilter} >
     </div>
-    <button data-user-button class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-10 cursor-pointer border-(--color13) hover:bg-(--color8)">
-      <ArrowUpDown size={16} color="var(--color14)" />
-      <p class="font-semibold text-sm text-(--color14)">Sort</p>
-    </button>
-  
+    <div class="relative">
+      <!-- TODO: Colocar filtro para cards dominados e não dominados -->
+      <button data-user-button onclick={() => sortFlashcardsOverlay.update(open => !open)} class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-10 cursor-pointer border-(--color13) hover:bg-(--color8)">
+        <ArrowUpDown size={16} color="var(--color14)" />
+        <p class="font-semibold text-sm text-(--color14)">Sort</p>
+      </button>
+      {#if $sortFlashcardsOverlay}
+        <SortFlashcardsOverlay 
+          changeSort={(newSort) => changeSort(newSort)}
+        />
+      {/if}
+    </div>
   </div>
   <div class="flex flex-col gap-2">
     {#each flashcards as flashcard}

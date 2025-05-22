@@ -5,7 +5,7 @@
 	import { onMount } from "svelte";
 	import { deletedDeck } from "$lib/stores/deckStore";
 	import { fetchGetFlashcardsTotal } from "$lib/api/decks/fetchGetFlashcardsTotal";
-	import { createdFlashcardInManagement } from "$lib/stores/flashcardStore";
+	import { createdFlashcardInManagement, deletedFlashcard } from "$lib/stores/flashcardStore";
 	import EditDeckOverlay from "./EditDeckOverlay.svelte";
 	import DeleteWarningOverlay from "./DeleteWarningOverlay.svelte";
 	import NewFlashcardOverlay from "./NewFlashcardOverlay.svelte";
@@ -17,6 +17,7 @@
 
   let alertTitle = "Are you sure?";
   let alertMessage = `This action cannot be undone. It will permanently delete the "${title}" deck and all of its flashcards.`;
+  
   let flashcards = 0;
   let token;
 
@@ -28,7 +29,7 @@
   async function deleteDeck() {
     try {
       await fetchDeleteDeck(id, token);
-      deleteWarningOverlay.set(false);
+      deleteWarningOverlay.set(null);
       deckManagementOverlay.set(null);
       deletedDeck.set(true);
     } catch(e) {
@@ -51,6 +52,13 @@
     }
   });
 
+  deletedFlashcard.subscribe(async (value) => {
+    if(value) {
+      getFlashcardsTotal();
+      deletedFlashcard.set(false);
+    }
+  });
+
   onMount(() => {
     token = localStorage.getItem("token");
     getFlashcardsTotal();
@@ -60,10 +68,10 @@
 
 {#if $deleteWarningOverlay}
   <DeleteWarningOverlay 
-    alertTitle = {alertTitle}
-    alertMessage = {alertMessage}
-    cancelButton = {() => deleteWarningOverlay.set(false)}
-    deleteButton = {deleteDeck}
+    alertTitle = {$deleteWarningOverlay.alertTitle}
+    alertMessage = {$deleteWarningOverlay.alertMessage}
+    cancelButton = {() => deleteWarningOverlay.set(null)}
+    deleteButton = {$deleteWarningOverlay.deleteButton}
   />
 {/if}
 {#if $editDeckOverlay}
@@ -85,13 +93,13 @@
       </button>
       <div class="flex flex-col space-y-1.5 text-center sm:text-left flex-shrink-0">
         <div class="flex items-center justify-between">
-          <h2 class="font-semibold tracking-tight text-xl">{title}</h2>
+          <h2 class="font-bold tracking-tight text-xl text-(--color14)">{title}</h2>
           <div class="flex gap-2">
             <button onclick={() => editDeckOverlay.set(true)} class="inline-flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
               <Settings size={16} color="var(--color14)" />
               Edit Deck
             </button>
-            <button onclick={() => deleteWarningOverlay.set(true)} class="inline-flex items-center text-white bg-red-500 justify-center gap-2 text-sm font-semibold transition-colors hover:bg-red-500/85 hover:cursor-pointer h-9 rounded-md px-3">
+            <button onclick={() => deleteWarningOverlay.set({alertTitle, alertMessage, deleteButton: deleteDeck})} class="inline-flex items-center text-white bg-red-500 justify-center gap-2 text-sm font-semibold transition-colors hover:bg-red-500/85 hover:cursor-pointer h-9 rounded-md px-3">
               <Trash2 size={16}/>
               Delete Deck
             </button>
@@ -100,7 +108,7 @@
       </div>
       <div class="flex-grow">
         <div class="flex justify-between items-center mb-0">
-          <h3 class="text-lg font-medium">Flashcards in this deck ({flashcards})</h3>
+          <h3 class="text-lg font-semibold text-(--color14)">Flashcards in this deck ({flashcards})</h3>
           <button onclick={() => newFlashcardOverlay.set(true)} class="flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
             <Plus size={16} color="var(--color14)" />
             Add Flashcards
