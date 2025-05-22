@@ -175,6 +175,10 @@
 	:global .rich-editor *:focus {
 		outline: none;
 	}
+
+  :global .rich-editor {
+		cursor: text;
+	}
 	:global .rich-editor h1 {
 		font-size: 1.7em;
 		font-weight: bold;
