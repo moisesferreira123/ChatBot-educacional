@@ -49,7 +49,7 @@ public class FlashcardService {
     
     DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Flashcard deck not found"));
     flashcard.setFront(flashcardDTO.getFront());
-    flashcard.setBack(flashcard.getBack());
+    flashcard.setBack(flashcardDTO.getBack());
     flashcard.setNextReview(LocalDateTime.now());
     flashcard.setRepetition(0);
     flashcard.setEaseFactor(2.5);
@@ -60,11 +60,11 @@ public class FlashcardService {
     //flashcardRepository.save(flashcard);
   }
 
-  public Page<FlashcardSummaryDTO> listFlashcards(String word, boolean dominatedFlashcards, boolean undominatedFlashcards, Long userId, String sortType, Pageable pageable) {
+  public Page<FlashcardSummaryDTO> listFlashcards(String word, boolean dominatedFlashcard, boolean undominatedFlashcard, Long userId, Long deckId, String sortType, Pageable pageable) {
     FlashcardSpecificationBuilder builder = new FlashcardSpecificationBuilder().filterByWord(word);
 
-    if(dominatedFlashcards) builder.filterByDominatedFlashcards();
-    if(undominatedFlashcards) builder.filterByUndominatedFlashcards();
+    if(dominatedFlashcard) builder.filterByDominatedFlashcards();
+    if(undominatedFlashcard) builder.filterByUndominatedFlashcards();
 
     if ("createdAtAsc".equalsIgnoreCase(sortType)) {
       builder.sortByCreatedAtAsc();
@@ -80,7 +80,7 @@ public class FlashcardService {
       builder.sortByNextReviewAsc();
     } 
 
-    Specification<FlashcardEntity> specification = builder.build(userId);
+    Specification<FlashcardEntity> specification = builder.build(userId, deckId);
     return flashcardRepository.findAll(specification, pageable).map(FlashcardSummaryDTO::new);
   }
 

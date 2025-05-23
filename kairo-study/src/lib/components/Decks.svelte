@@ -4,8 +4,13 @@
   import { onMount } from 'svelte';
   import { topicFilter } from '$lib/stores/filter';
   import { sortTypeDecks } from '$lib/stores/sortType';
-  import { deckCreated } from '$lib/stores/deckStore';
+  import { createdDeck, deletedDeck, updatedDeck } from '$lib/stores/deckStore';
+  import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay, sortDecksOverlay } from '$lib/stores/overlayStore.svelte';
+	import { createdFlashcard, deletedFlashcard } from '$lib/stores/flashcardStore';
   import Deck from './Deck.svelte';
+  import DeckManagementOverlay from './DeckManagementOverlay.svelte';
+	import SortDecksOverlay from './SortDecksOverlay.svelte';
+	import NewFlashcardOverlay from './NewFlashcardOverlay.svelte';
 
   let allDecks = [];
   let visibleDecks = [];
@@ -64,12 +69,12 @@
   function resetPages() {
     currentPage = 0;
     displayCount = 12;
+    visibleDecks = [];
     allDecks = [];
     hasMore = true;
   }
 
   async function reloadDecks() {
-    visibleDecks = [];
     resetPages();
     const data = await fetchListDecks(0, pageSize, titleFilter, $topicFilter, $sortTypeDecks, token);
     allDecks = data.content;
@@ -78,20 +83,54 @@
     currentPage = 1;
   }
 
-  deckCreated.subscribe(async (value) => {
+  createdDeck.subscribe(async (value) => {
       if (value) {
         reloadDecks();
-        deckCreated.set(false);
+        createdDeck.set(false);
+      }
+    });
+
+    deletedDeck.subscribe(async (value) => {
+      if (value) {
+        reloadDecks();
+        deletedDeck.set(false);
+      }
+    });
+
+    updatedDeck.subscribe(async (value) => {
+      if (value) {
+        reloadDecks();
+        updatedDeck.set(false);
+      }
+    });
+
+    createdFlashcard.subscribe(async (value) => {
+      if(value) {
+        reloadDecks();
+        createdFlashcard.set(false);
+      }
+    });
+
+    deletedFlashcard.subscribe(async (value) => {
+      if(value) {
+        reloadDecks();
+        deletedFlashcard.set(false);
       }
     });
 
   onMount(() => {
     token = localStorage.getItem("token");
+    sortTypeDecks.set("lastReviewedAtDesc");
     loadDecks();
   });
 
 </script>
 
+{#if $newFlashcardInDeckInterfaceOverlay !== null}
+  <NewFlashcardOverlay 
+    deckId={$newFlashcardInDeckInterfaceOverlay.id}
+  />
+{/if}
 <div class="relative mb-4">
   <Search class="absolute left-3 top-1/2 transform -translate-y-1/2" size={16} color="var(--color16)" />
   <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md focus:outline-offset-2 focus:outline-black-500 focus:outline-2 bg-white" placeholder="Search decks..."
@@ -101,8 +140,8 @@
   <div class="inline-flex ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap justify-center items-center h-9 border-(--color13)">
     <p class="font-semibold text-sm text-(--color14) cursor-default">Decks</p>
   </div>
-  <div>
-    <button data-user-button onclick={() => filterTopicOverlay.update(open => !open)} class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
+  <div class="relative">
+    <button filter-button onclick={() => filterTopicOverlay.update(open => !open)} class="inline-flex mr-1 transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
       <Funnel size={16} color="var(--color14)" />
       <p class="font-semibold text-sm text-(--color14)">Filter</p>
     </button>
@@ -110,6 +149,11 @@
       <ArrowUpDown size={16} color="var(--color14)" />
       <p class="font-semibold text-sm text-(--color14)">Sort</p>
     </button>
+    {#if $sortDecksOverlay}
+      <SortDecksOverlay
+        changeSort={(newSort) => changeSort(newSort)}
+      />
+    {/if}
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -119,10 +163,6 @@
       title={deck.title} 
       topic={deck.topic} 
       lastReviewedAt={new Date(deck.lastReviewedAt)} 
-      onDelete={() => {
-        resetPages();
-        loadNotes();
-      }}
     />
   {/each}
 </div>
@@ -140,3 +180,11 @@
     <ArrowDown size={20} />
   </button>   
 </div>
+
+{#if $deckManagementOverlay !== null}
+  <DeckManagementOverlay 
+    id={$deckManagementOverlay.id}
+    title={$deckManagementOverlay.title}
+    topic={$deckManagementOverlay.topic}
+  />
+{/if}

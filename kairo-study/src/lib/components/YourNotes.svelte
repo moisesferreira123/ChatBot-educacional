@@ -64,6 +64,7 @@
 
   onMount(() => {
     token = localStorage.getItem("token");
+    sortTypeNotes.set("updatedAtDesc");
     loadNotes();
   });
 

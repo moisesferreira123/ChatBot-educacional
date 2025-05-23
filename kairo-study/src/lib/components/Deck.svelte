@@ -4,12 +4,12 @@
   import { formatDate } from '$lib/stores/formatDate';
 	import { fetchGetDueFlashcardsTotal } from '$lib/api/decks/fetchGetDueFlashcardsTotal';
 	import { fetchGetMasteryLevel } from '$lib/api/decks/fetchGetMasteryLevel';
+  import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay } from '$lib/stores/overlayStore.svelte';
 
   export let id;
   export let title;
   export let topic;
   export let lastReviewedAt;
-  export let onDelete;
 
   let token;
   let dueFlashcards = 0;
@@ -53,7 +53,7 @@
         <div class="bg-gray-100 text-gray-700 text-sm font-medium px-2 py-1 rounded">
           {dueFlashcards} due cards
         </div>
-        <button class="flex items-center justify-center cursor-pointer hover:bg-(--color8) h-7 w-7 rounded">
+        <button onclick={() => {deckManagementOverlay.set({id, title, topic}); console.log($deckManagementOverlay);}} class="flex items-center justify-center cursor-pointer hover:bg-(--color8) h-7 w-7 rounded">
           <Settings size={16} color="var(--color14)" />
         </button>
       </div>
@@ -82,7 +82,7 @@
     </div>
     <div class="mt-3 pt-3 border-t border-t-(--color13) flex justify-between">
       <button class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color1) hover:bg-(--color8)">Review</button>
-      <button class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color14) hover:bg-(--color8)">Add Card</button>
+      <button onclick={() => newFlashcardInDeckInterfaceOverlay.set({id})} class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color14) hover:bg-(--color8)">Add Flashcard</button>
     </div>
   </div>
 </div>

@@ -28,6 +28,10 @@ public class FlashcardSummaryDTO {
     this.interval = flashcard.getInterval();
   }
 
+	public FlashcardSummaryDTO() {
+		
+	}
+
   public Long getId() {
 		return id;
 	}

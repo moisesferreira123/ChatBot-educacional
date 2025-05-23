@@ -56,9 +56,9 @@ public class FlashcardSpecificationBuilder {
     return this;
   }
 
-  public Specification<FlashcardEntity> build(Long userId) {
+  public Specification<FlashcardEntity> build(Long userId, Long deckId) {
     return this.specification.and((root, query, criteriaBuilder) -> 
-      criteriaBuilder.equal(root.get("deckEntity").get("userEntity").get("id"), userId)
+      criteriaBuilder.and(criteriaBuilder.equal(root.get("deckEntity").get("userEntity").get("id"), userId), criteriaBuilder.equal(root.get("deckEntity").get("id"), deckId))
     );
   }
 }

@@ -73,7 +73,7 @@ public class DeckService {
     if(!deck.getUserEntity().getId().equals(userId)) {
       throw new RuntimeException("Unauthorized to edit this deck");
     }
-
+    
     if(deckSummaryDTO.getTitle() != null) {
       if(deckSummaryDTO.getTitle().trim().isEmpty()) {
 				throw new IllegalArgumentException("Title deck can't be empty");
@@ -97,6 +97,16 @@ public class DeckService {
 			throw new RuntimeException("Unauthorized to delete this deck");
 		}
 		deckRepository.delete(deck);
+  }
+
+  public long getFlashcardsTotal(Long deckId, Long userId) {
+    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+    if(!deck.getUserEntity().getId().equals(userId)) {
+			// TODO: Trocar por Exceptions criados por nós
+			throw new RuntimeException("Unauthorized to see due flashcards total this deck");
+		}
+    long flashcardsTotal = deck.getFlashcards().size();
+    return flashcardsTotal;
   }
 
   public long getDueFlashcardsTotal(Long deckId, Long userId) {
@@ -124,10 +134,10 @@ public class DeckService {
                             .filter(flashcard -> flashcard.getRepetition() > repetitionMastery)
                             .count();
 
-    int totalFlashcards = deck.getFlashcards().size();
-    if (totalFlashcards == 0) return 0.0; 
+    int flashcardsTotal = deck.getFlashcards().size();
+    if (flashcardsTotal == 0) return 0.0; 
 
-    double masteryLevel = (double) dominatedFlashcards/totalFlashcards;
+    double masteryLevel = (double) dominatedFlashcards/flashcardsTotal;
     return masteryLevel;
   } 
 }

@@ -20,6 +20,10 @@ public class DeckSummaryDTO {
     this.lastReviewedAt = deck.getLastReviewedAt();
   }
 
+  public DeckSummaryDTO() {
+    
+  }
+
   public Long getId() {
     return id;
   }
