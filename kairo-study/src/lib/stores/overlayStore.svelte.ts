@@ -9,10 +9,10 @@ export const sortNotesOverlay = writable(false);
 export const sortDecksOverlay = writable(false);
 export const sortFlashcardsOverlay = writable(false);
 export const deleteWarningOverlay = writable(null);
-export const editDeckOverlay = writable(false);
+export const actionOverlay = writable(null);
 export const deckManagementOverlay = writable(null);
 export const newFlashcardInDeckInterfaceOverlay = writable(null);
-
+export const flashcardDetailsOverlay = writable(null);
 
 export const overlayStore = $state<{currentOverlay: string | null}>({ 
   currentOverlay: null

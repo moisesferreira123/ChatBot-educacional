@@ -1,15 +1,17 @@
 <script>
-  import { deckManagementOverlay, deleteWarningOverlay, editDeckOverlay, newFlashcardOverlay } from "$lib/stores/overlayStore.svelte";
+  import { actionOverlay, deckManagementOverlay, deleteWarningOverlay, flashcardDetailsOverlay, newFlashcardOverlay } from "$lib/stores/overlayStore.svelte";
   import { X, Settings, Trash2, Plus } from "@lucide/svelte";
   import { fetchDeleteDeck } from "$lib/api/decks/fetchDeleteDeck";
 	import { onMount } from "svelte";
-	import { deletedDeck } from "$lib/stores/deckStore";
+	import { deletedDeck, updatedDeck } from "$lib/stores/deckStore";
 	import { fetchGetFlashcardsTotal } from "$lib/api/decks/fetchGetFlashcardsTotal";
 	import { createdFlashcardInManagement, deletedFlashcard } from "$lib/stores/flashcardStore";
-	import EditDeckOverlay from "./EditDeckOverlay.svelte";
+	import { fetchUpdateDeck } from "$lib/api/decks/fetchUpdateDeck";
 	import DeleteWarningOverlay from "./DeleteWarningOverlay.svelte";
 	import NewFlashcardOverlay from "./NewFlashcardOverlay.svelte";
 	import Flashcards from "./Flashcards.svelte";
+	import ActionOverlay from "./ActionOverlay.svelte";
+	import FlashcardDetails from "./FlashcardDetails.svelte";
   
   export let id;
   export let title;
@@ -24,6 +26,17 @@
   function updateDeckTitleAndTopic(deckTitle, deckTopic) {
     title = deckTitle;
     topic = deckTopic;
+  }
+
+  async function updateDeck(newTitle, newTopic) {
+    try {
+      await fetchUpdateDeck(id, newTitle, newTopic, token);
+      actionOverlay.set(null);
+      updatedDeck.set(true);
+      updateDeckTitleAndTopic(newTitle, newTopic);
+    } catch(e) {
+      alert(e.message);
+    }
   }
 
   async function deleteDeck() {
@@ -74,12 +87,19 @@
     deleteButton = {$deleteWarningOverlay.deleteButton}
   />
 {/if}
-{#if $editDeckOverlay}
-  <EditDeckOverlay
-    id={id}
-    title={title}
-    topic={topic}
-    updateDeckInformations={(deckTitle, deckTopic) => updateDeckTitleAndTopic(deckTitle, deckTopic)}
+{#if $flashcardDetailsOverlay}
+  <FlashcardDetails 
+    flashcardId={$flashcardDetailsOverlay.id}
+  />
+{/if}
+{#if $actionOverlay}
+  <ActionOverlay 
+    title={$actionOverlay.title}
+    textLabel1={$actionOverlay.textLabel1}
+    text1={$actionOverlay.text1}
+    textLabel2={$actionOverlay.textLabel2}
+    text2={$actionOverlay.text2}
+    actionButton={$actionOverlay.actionButton}
   />
 {:else if $newFlashcardOverlay} 
   <NewFlashcardOverlay 
@@ -95,7 +115,7 @@
         <div class="flex items-center justify-between">
           <h2 class="font-bold tracking-tight text-xl text-(--color14)">{title}</h2>
           <div class="flex gap-2">
-            <button onclick={() => editDeckOverlay.set(true)} class="inline-flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
+            <button onclick={() => actionOverlay.set({title: "Update Deck", textLabel1: "Deck Title", text1: title, textLabel2: "Topic", text2: topic, actionButton: updateDeck})} class="inline-flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
               <Settings size={16} color="var(--color14)" />
               Edit Deck
             </button>

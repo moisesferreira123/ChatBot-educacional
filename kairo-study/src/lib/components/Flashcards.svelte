@@ -6,7 +6,7 @@
 	import { sortFlashcardsOverlay } from "$lib/stores/overlayStore.svelte";
 	import Flashcard from "./Flashcard.svelte";
 	import SortFlashcardsOverlay from "./SortFlashcardsOverlay.svelte";
-	import { deletedFlashcard } from "$lib/stores/flashcardStore";
+	import { deletedFlashcard, updatedFlashcard } from "$lib/stores/flashcardStore";
 
   export let deckId;
 
@@ -60,6 +60,14 @@
       resetPages();
       loadFlashcards();
       deletedFlashcard.set(false);
+    }
+  });
+
+  updatedFlashcard.subscribe(async (value) => {
+    if(value) {
+      resetPages();
+      loadFlashcards();
+      updatedFlashcard.set(false);
     }
   });
 
