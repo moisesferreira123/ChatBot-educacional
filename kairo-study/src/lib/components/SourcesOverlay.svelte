@@ -75,8 +75,6 @@
     formData.append('file', file);
 
     try {
-      // Call the API function to upload the file
-      // You'll need to implement uploadSource in $lib/api/sources.ts
       const newSource: Source = await uploadSource(noteId, formData, token);
 
       // Add the newly uploaded source to the list
@@ -103,8 +101,6 @@
      }
      if (confirm("Are you sure you want to delete this source?")) {
          try {
-             // Call the API function to delete the source
-             // You'll need to implement deleteSource in $lib/api/sources.ts
              await deleteSource(sourceId, token);
 
              // Remove the source from the local list
