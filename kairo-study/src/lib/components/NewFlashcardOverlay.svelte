@@ -1,5 +1,5 @@
 <script>
-	import { fetchCreateFlashcard } from "$lib/api/flashcards/fetchCreateFlashcard";
+	import { fetchCreateFlashcard } from "$lib/api/flashcards";
 	import { createdFlashcard, createdFlashcardInManagement } from "$lib/stores/flashcardStore";
   import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay, newFlashcardOverlay } from "$lib/stores/overlayStore.svelte";
   import { X } from '@lucide/svelte';

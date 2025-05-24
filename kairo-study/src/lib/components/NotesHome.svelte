@@ -1,6 +1,6 @@
 <script>
   import { Trash2 } from '@lucide/svelte';
-  import { fetchDeleteNote } from '$lib/api/notes/fetchDeleteNote';
+  import { fetchDeleteNote } from '$lib/api/notes';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
 

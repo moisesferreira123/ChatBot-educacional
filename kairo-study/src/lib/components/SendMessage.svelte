@@ -42,7 +42,7 @@
   }
 
   textarea:focus {
-    outline: 2px solid var(--color14);
+    outline: none;
   }
 
   .send-message {

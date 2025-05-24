@@ -3,7 +3,7 @@
 	// TODO: Colocar o primeiro nome do usuário para aparecer na navbar.
   import { fullName } from '$lib/stores/userDataStore.svelte';
   //Icons from Lucide
-  import { House, MessageSquare, BookOpen, User } from '@lucide/svelte';
+  import { House, BookOpen, User } from '@lucide/svelte';
   import { isMenuMyAccountOpen } from '$lib/stores/menuMyAccountStore';
   import MenuMyAccount from './MenuMyAccount.svelte';
 
@@ -14,11 +14,6 @@
       icon: House,
       text: "Home",
       href: "/home"
-    },
-    {
-      icon: MessageSquare,
-      text: "Chat",
-      href: "/chat"
     },
     {
       icon: BookOpen,

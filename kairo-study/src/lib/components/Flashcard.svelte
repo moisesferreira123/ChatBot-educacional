@@ -1,6 +1,6 @@
 <script>
-	import { fetchDeleteFlashcard } from "$lib/api/flashcards/fetchDeleteFlashcard";
-	import { fetchUpdateFlashcard } from "$lib/api/flashcards/fetchUpdateFlashcard";
+	import { fetchDeleteFlashcard } from "$lib/api/flashcards";
+	import { fetchUpdateFlashcard } from "$lib/api/flashcards";
 	import { deletedFlashcard, updatedFlashcard } from "$lib/stores/flashcardStore";
 	import { actionOverlay, deleteWarningOverlay, flashcardDetailsOverlay } from "$lib/stores/overlayStore.svelte";
   import { SquarePen, Trash2 } from "@lucide/svelte";

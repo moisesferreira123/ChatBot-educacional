@@ -19,7 +19,7 @@
             <LucideRotateCw size={20}/>
         </div>
         <strong>No Flashcards yet</strong>
-        <p class="text-sm">Create Flashcards to help with your studies</p>
+        <p class="text-sm text-center">Create Flashcards to help with your studies</p>
         <button class="mt-4 bg-[var(--color1)] text-white px-4 py-2 rounded hover:bg-[var(--color1)]/90">
           + Create Flashcard
         </button>

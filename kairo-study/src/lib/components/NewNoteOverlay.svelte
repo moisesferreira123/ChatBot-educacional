@@ -1,6 +1,6 @@
 <script>
 	import { goto } from "$app/navigation";
-  import { fetchCreateNote } from "$lib/api/notes/fetchCreateNote";
+  import { fetchCreateNote } from "$lib/api/notes";
 	import { newNoteOverlay } from "$lib/stores/overlayStore.svelte";
   import { X } from '@lucide/svelte';
 

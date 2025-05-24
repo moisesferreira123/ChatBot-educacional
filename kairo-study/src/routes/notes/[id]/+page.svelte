@@ -3,8 +3,8 @@
   import WYSIWYGEditor from "$lib/components/WYSIWYGEditor.svelte";
   import { ChevronLeft, Pencil, Plus, Clock, Save, Settings, FileText, MessageSquare, BookCheck } from "@lucide/svelte";
 	import { onMount } from "svelte";
-	import { fetchGetNoteById } from '$lib/api/notes/fetchGetNoteById';
-  import { fetchUpdateNote } from "$lib/api/notes/fetchUpdateNote";
+	import { fetchGetNoteById } from '$lib/api/notes';
+  import { fetchUpdateNote } from "$lib/api/notes";
   import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import SourcesOverlay from "$lib/components/SourcesOverlay.svelte";
@@ -91,7 +91,7 @@
   <div class="flex flex-1 flex-col pt-20">
     <header class="bg-white border-b border-neutral-300 p-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-neutral-300/50 hover:text-accent-foreground h-10 w-10">
+        <button onclick={() => {goto('/home')}} class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-neutral-300/50 hover:text-accent-foreground h-10 w-10">
           <ChevronLeft size=5 />
         </button>
   
@@ -121,8 +121,10 @@
       </div>
     </header>
     <div class="flex flex-1 overflow-y-hidden">
+      {#if showSourcesOverlay}
       <SourcesOverlay bind:show={showSourcesOverlay} onClose={() => {showSourcesOverlay = false}} />
-      <div class="w-full">
+      {/if}
+        <div class="w-full">
         <WYSIWYGEditor content={note.content} onContentChange={autoSave} token={token} />
       </div>
       <FlashcardsOverlay bind:show={showFlashcardsOverlay} onClose={() => {showFlashcardsOverlay = false}} />

@@ -1,12 +1,12 @@
 <script>
   import { actionOverlay, deckManagementOverlay, deleteWarningOverlay, flashcardDetailsOverlay, newFlashcardOverlay } from "$lib/stores/overlayStore.svelte";
   import { X, Settings, Trash2, Plus } from "@lucide/svelte";
-  import { fetchDeleteDeck } from "$lib/api/decks/fetchDeleteDeck";
+  import { fetchDeleteDeck } from "$lib/api/decks";
 	import { onMount } from "svelte";
 	import { deletedDeck, updatedDeck } from "$lib/stores/deckStore";
-	import { fetchGetFlashcardsTotal } from "$lib/api/decks/fetchGetFlashcardsTotal";
+	import { fetchGetFlashcardsTotal } from "$lib/api/decks";
 	import { createdFlashcardInManagement, deletedFlashcard } from "$lib/stores/flashcardStore";
-	import { fetchUpdateDeck } from "$lib/api/decks/fetchUpdateDeck";
+	import { fetchUpdateDeck } from "$lib/api/decks";
 	import DeleteWarningOverlay from "./DeleteWarningOverlay.svelte";
 	import NewFlashcardOverlay from "./NewFlashcardOverlay.svelte";
 	import Flashcards from "./Flashcards.svelte";

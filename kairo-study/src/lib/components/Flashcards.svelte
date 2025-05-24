@@ -1,5 +1,5 @@
 <script>
-	import { fetchListFlashcards } from "$lib/api/flashcards/fetchListFlashcards";
+	import { fetchListFlashcards } from "$lib/api/flashcards";
 	import { sortTypeFlashcards } from "$lib/stores/sortType";
   import { Search, ArrowUpDown, SquarePen, Trash2 } from "@lucide/svelte";
 	import { onMount } from "svelte";
