@@ -62,6 +62,12 @@ public class FlashcardController {
     flashcardService.deleteFlashcard(flashcardId, user.getId());
   }
 
+  @GetMapping("/{flashcardId}")
+  public FlashcardSummaryDTO getFlashcardById(@PathVariable Long flashcardId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getFlashcardById(flashcardId, user.getId());
+  }
+
   @GetMapping("/next-due-flashcard")
   public ResponseEntity<FlashcardSummaryDTO> getNextDueFlashcard(Long deckId, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();

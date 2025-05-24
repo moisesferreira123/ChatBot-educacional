@@ -129,9 +129,9 @@ public class DeckService {
 			throw new RuntimeException("Unauthorized to see mastery level this deck");
 		}
 
-    int repetitionMastery = 3;
+    int repetitionMastery = 4;
     long dominatedFlashcards = deck.getFlashcards().stream()
-                            .filter(flashcard -> flashcard.getRepetition() > repetitionMastery)
+                            .filter(flashcard -> flashcard.getRepetition() >= repetitionMastery)
                             .count();
 
     int flashcardsTotal = deck.getFlashcards().size();

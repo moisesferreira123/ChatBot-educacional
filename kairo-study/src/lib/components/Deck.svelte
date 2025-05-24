@@ -5,6 +5,7 @@
 	import { fetchGetDueFlashcardsTotal } from '$lib/api/decks/fetchGetDueFlashcardsTotal';
 	import { fetchGetMasteryLevel } from '$lib/api/decks/fetchGetMasteryLevel';
   import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay } from '$lib/stores/overlayStore.svelte';
+	import { goto } from '$app/navigation';
 
   export let id;
   export let title;
@@ -81,7 +82,7 @@
       </div>
     </div>
     <div class="mt-3 pt-3 border-t border-t-(--color13) flex justify-between">
-      <button class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color1) hover:bg-(--color8)">Review</button>
+      <button onclick={() => goto("/flashcardReview")} class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color1) hover:bg-(--color8)">Study</button>
       <button onclick={() => newFlashcardInDeckInterfaceOverlay.set({id})} class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color14) hover:bg-(--color8)">Add Flashcard</button>
     </div>
   </div>

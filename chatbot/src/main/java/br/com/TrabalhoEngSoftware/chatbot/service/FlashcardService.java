@@ -114,6 +114,17 @@ public class FlashcardService {
     // flashcardRepository.delete(flashcard);
   }
 
+  @Transactional
+  public FlashcardSummaryDTO getFlashcardById(Long flashcardId, Long userId) {
+    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
+    
+    if(!flashcard.getDeckEntity().getUserEntity().getId().equals(userId)) {
+      throw new RuntimeException("Unauthorized to get this flashcard");
+    }
+
+    return new FlashcardSummaryDTO(flashcard);
+  }
+
   public Optional<FlashcardSummaryDTO> getNextDueFlashcard(Long deckId, Long userId) {
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
     Page<FlashcardEntity> page = flashcardRepository.findNextDueFlashcard(deckId, userId, tomorrow, PageRequest.of(0, 1));

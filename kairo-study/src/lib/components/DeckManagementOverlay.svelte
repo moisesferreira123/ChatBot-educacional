@@ -89,7 +89,7 @@
 {/if}
 {#if $flashcardDetailsOverlay}
   <FlashcardDetails 
-    flashcardId={$flashcardDetailsOverlay.id}
+    flashcardId={$flashcardDetailsOverlay.flashcardId}
   />
 {/if}
 {#if $actionOverlay}
