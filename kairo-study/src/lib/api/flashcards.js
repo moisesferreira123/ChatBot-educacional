@@ -53,3 +53,28 @@ export async function fetchUpdateFlashcard(flashcardId, front, back, token) {
   });
   if(!response.ok) throw new Error("Error updating flashcard");
 }
+
+export async function fetchGetNextDueFlashcardByDeckId(deckId, token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/next-due-flashcard-by-deck-id/${deckId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(response.status === 204) {
+    console.log("There are no more cards to review.");
+    return null;
+  } else if(!response.ok) throw new Error("Error getting next due flashcard by id");
+  return response.json();
+}
+
+export async function fetchApplyReviewResult(flashcardId, answer, token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/apply-review-result/${flashcardId}/${answer}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(!response.ok) throw new Error("Error appling review result");
+}

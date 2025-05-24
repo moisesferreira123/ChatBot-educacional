@@ -77,7 +77,7 @@ public class FlashcardService {
     } else if ("nextReviewAsc".equalsIgnoreCase(sortType)) {
       builder.sortByNextReviewAsc();
     } else if("nextReviewDesc".equalsIgnoreCase(sortType)) {
-      builder.sortByNextReviewAsc();
+      builder.sortByNextReviewDesc();
     } 
 
     Specification<FlashcardEntity> specification = builder.build(userId, deckId);
@@ -125,7 +125,7 @@ public class FlashcardService {
     return new FlashcardSummaryDTO(flashcard);
   }
 
-  public Optional<FlashcardSummaryDTO> getNextDueFlashcard(Long deckId, Long userId) {
+  public Optional<FlashcardSummaryDTO> getNextDueFlashcardByDeckId(Long deckId, Long userId) {
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
     Page<FlashcardEntity> page = flashcardRepository.findNextDueFlashcard(deckId, userId, tomorrow, PageRequest.of(0, 1));
 
@@ -154,12 +154,14 @@ public class FlashcardService {
       flashcard.setRepetition(flashcard.getRepetition()+1);
       if(flashcard.getRepetition() == 1){
         flashcard.setNextReview(LocalDateTime.now().plusMinutes(10L));
+      } else if(flashcard.getRepetition() == 2) {
+        flashcard.setNextReview(LocalDateTime.now().plusDays(1L));
       } else {
         flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
+        flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
       }
-      flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
     }
-    flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
 
     flashcard.setLastReviewedAt(LocalDateTime.now());
     flashcard.getDeckEntity().setLastReviewedAt(LocalDateTime.now());

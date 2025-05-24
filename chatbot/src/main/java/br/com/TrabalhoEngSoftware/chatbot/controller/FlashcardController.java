@@ -68,16 +68,16 @@ public class FlashcardController {
     return flashcardService.getFlashcardById(flashcardId, user.getId());
   }
 
-  @GetMapping("/next-due-flashcard")
-  public ResponseEntity<FlashcardSummaryDTO> getNextDueFlashcard(Long deckId, Authentication authentication) {
+  @GetMapping("/next-due-flashcard-by-deck-id/{deckId}")
+  public ResponseEntity<FlashcardSummaryDTO> getNextDueFlashcardByDeckId(@PathVariable Long deckId, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
-    return flashcardService.getNextDueFlashcard(deckId, user.getId())
+    return flashcardService.getNextDueFlashcardByDeckId(deckId, user.getId())
            .map(ResponseEntity::ok)
            .orElseGet(() -> ResponseEntity.noContent().build());
   }
 
-  @PutMapping("apply-review-result/{flashcardId}")
-  public void applyReviewResult(@PathVariable Long flashcardId, int answer, Authentication authentication) {
+  @PutMapping("apply-review-result/{flashcardId}/{answer}")
+  public void applyReviewResult(@PathVariable Long flashcardId, @PathVariable int answer, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
     flashcardService.applyReviewResult(flashcardId, answer, user.getId());
   }

@@ -6,6 +6,7 @@
 	import { fetchGetMasteryLevel } from '$lib/api/decks';
   import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay } from '$lib/stores/overlayStore.svelte';
 	import { goto } from '$app/navigation';
+	import { flashcardReview } from '$lib/stores/flashcardStore';
 
   export let id;
   export let title;
@@ -30,6 +31,12 @@
     } catch(e) {
       alert(e.message);
     }
+  }
+
+  function toGoReview() {
+    if(dueFlashcards === 0) alert("There are no cards to review.");
+    flashcardReview.set({id}); 
+    goto("/flashcardReview");
   }
 
   onMount(() => {
@@ -82,7 +89,7 @@
       </div>
     </div>
     <div class="mt-3 pt-3 border-t border-t-(--color13) flex justify-between">
-      <button onclick={() => goto("/flashcardReview")} class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color1) hover:bg-(--color8)">Study</button>
+      <button onclick={toGoReview} class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color1) hover:bg-(--color8)">Study</button>
       <button onclick={() => newFlashcardInDeckInterfaceOverlay.set({id})} class="flex items-center justify-center font-semibold rounded-md h-9 px-3 cursor-pointer text-sm text-(--color14) hover:bg-(--color8)">Add Flashcard</button>
     </div>
   </div>
