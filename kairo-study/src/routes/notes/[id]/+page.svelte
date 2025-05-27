@@ -128,7 +128,7 @@
         <WYSIWYGEditor content={note.content} onContentChange={autoSave} token={token} />
       </div>
       <FlashcardsOverlay bind:show={showFlashcardsOverlay} onClose={() => {showFlashcardsOverlay = false}} />
-      <ChatOverlay bind:show={showChatOverlay} onClose={() => {showChatOverlay = false}} />
+      <ChatOverlay bind:show={showChatOverlay} onClose={() => {showChatOverlay = false}} noteContext={note?.content || ''} />
       </div>
         <footer class="bottom-0 z-5 0 w-screen bg-white border-t border-neutral-300 p-2 flex items-center justify-around">
           {#snippet footerButton(icon, text, action, active)}
