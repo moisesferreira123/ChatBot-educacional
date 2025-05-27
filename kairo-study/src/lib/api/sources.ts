@@ -1,10 +1,7 @@
-//import { PUBLIC_BACKEND_URL } from '$env/static/public'; // Assuming you have your backend URL in environment variables
-
-// Interface for a Source (should match your backend DTO)
 interface Source {
   id: number;
   fileName: string;
-  filePath: string; // Or a download URL
+  filePath: string;
   createdAt: string;
 }
 
@@ -53,9 +50,8 @@ export async function uploadSource(noteId: string, formData: FormData, token: st
 }
 
 // Function to delete a source
-export async function deleteSource(sourceId: number, token: string): Promise<void> {
-    // Note: The backend endpoint is /api/sources/{sourceId}, not nested under noteId
-    const response = await fetch(`http://localhost:8080/api/sources/${sourceId}`, {
+export async function deleteSource(noteId: string, sourceId: number, token: string): Promise<void> {
+    const response = await fetch(`http://localhost:8080/api/notes/${noteId}/sources/${sourceId}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`

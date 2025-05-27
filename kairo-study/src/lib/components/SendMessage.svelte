@@ -1,7 +1,8 @@
 <script lang="ts">
   import { selectedChatFeature } from "$lib/stores/chatStore";
   // TODO: Depois trocar por um store para poder guardar o histórico de mensagens.
-  let message = '';
+  let message = $state('');
+  let { onsubmit } = $props();
 </script>
 
 <div class="message">
@@ -10,7 +11,7 @@
     <button class="send-file"><img src="/images/icons8-upload-file-20.png" alt=""></button>
     {/if}
     <textarea bind:value={message} wrap="soft" placeholder="Type your message..."></textarea>
-    <button class="send-message" disabled={message.trim() === ''}><img width=20px height=20px src="/images/icons8-send-24.png" alt=""></button>
+    <button class="send-message" disabled={message.trim() === ''} onclick={() => {onsubmit(message); message = '';}}><img width=20px height=20px src="/images/icons8-send-24.png" alt=""></button>
   </form>
 </div>
 

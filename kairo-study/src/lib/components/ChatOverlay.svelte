@@ -1,9 +1,18 @@
 <script lang="ts">
   import { X } from '@lucide/svelte';
 	import SendMessage from './SendMessage.svelte';
+	import AiChatBubble from './AIChatBubble.svelte';
+  import UserChatBubble from './UserChatBubble.svelte';
 
   // Props to control visibility and handle closing
   let {show = $bindable(), onClose} = $props();
+
+  interface Message {
+    content : string;
+    sender : string;
+  };
+
+  let messages = $state<Message[]>([]);
 </script>
 
 {#if show}
@@ -15,12 +24,21 @@
       </button>
     </header>
     <div class="p-4">
+      {#if messages.length == 0}
       <div class="flex flex-col items-center justify-center h-64 border border-dashed border-neutral-300 rounded-md text-gray-500">
         <p>Chat with Kairo about your note</p>
-        </div>
+      </div>
+      {:else}
+      <div class="flex flex-col overflow-y-auto items-start justify-items-start max-h-full min-h-64 border border-solid border-neutral-300 rounded-md text-gray-500" >
+        {#each messages as msg}
+          <AiChatBubble message={msg.content}/>
+          <UserChatBubble message={msg.content}/>
+        {/each}
+      </div>
+      {/if}
     </div>
     <div class="bottom-0">
-        <SendMessage />
+        <SendMessage onsubmit = {(message: string) => {messages.push({content: message, sender: "User"});}}/>
     </div>
   </aside>
 {/if}

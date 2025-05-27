@@ -88,7 +88,7 @@
 <div class="flex flex-col h-screen">
   {#if note}
   <HeaderLoggedIn />
-  <div class="flex flex-1 flex-col pt-20">
+  <div class="flex h-full flex-1 flex-col pt-20">
     <header class="bg-white border-b border-neutral-300 p-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <button onclick={() => {goto('/home')}} class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-neutral-300/50 hover:text-accent-foreground h-10 w-10">
