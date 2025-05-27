@@ -42,18 +42,18 @@
           <div class="flex items-center bg-gray-50 border border-(--color13) rounded-md p-4 gap-3">
             <span class="text-gray-500"><CalendarCheck2 class="tex-gray-500" size={20} /></span>
             <div class="flex flex-col">
-              <p class="text-sm text-gray-500">Última revisão</p>
-              {#if formatDate(new Date(flashcard.lastReviewAt)) === formatDate(new Date(null))}
+              <p class="text-sm text-gray-500">Last review</p>
+              {#if formatDate(new Date(flashcard.lastReviewedAt)) === formatDate(new Date(null))}
                 <p class="font-semibold text-(--color14)">Never reviewed</p>
               {:else}
-                <p class="font-semibold text-(--color14)">{formatDate(new Date(flashcard.lastReviewAt))}</p>
+                <p class="font-semibold text-(--color14)">{formatDate(new Date(flashcard.lastReviewedAt))}</p>
               {/if}
             </div>
           </div>
           <div class="flex items-center bg-gray-50 border border-(--color13) rounded-md p-4 gap-3">
             <span class="text-gray-500"><CalendarClock size={20} /></span>
             <div class="flex flex-col">
-              <p class="text-sm text-gray-500">Próxima revisão</p>
+              <p class="text-sm text-gray-500">Next review</p>
               <p class="font-semibold text-(--color14)">{formatDate( new Date(flashcard.nextReview))}</p>
             </div>
           </div>
@@ -61,7 +61,7 @@
         <div class="flex items-center justify-between mt-6 border-t border-t-(--color13) pt-4">
 
          <div class="flex items-center gap-2">
-            <p class="text-sm text-gray-500">Criado em:</p>
+            <p class="text-sm text-gray-500">Created on:</p>
             <p class="text-sm font-semibold text-(--color14)">{formatDate( new Date(flashcard.createdAt))}</p>
           </div>
           {#if flashcard.repetition < 4}

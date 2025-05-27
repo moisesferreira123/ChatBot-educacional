@@ -76,9 +76,27 @@ public class FlashcardController {
            .orElseGet(() -> ResponseEntity.noContent().build());
   }
 
-  @PutMapping("apply-review-result/{flashcardId}/{answer}")
+  @PutMapping("/apply-review-result/{flashcardId}/{answer}")
   public void applyReviewResult(@PathVariable Long flashcardId, @PathVariable int answer, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
     flashcardService.applyReviewResult(flashcardId, answer, user.getId());
+  }
+
+  @GetMapping("/get-count-new-flashcards/{deckId}")
+  public long getCountNewFlashcards(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountNewFlashcards(deckId, user.getId());
+  }
+
+  @GetMapping("/get-count-learning-flashcards/{deckId}")
+  public long getCountLearningFlashcards(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountLearningFlashcards(deckId, user.getId());
+  }
+
+  @GetMapping("/get-count-review-flashcards/{deckId}")
+  public long getCountReviewFlashcards(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountReviewFlashcards(deckId, user.getId());
   }
 }

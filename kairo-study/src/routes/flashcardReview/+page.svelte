@@ -1,9 +1,10 @@
 <script>
-	import { fetchApplyReviewResult, fetchGetNextDueFlashcardByDeckId } from "$lib/api/flashcards";
+	import { fetchApplyReviewResult, fetchGetCountLearningFlashcards, fetchGetCountNewFlashcards, fetchGetCountReviewFlashcards, fetchGetNextDueFlashcardByDeckId } from "$lib/api/flashcards";
 	import { ArrowLeft } from "@lucide/svelte";
   import { flashcardReview } from '$lib/stores/flashcardStore';
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
+	import { formatDate } from "$lib/stores/formatDate";
 
 
   let flipped = false;
@@ -11,14 +12,14 @@
   let begin = true;
   let flashcard;
   let flashcardToView;
-  let newFlashcard;
-  let learningFlashcard;
-  let reviewFlashcard;
+  let newFlashcards;
+  let learningFlashcards;
+  let reviewFlashcards;
   let token;
 
   const Answer = {
     WRONG: 0,
-    HARD: 3,
+    HARD: 2,
     GOOD: 4,
     EASY: 5
   }
@@ -34,6 +35,30 @@
         begin = false;
       }
       flashcardToView = {...flashcard};
+    } catch(e) {
+      alert(e.message);
+    }
+  }
+
+  async function getCountNewFlashcards() {
+    try {
+      newFlashcards = await fetchGetCountNewFlashcards($flashcardReview.id, token);
+    } catch(e) {
+      alert(e.message);
+    }
+  }
+
+  async function getCountLearningFlashcards() {
+    try {
+      learningFlashcards = await fetchGetCountLearningFlashcards($flashcardReview.id, token);
+    } catch(e) {
+      alert(e.message);
+    }
+  }
+
+  async function getCountReviewFlashcards() {
+    try {
+      reviewFlashcards = await fetchGetCountReviewFlashcards($flashcardReview.id, token);
     } catch(e) {
       alert(e.message);
     }
@@ -55,32 +80,78 @@
   }
 
   function wrongAnswer() {
+    if(flashcard.lastReviewedAt === null) {
+      newFlashcards--;
+      learningFlashcards++;
+    } else if((flashcard.repetition > 1) || (flashcard.repetition === 1 && formatDate(new Date(flashcard.lastReviewedAt)) !== formatDate(new Date()))) {
+      reviewFlashcards--;
+      learningFlashcards++;
+    }
     applyReviewResult(Answer.WRONG);
-
   }
 
   function hardAnswer() {
+    if(flashcard.lastReviewedAt === null) {
+      newFlashcards--;
+      learningFlashcards++;
+    } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) !== formatDate(new Date())) {
+      reviewFlashcards--;
+    } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) === formatDate(new Date())) {
+      learningFlashcards--;
+    }
     applyReviewResult(Answer.HARD);
-
   }
 
   function goodAnswer() {
+    console.log(flashcard);
+    console.log(flashcard.lastReviewedAt);
+    console.log(flashcard.repetition);
+    if(flashcard.lastReviewedAt === null) {
+      newFlashcards--;
+      learningFlashcards++;
+    } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) !== formatDate(new Date())) {
+      reviewFlashcards--;
+    } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) === formatDate(new Date())) {
+      learningFlashcards--;
+    }
     applyReviewResult(Answer.GOOD);
-
   }
 
   function easyAnswer() {
+    if(flashcard.lastReviewedAt === null) {
+      newFlashcards--;
+    } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) !== formatDate(new Date())) {
+      reviewFlashcards--;
+    } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) === formatDate(new Date())) {
+      learningFlashcards--;
+    } else if(flashcard.repetition === 0) {
+      learningFlashcards--;
+    }
     applyReviewResult(Answer.EASY);
-
   }
 
   function handleTransitionEnd() {
 		isTransitioning = false;
 	}
 
+  function isBeforeDay(date1, date2) {
+    if(date1 === null) return false;
+    
+    if (date1.getFullYear() < date2.getFullYear()) return true;
+    if (date1.getFullYear() > date2.getFullYear()) return false;
+
+    if (date1.getMonth() < date2.getMonth()) return true;
+    if (date1.getMonth() > date2.getMonth()) return false;
+
+    return date1.getDate() < date2.getDate();
+  }
+
   onMount(() => {
     token = localStorage.getItem("token");
     getNextDueFlashcardByDeckId();
+    getCountNewFlashcards();
+    getCountLearningFlashcards();
+    getCountReviewFlashcards();
   });
 
 </script>
@@ -98,9 +169,21 @@
           <div class="text-xl font-semibold text-gray-900">Flashcard Review</div>
         </div>
         <div class="flex gap-2 ">
-          <div class="flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold gap-1 bg-blue-100 text-blue-800">New: 0</div>
-          <div class="flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold gap-1 bg-red-100 text-red-800">Learning: 0 </div>
-          <div class="flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold gap-1 bg-green-100 text-green-800">Review: 0</div>
+          {#if flashcard.lastReviewedAt === null}
+            <div class="flex items-center rounded-full px-2.5 py-1 text-xs font-semibold gap-1 bg-blue-100 text-blue-800"><u>New: {newFlashcards}</u></div>
+          {:else}
+            <div class="flex items-center rounded-full px-2.5 py-1 text-xs font-semibold gap-1 bg-blue-100 text-blue-800">New: {newFlashcards}</div>
+          {/if}
+          {#if formatDate(new Date(flashcard.lastReviewedAt)) === formatDate(new Date())}
+            <div class="flex items-center rounded-full px-2.5 py-1 text-xs font-semibold gap-1 bg-red-100 text-red-800"><u>Learning: {learningFlashcards}</u></div>
+          {:else}
+            <div class="flex items-center rounded-full px-2.5 py-1 text-xs font-semibold gap-1 bg-red-100 text-red-800">Learning: {learningFlashcards} </div>
+          {/if}
+          {#if flashcard.lastReviewedAt !== null && isBeforeDay(new Date(flashcard.lastReviewedAt), new Date())}
+            <div class="flex items-center rounded-full px-2.5 py-1 text-xs font-semibold gap-1 bg-green-100 text-green-800"><u>Review: {reviewFlashcards}</u></div>
+          {:else}
+            <div class="flex items-center rounded-full px-2.5 py-1 text-xs font-semibold gap-1 bg-green-100 text-green-800">Review: {reviewFlashcards}</div>
+          {/if}
         </div>
       </div>
     </div>

@@ -78,3 +78,36 @@ export async function fetchApplyReviewResult(flashcardId, answer, token) {
   });
   if(!response.ok) throw new Error("Error appling review result");
 }
+
+export async function fetchGetCountNewFlashcards(deckId, token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/get-count-new-flashcards/${deckId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(!response.ok) throw new Error("Error getting number of new flashcards");
+  return response.json();
+}
+
+export async function fetchGetCountLearningFlashcards(deckId, token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/get-count-learning-flashcards/${deckId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(!response.ok) throw new Error("Error getting number of learning flashcards");
+  return response.json();
+}
+
+export async function fetchGetCountReviewFlashcards(deckId, token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/get-count-review-flashcards/${deckId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(!response.ok) throw new Error("Error getting number of review flashcards");
+  return response.json();
+}
