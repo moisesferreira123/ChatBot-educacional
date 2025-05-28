@@ -9,7 +9,6 @@ public class UserDTO {
 	private Long id;
 	private String fullName;
 	private String email;
-	private String password;
 	
 	public UserDTO(UserEntity user) {
 		BeanUtils.copyProperties(user, this);
@@ -36,11 +35,5 @@ public class UserDTO {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
 	}
 }

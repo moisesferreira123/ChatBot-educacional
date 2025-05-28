@@ -1,13 +1,12 @@
 <script>
 	// import HamburgerMenu from "./HamburgerMenu.svelte";
-	// TODO: Colocar o primeiro nome do usuário para aparecer na navbar.
-  import { fullName } from '$lib/stores/userDataStore.svelte';
   //Icons from Lucide
   import { House, BookOpen, User } from '@lucide/svelte';
   import { isMenuMyAccountOpen } from '$lib/stores/menuMyAccountStore';
   import MenuMyAccount from './MenuMyAccount.svelte';
+	import { userData } from '$lib/stores/userDataStore.svelte';
 
-  $: firstName = $fullName.split(' ')[0];
+  let firstName = $userData.fullName.split(' ')[0];
 
   const navItems= [
     {
@@ -22,7 +21,7 @@
     },
     {
       icon: User,
-      text: "User",
+      text: firstName,
       onclick: () => {
         isMenuMyAccountOpen.update(open => !open);
       }
@@ -58,7 +57,6 @@
     {/each}
   </ul>
 </nav>
-
 
 <style>
   /* Nao era pra precisar disso mas tou esquecendo alguma coisa no tailwind que se tirar isso n funciona */

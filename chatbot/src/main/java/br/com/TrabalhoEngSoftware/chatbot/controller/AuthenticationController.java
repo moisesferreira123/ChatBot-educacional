@@ -2,6 +2,8 @@ package br.com.TrabalhoEngSoftware.chatbot.controller;
 
 import jakarta.validation.Valid;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,6 +46,7 @@ public class AuthenticationController {
 	public ResponseEntity register(@RequestBody @Valid  RegisterDTO data) {
 		if(this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 		String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+		if(data.fullName().trim().isEmpty()) throw new RuntimeException("Full name can't be empty");
 		UserEntity newUser = new UserEntity(data.email(), data.fullName(), encryptedPassword);
 		this.userRepository.save(newUser);
 		String token = tokenService.generateToken(newUser);

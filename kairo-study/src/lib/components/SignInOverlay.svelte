@@ -1,15 +1,26 @@
-<script lang="ts">
+<script>
 	import { toggleOverlay, closeOverlay } from "$lib/stores/overlayStore.svelte";
   import { goto } from '$app/navigation';
 	import Overlay from "./Overlay.svelte";
+	import { fetchGetUserById } from "$lib/api/users";
+	import { userData } from "$lib/stores/userDataStore.svelte";
   
 	const id = 'sign-in';
   const title = 'Get Started Today';
   const subtitle = 'Create your account and start learning smarter';
 
-	let fullName: string, email: string, password: string;
+	let fullName, email, password;
 
-	async function handleSubmit(event: Event) {
+	async function getUserById(token) {
+    try {
+      const user = await fetchGetUserById(token);
+      userData.set({fullName: user.fullName, email: user.email});
+    } catch(e) {
+      alert(e.message);
+    }
+  }
+
+	async function handleSubmit(event) {
 		event.preventDefault();
 		const response = await fetch('http://localhost:8080/auth/register', {
 			method: 'POST',
@@ -26,6 +37,7 @@
 		if(response.ok) {
 			const data = await response.json();
 			localStorage.setItem('token', data.token);
+			await getUserById(data.token);
 			closeOverlay();
 			goto('/home');
 		} else {

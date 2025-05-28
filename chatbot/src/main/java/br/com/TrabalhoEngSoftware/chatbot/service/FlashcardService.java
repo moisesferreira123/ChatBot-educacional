@@ -182,9 +182,13 @@ public class FlashcardService {
           flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
         }
       } else {
-        flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
-        flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
-        flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
+        if(flashcard.getInterval() == 1) {
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        } else {
+          flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
+          flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        }
       }
     }
 

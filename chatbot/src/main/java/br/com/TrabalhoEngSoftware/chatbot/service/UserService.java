@@ -1,9 +1,8 @@
 package br.com.TrabalhoEngSoftware.chatbot.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.UserDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
@@ -14,29 +13,27 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
-	public List<UserDTO> listAll() {
-		List<UserEntity> users = userRepository.findAll();
-		return users.stream().map(UserDTO::new).toList();
+
+	public 	UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
 	}
 	
-	public void insert(UserDTO user) {
-		UserEntity userEntity = new UserEntity(user);
-		userRepository.save(userEntity);
+	public UserDTO getUserById(Long userId) {
+		UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		return new UserDTO(user);
 	}
-	
+
+	@Transactional
 	public UserDTO update(UserDTO user) {
 		UserEntity userEntity = new UserEntity(user);
 		return new UserDTO(userRepository.save(userEntity));
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		UserEntity user = userRepository.findById(id).get();
 		userRepository.delete(user);
 	}
 	
-	public UserDTO searchById(Long id) {
-		return new UserDTO(userRepository.findById(id).get());
-	}
 	
 }
