@@ -3,6 +3,9 @@ package br.com.TrabalhoEngSoftware.chatbot.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSuggestionDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSummaryDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
@@ -159,4 +163,35 @@ public class FlashcardService {
     double easeFactorTemp = easeFactor - 0.8 + (0.28*answer) - (0.02*Math.pow(answer,2));
     return Math.max(MIN_EASE_FACTOR, easeFactorTemp);
   }
+
+  @Transactional
+    public List<FlashcardSummaryDTO> createFlashcardsFromSuggestions(List<FlashcardSuggestionDTO> suggestions, Long deckId, Long userId) {
+        DeckEntity deck = deckRepository.findById(deckId)
+                .orElseThrow(() -> new RuntimeException("Deck not found with ID: " + deckId));
+
+        if (!deck.getUserEntity().getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized: Deck does not belong to user " + userId);
+        }
+
+        List<FlashcardEntity> createdFlashcards = new ArrayList<>();
+        for (FlashcardSuggestionDTO suggestion : suggestions) {
+            if (suggestion.getFront() == null || suggestion.getFront().trim().isEmpty() ||
+                suggestion.getBack() == null || suggestion.getBack().trim().isEmpty()) {
+                System.err.println("Skipping invalid flashcard suggestion (empty front or back).");
+                continue;
+            }
+            FlashcardEntity flashcard = new FlashcardEntity();
+            flashcard.setFront(suggestion.getFront());
+            flashcard.setBack(suggestion.getBack());
+            flashcard.setNextReview(LocalDateTime.now());
+            flashcard.setRepetition(0);
+            flashcard.setEaseFactor(2.5);
+            flashcard.setInterval(1);
+            flashcard.setDeckEntity(deck);
+            
+            flashcardRepository.save(flashcard);
+            createdFlashcards.add(flashcard);
+        }
+        return createdFlashcards.stream().map(FlashcardSummaryDTO::new).collect(Collectors.toList());
+    }
 }

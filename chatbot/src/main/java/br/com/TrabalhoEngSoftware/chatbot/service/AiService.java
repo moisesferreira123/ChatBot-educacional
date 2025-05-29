@@ -1,12 +1,8 @@
 package br.com.TrabalhoEngSoftware.chatbot.service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.SourceEntity;
@@ -19,6 +15,9 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSuggestionDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import reactor.core.publisher.Flux;
 
@@ -32,6 +31,7 @@ public class AiService {
 
     @Value("${file.upload-dir:./uploads}") // Usa ./uploads enquanto a variavel nao tiver definida no application.properties
     private String uploadDir;
+    private final ObjectMapper objectMapper = new ObjectMapper(); // Parsing de ouput JSON da LLM
 
     // Injeção do ChatClient, NoteRepository, SourceRepository
     public AiService(ChatClient.Builder chatClientBuilder, NoteRepository noteRepository, SourceRepository sourceRepository) {
@@ -110,5 +110,48 @@ public class AiService {
 
         Prompt prompt = new Prompt(messages);
         return chatClient.prompt(prompt).call().content();
+    }
+
+    /**
+     * Gera sugestões de flashcards a partir do Texto fornecido.
+     *
+     * @param noteContent Texto usado para gerar os flashcards.
+     * @param userId      ID do Usuário.
+     * @param count       Número de flashcards a ser gerado.
+     * @return Uma lista de FlashcardSuggestionDTO.
+     */
+    public List<FlashcardSuggestionDTO> generateFlashcardSuggestions(String noteContent, Long userId, int count) {
+        String systemPromptForFlashcards =
+            "You are an AI assistant specialized in creating educational flashcards. " +
+            "Based on the provided text, generate exactly " + count + " flashcards. " +
+            "Each flashcard must have a 'front' (a question, term, or concept) and a 'back' (the corresponding answer, definition, or explanation). " +
+            "The 'front' should be concise and suitable for a flashcard. The 'back' should also be concise but comprehensive enough to be useful. " +
+            "IMPORTANT: Respond ONLY with a valid JSON array of objects. Each object must have two keys: \"front\" and \"back\". Do not include any other text, explanations, or introductions in your response. " +
+            "Example format: [{\"front\": \"What is photosynthesis?\", \"back\": \"The process by which green plants use sunlight, water, and carbon dioxide to create their own food.\"}, {\"front\": \"Capital of France?\", \"back\": \"Paris\"}]";
+
+        String userPromptForFlashcards = "Here is the text to generate flashcards from:\n\n" + noteContent;
+
+        List<Message> messages = new ArrayList<>();
+        messages.add(new SystemMessage(systemPromptForFlashcards));
+        messages.add(new UserMessage(userPromptForFlashcards));
+
+        Prompt prompt = new Prompt(messages);
+        String jsonResponse = chatClient.prompt(prompt).call().content();
+
+        try {
+            // Remover blocos de markdown (caso a IA responda com eles)
+            if (jsonResponse.startsWith("```json")) {
+                jsonResponse = jsonResponse.substring(7);
+                if (jsonResponse.endsWith("```")) {
+                    jsonResponse = jsonResponse.substring(0, jsonResponse.length() - 3);
+                }
+            }
+            jsonResponse = jsonResponse.trim();
+            return objectMapper.readValue(jsonResponse, new TypeReference<List<FlashcardSuggestionDTO>>() {});
+        } catch (IOException e) {
+            System.err.println("Error parsing flashcard suggestions from AI: " + e.getMessage() + "\nResponse was: " + jsonResponse);
+            //TODO: Jogar alguma exceção aqui
+            return new ArrayList<>(); // Por enquanto retorna lista vazia
+        }
     }
 }
