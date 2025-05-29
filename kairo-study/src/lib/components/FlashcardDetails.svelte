@@ -12,9 +12,7 @@
 
   async function getFlashcardById() {
     try {
-      console.log(flashcardId);
       flashcard = await fetchGetFlashcardById(flashcardId, token);
-      console.log(flashcard);
     } catch(e) {
       alert(e.message);
       flashcardDetailsOverlay.set(null);
