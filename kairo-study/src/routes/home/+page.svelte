@@ -1,13 +1,13 @@
 <script>
-	import { fetchGetUserById } from "$lib/api/users";
   import HeaderLoggedIn from "$lib/components/HeaderLoggedIn.svelte";
 	import Intro from "$lib/components/Intro.svelte";
 	import NewNoteOverlay from "$lib/components/NewNoteOverlay.svelte";
 	import YourNotes from "$lib/components/YourNotes.svelte";
   import { newNoteOverlay } from '$lib/stores/overlayStore.svelte';
-	import { userData } from "$lib/stores/userDataStore.svelte";
+	import { userData } from "$lib/stores/userDataStore";
   //TODO: Deixar o HearderLoggedIn mais modular, permitindo a inserção de ícones e textos diferentes
-  let firstName = $userData.fullName.split(' ')[0];
+
+  let firstName = $userData.username;
   let title = `Hello, ${firstName}!`;
 </script>
 <div class="flex flex-col pointer-events-auto">

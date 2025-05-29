@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +26,9 @@ public class UserEntity implements UserDetails{
 	
 	@Column(nullable = false)
 	private String fullName;
+
+	@Column(nullable = false)
+	private String username;
 	
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -35,15 +37,19 @@ public class UserEntity implements UserDetails{
 	private String password;
 	
 	public UserEntity(UserDTO user) {
-		BeanUtils.copyProperties(user, this);
+		this.id = user.getId();
+		this.username = user.getUsername();
+		this.fullName = user.getFullName();
+		this.email = user.getEmail();
 	}
 	
 	public UserEntity() {
 		
 	}
 	
-	public UserEntity(String email, String fullName, String password) {
+	public UserEntity(String email, String username, String fullName, String password) {
 		this.email = email;
+		this.username = username;
 		this.fullName = fullName;
 		this.password = password;
 	}
@@ -83,6 +89,14 @@ public class UserEntity implements UserDetails{
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public String getUserName() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -130,4 +144,5 @@ public class UserEntity implements UserDetails{
 	 public boolean isEnabled() {
 	     return true;
 	 }
+
 }

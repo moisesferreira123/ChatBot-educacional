@@ -3,14 +3,15 @@
 	import { goto } from "$app/navigation";
 	import { closeOverlay } from '$lib/stores/overlayStore.svelte';
 	import { fetchGetUserById } from "$lib/api/users";
-	import { userData } from "$lib/stores/userDataStore.svelte";
+	import { userData } from "$lib/stores/userDataStore";
 
 	let email, password;
 
 	async function getUserById(token) {
     try {
       const user = await fetchGetUserById(token);
-      userData.set({fullName: user.fullName, email: user.email});
+			localStorage.setItem('userData', JSON.stringify(user));
+      userData.set({username: user.username, fullName: user.fullName, email: user.email});
     } catch(e) {
       alert(e.message);
     }
