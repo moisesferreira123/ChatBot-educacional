@@ -26,6 +26,21 @@ public class FlashcardSpecificationBuilder {
     return this;
   }
 
+  public FlashcardSpecificationBuilder filterByNewFlashcards() {
+    this.specification = this.specification.and(FlashcardSpecification.filterByNewFlashcards());
+    return this;
+  }
+
+  public FlashcardSpecificationBuilder filterByNotNewFlashcards() {
+    this.specification = this.specification.and(FlashcardSpecification.filterByNotNewFlashcards());
+    return this;
+  }
+
+  public FlashcardSpecificationBuilder filterByDueFlashcards() {
+    this.specification = this.specification.and(FlashcardSpecification.filterByDueFlashcards());
+    return this;
+  }
+
   public FlashcardSpecificationBuilder sortByCreatedAtDesc() {
     this.specification = this.specification.and(FlashcardSpecification.sortByCreatedAtDesc());
     return this;

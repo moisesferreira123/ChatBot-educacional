@@ -58,14 +58,22 @@ public class FlashcardService {
     flashcard.setDeckEntity(deck);
     
     flashcard.getDeckEntity().getFlashcards().add(flashcard);
-    //flashcardRepository.save(flashcard);
   }
 
-  public Page<FlashcardSummaryDTO> listFlashcards(String word, boolean dominatedFlashcard, boolean undominatedFlashcard, Long userId, Long deckId, String sortType, Pageable pageable) {
+  public Page<FlashcardSummaryDTO> listFlashcards(String word, String flashcardFilter, Long userId, Long deckId, String sortType, Pageable pageable) {
     FlashcardSpecificationBuilder builder = new FlashcardSpecificationBuilder().filterByWord(word);
 
-    if(dominatedFlashcard) builder.filterByDominatedFlashcards();
-    if(undominatedFlashcard) builder.filterByUndominatedFlashcards();
+    if(flashcardFilter.equalsIgnoreCase("dominatedFlashcards")) {
+      builder.filterByDominatedFlashcards();
+    } else if(flashcardFilter.equalsIgnoreCase("undominatedFlashcards")) {
+      builder.filterByUndominatedFlashcards();
+    } else if(flashcardFilter.equalsIgnoreCase("newFlashcards")) {
+      builder.filterByNewFlashcards();
+    } else if(flashcardFilter.equalsIgnoreCase("notNewFlashcards")) {
+      builder.filterByNotNewFlashcards();
+    } else if(flashcardFilter.equalsIgnoreCase("dueFlashcards")) {
+      builder.filterByDueFlashcards();
+    }
 
     if ("createdAtAsc".equalsIgnoreCase(sortType)) {
       builder.sortByCreatedAtAsc();
@@ -112,7 +120,6 @@ public class FlashcardService {
     }
     
     flashcard.getDeckEntity().getFlashcards().remove(flashcard);
-    // flashcardRepository.delete(flashcard);
   }
 
   @Transactional

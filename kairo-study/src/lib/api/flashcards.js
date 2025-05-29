@@ -28,8 +28,8 @@ export async function fetchDeleteFlashcard(flashcardId, token) {
   }
 }
 
-export async function fetchListFlashcards(page, pageSize, word, dominatedFlashcard, undominatedFlashcard, deckId, sortType, token) {
-  const response = await fetch(`http://localhost:8080/api/flashcards?page=${page}&size=${pageSize}&word=${word}&dominatedFlashcard=${dominatedFlashcard}&undominatedFlashcard=${undominatedFlashcard}&sortType=${sortType}&deckId=${deckId}`, {
+export async function fetchListFlashcards(page, pageSize, word, flashcardFilter, deckId, sortType, token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards?page=${page}&size=${pageSize}&word=${word}&flashcardFilter=${flashcardFilter}&sortType=${sortType}&deckId=${deckId}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`

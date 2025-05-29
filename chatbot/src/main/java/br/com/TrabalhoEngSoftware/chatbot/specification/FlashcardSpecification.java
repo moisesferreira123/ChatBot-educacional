@@ -1,9 +1,12 @@
 package br.com.TrabalhoEngSoftware.chatbot.specification;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.data.jpa.domain.Specification;
 
-import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Predicate;
 
 public class FlashcardSpecification {
@@ -35,6 +38,25 @@ public class FlashcardSpecification {
     };
   }
 
+	public static Specification<FlashcardEntity> filterByNewFlashcards() {
+		return (root, query, criteriaBuilder) -> {
+      return criteriaBuilder.isNull(root.get("lastReviewedAt"));
+    };
+	}
+
+	public static Specification<FlashcardEntity> filterByNotNewFlashcards() {
+		return (root, query, criteriaBuilder) -> {
+      return criteriaBuilder.isNotNull(root.get("lastReviewedAt"));
+    };
+	}
+
+	public static Specification<FlashcardEntity> filterByDueFlashcards() {
+		return (root, query, criteriaBuilder) -> {
+      LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+			return criteriaBuilder.lessThan(root.get("nextReview"), tomorrow);
+    };
+	}
+
   // Ordenação por data de criação mais recente
 	public static Specification<FlashcardEntity> sortByCreatedAtDesc() {
 		return (root, query, criteriaBuilder) -> {
@@ -54,9 +76,17 @@ public class FlashcardSpecification {
   // Ordenação pela data de última revisão feita (mais recente)
 	public static Specification<FlashcardEntity> sortByLastReviewedAtDesc() {
 		return (root, query, criteriaBuilder) -> {
-			query.orderBy(criteriaBuilder.desc(root.get("lastReviewedAt")));
-			return null;
-		};
+	      Expression<Object> nullsLast = criteriaBuilder.selectCase()
+	          .when(criteriaBuilder.isNull(root.get("lastReviewedAt")), 1)
+	          .otherwise(0);
+
+	      query.orderBy(
+	          criteriaBuilder.asc(nullsLast),
+	          criteriaBuilder.desc(root.get("lastReviewedAt"))
+	      );
+				
+	      return null;
+	  };
 	}
 
 	// Ordenação pela data de última revisão feita (mais antiga)
