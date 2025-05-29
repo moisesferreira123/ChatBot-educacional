@@ -42,7 +42,7 @@ public class SourceController {
     // Não é necessário o noteId aqui, pois o sourceId já é suficiente para identificar o arquivo:
     @DeleteMapping("/{sourceId}")
     public ResponseEntity<Void> deleteSource(
-            //@PathVariable Long noteId, // Não é necessário
+            @PathVariable Long noteId, // Não é necessário
             @PathVariable Long sourceId,
             Authentication authentication) {
         UserEntity user = (UserEntity) authentication.getPrincipal();

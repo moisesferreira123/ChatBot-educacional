@@ -5,12 +5,15 @@ import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.SourceEntity;
 import br.com.TrabalhoEngSoftware.chatbot.repository.NoteRepository;
 import br.com.TrabalhoEngSoftware.chatbot.repository.SourceRepository;
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +31,7 @@ public class SourceService {
 
     // TODO: Configurar o diretório de upload de forma mais robusta (ex: usando propriedades do Spring)
     private final String uploadDir = "./uploads"; // FIXME: Temporário, deve ser configurado corretamente
+    private final Tika tika = new Tika(); // Inicializar instância do Tika
 
     public SourceService() {
         // Criar o diretório de upload se não existir
@@ -41,7 +45,6 @@ public class SourceService {
 
     @Transactional
     public SourceDTO uploadSource(Long noteId, Long userId, MultipartFile file) {
-        // Encontrar a nota e garantir que pertence ao usuário
         NoteEntity note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
 
@@ -50,34 +53,37 @@ public class SourceService {
         }
 
         try {
-            // Gerar um nome de arquivo único
             String originalFileName = file.getOriginalFilename();
             String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
             Path filePath = Paths.get(uploadDir, uniqueFileName);
 
-            // Salvar o arquivo no sistema de arquivos
             Files.copy(file.getInputStream(), filePath);
 
-            // Criar a entidade SourceEntity
-            // e associá-la à nota
+            String extractedTextContent = "";
+            try (InputStream inputStream = file.getInputStream()) {
+                extractedTextContent = tika.parseToString(inputStream);
+            } catch (IOException | TikaException e) {
+                System.err.println("Error extracting text from file " + originalFileName + ": " + e.getMessage());
+                //Segue com texto vazio (sem jogar exceptions)
+            }
+
             SourceEntity source = new SourceEntity();
             source.setFileName(originalFileName);
-            source.setFilePath(filePath.toString()); // Store the file path
+            source.setFilePath(filePath.toString());
             source.setNoteEntity(note);
+            source.setExtractedText(extractedTextContent);
 
             SourceEntity savedSource = sourceRepository.save(source);
 
             return new SourceDTO(savedSource);
 
         } catch (IOException e) {
-            // Tratamento de erro ao salvar o arquivo
             throw new RuntimeException("Failed to upload file", e);
         }
     }
 
     @Transactional(readOnly = true)
     public List<SourceDTO> getSourcesByNoteId(Long noteId, Long userId) {
-        // Encontrar a nota e garantir que pertence ao usuário
         NoteEntity note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
 
@@ -93,7 +99,6 @@ public class SourceService {
 
     @Transactional
     public void deleteSource(Long sourceId, Long userId) {
-        // Encontrar o arquivo e garantir que pertence ao usuário
         SourceEntity source = sourceRepository.findById(sourceId)
                 .orElseThrow(() -> new RuntimeException("Source not found"));
 
@@ -102,14 +107,10 @@ public class SourceService {
         }
 
         try {
-            // Remover o arquivo do sistema de arquivos
             Path filePath = Paths.get(source.getFilePath());
             Files.deleteIfExists(filePath);
-
-            // Remover a entidade do banco de dados
             sourceRepository.delete(source);
         } catch (IOException e) {
-            // Tratamento de erro ao remover o arquivo
             throw new RuntimeException("Failed to delete file", e);
         }
     }

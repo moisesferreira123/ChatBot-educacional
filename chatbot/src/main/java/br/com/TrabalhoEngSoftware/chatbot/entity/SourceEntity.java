@@ -31,6 +31,10 @@ public class SourceEntity {
     @JoinColumn(name = "note_id", nullable = false)
     private NoteEntity noteEntity;
 
+    @Lob // For potentially large text content
+    @Column(name = "extracted_text", columnDefinition="TEXT") // Ensure it can store large text
+    private String extractedText;
+
     // Constructors
     public SourceEntity() {
     }
@@ -80,6 +84,14 @@ public class SourceEntity {
 
     public void setNoteEntity(NoteEntity noteEntity) {
         this.noteEntity = noteEntity;
+    }
+
+    public String getExtractedText() {
+        return extractedText;
+    }
+
+    public void setExtractedText(String extractedText) {
+        this.extractedText = extractedText;
     }
 
     @Override
