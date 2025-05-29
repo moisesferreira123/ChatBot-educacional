@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { selectedChatFeature } from "$lib/stores/chatStore";
   let message = $state('');
   let { onsubmit, disabled = false } = $props<{
     onsubmit: (message: string) => void;
@@ -14,12 +13,7 @@
 </script>
 
 <div class="message-input-area">
-  <form on:submit|preventDefault={handleSubmit} class="flex items-center gap-2">
-    {#if $selectedChatFeature === 'Smart Summary' || $selectedChatFeature === 'Automatic Flashcards'}
-      <button type="button" class="send-file" {disabled} title="Upload file (feature not implemented)">
-        <img src="/images/icons8-upload-file-20.png" alt="Upload file">
-      </button>
-    {/if}
+  <form onsubmit={handleSubmit} class="flex items-center gap-2">
     <textarea
       bind:value={message}
       wrap="soft"
@@ -27,7 +21,7 @@
       class="flex-grow p-2 border border-neutral-300 rounded-md resize-none leading-tight focus:outline-none focus:ring-1 focus:ring-[var(--color1)] text-sm"
       rows="1"
       {disabled}
-      on:keydown={(e) => {
+      onkeydown={(e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
           handleSubmit();
@@ -51,16 +45,16 @@
   }
 
   textarea {
-    min-height: 40px; /* Min height for one line */
-    max-height: 120px; /* Max height before scrolling */
+    min-height: 40px;
+    max-height: 120px;
     transition: height 0.1s ease-out;
   }
 
-  .send-message, .send-file {
+  .send-message {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 40px; /* Match textarea height */
+    height: 40px;
     width: 40px;
     flex-shrink: 0;
     border-radius: calc(0.5rem - 2px);
@@ -75,17 +69,6 @@
     background-color: var(--color6);
   }
   .send-message:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .send-file {
-    border: 1px solid var(--color13);
-  }
-  .send-file:hover {
-    background-color: var(--color8);
-  }
-  .send-file:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }

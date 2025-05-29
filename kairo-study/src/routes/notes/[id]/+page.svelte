@@ -10,6 +10,7 @@
 	import SourcesOverlay from "$lib/components/SourcesOverlay.svelte";
 	import FlashcardsOverlay from "$lib/components/FlashcardsOverlay.svelte";
 	import ChatOverlay from "$lib/components/ChatOverlay.svelte";
+  import Source from "$lib/components/SourcesOverlay.svelte"
 
   let id = $derived(page.params.id);
   
@@ -21,7 +22,8 @@
     createdAt: string;
     updatedAt: string;
   }
-  
+
+  let sources: Source[] = $state([]);
   let note: Note | null = $state(null);
   let token: string | null;
   let saveTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -122,18 +124,18 @@
     </header>
     <div class="flex flex-1 overflow-y-hidden">
       {#if showSourcesOverlay}
-      <SourcesOverlay bind:show={showSourcesOverlay} onClose={() => {showSourcesOverlay = false}} />
+      <SourcesOverlay bind:show={showSourcesOverlay} onClose={() => {showSourcesOverlay = false}} bind:sources={sources}/>
       {/if}
         <div class="w-full">
-        <WYSIWYGEditor content={note.content} onContentChange={autoSave} token={token} />
+        <WYSIWYGEditor content={note.content} onContentChange={autoSave} token={token} bind:sources={sources}/>
       </div>
       <FlashcardsOverlay bind:show={showFlashcardsOverlay} onClose={() => {showFlashcardsOverlay = false}} />
-      <ChatOverlay bind:show={showChatOverlay} onClose={() => {showChatOverlay = false}} noteContext={note?.content || ''} />
+      <ChatOverlay bind:show={showChatOverlay} onClose={() => {showChatOverlay = false}} noteContext={note?.content || ''} bind:sources={sources}/>
       </div>
         <footer class="bottom-0 z-5 0 w-screen bg-white border-t border-neutral-300 p-2 flex items-center justify-around">
-          {#snippet footerButton(icon, text, action, active)}
+          {#snippet footerButton(Icon, text, action, active)}
           <button onclick={action} class="{active() ? activeButtonClass : inactiveButtonClass } inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background h-10 !px-4 !py-2">
-            <svelte:component this={icon} size=5 />
+            <Icon size=5 />
             <span class="text-sm font-medium">{ text }</span>
           </button>
           {/snippet}

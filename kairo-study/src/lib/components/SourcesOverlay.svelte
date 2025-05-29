@@ -5,10 +5,8 @@
 	import { onMount } from 'svelte';
 
   // Props to control visibility and handle closing
-  let {show = $bindable(), onClose} = $props();
+  let {show = $bindable(), onClose, sources = $bindable()} = $props();
 
-  // State to store the list of sources
-  let sources: Source[] = $state([]);
   let loadingSources = $state(true);
   let uploading = $state(false);
   let uploadError: string | null = $state(null);
@@ -20,6 +18,8 @@
     filePath: string; // Or a download URL if your backend provides one
     createdAt: string;
   }
+
+  export { Source };
 
   // Get the note ID from the page store
   let noteId = $derived(page.params.id);
@@ -127,7 +127,7 @@
     let extension = parts.slice(1).join('.');
     if (extension.length > 6) extension = extension.slice(4);
     if (name.length > 22) name = name.slice(0,18)+"...";
-    return name+extension;
+    return [name,extension].join('.');
   }
 </script>
 

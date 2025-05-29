@@ -3,15 +3,12 @@
   import SendMessage from './SendMessage.svelte';
   import AiChatBubble from './AIChatBubble.svelte';
   import UserChatBubble from './UserChatBubble.svelte';
-  import { fetchAIStream } // Assuming this is adapted or a similar function is made
-    from '$lib/extensions/fetchAIStream.svelte'; // Adjust path if necessary
-  import { onMount, onDestroy } from 'svelte'; // Added onDestroy
+  import { onMount, onDestroy } from 'svelte';
+  import { fetchAIStream } from '$lib/actions/AiResponses.svelte';
+  import { marked } from 'marked';
+  import { page } from '$app/state'; // Import page store for noteId
 
-  let { show = $bindable(), onClose, noteContext = "" } = $props<{
-    show: boolean,
-    onClose: () => void,
-    noteContext?: string // Optional: Pass content of the current note for context
-  }>();
+  let { show = $bindable(), onClose, sources = $bindable()} = $props();
 
   interface Message {
     id: string;
@@ -20,117 +17,99 @@
     timestamp: Date;
   }
 
+  let sourceIds = $derived(sources.map(source => source.id));
   let messages = $state<Message[]>([]);
   let isLoadingAiResponse = $state(false);
   let chatError = $state<string | null>(null);
   let authToken: string | null = null;
   let chatContainerRef: HTMLElement | null = $state(null);
 
+  let currentNoteId = $derived(page.params.id ? parseInt(page.params.id) : undefined);
+
   onMount(() => {
     authToken = localStorage.getItem("token");
-    if (show) {
-      // Optional: Add an initial system message or greeting from AI
-      // messages.push({
-      //   id: crypto.randomUUID(),
-      //   sender: 'ai',
-      //   content: 'Hello! How can Kairo assist you with your note today?',
-      //   timestamp: new Date()
-      // });
+    if (show && messages.length === 0) {
+      messages.push({
+        id: crypto.randomUUID(),
+        sender:'ai',
+        content: 'Hello! How can Kairo assist you with your note today?',
+        timestamp: new Date()
+      });
     }
   });
 
-  // Auto-scroll to bottom
   $effect(() => {
     if (chatContainerRef && messages.length) {
       chatContainerRef.scrollTop = chatContainerRef.scrollHeight;
     }
   });
 
-
   async function handleUserMessageSubmit(userMessageContent: string) {
     if (!userMessageContent.trim() || isLoadingAiResponse) return;
 
     const userMessage: Message = {
-      id: crypto.randomUUID(),
-      sender: 'user',
-      content: userMessageContent,
-      timestamp: new Date()
+        id: crypto.randomUUID(),
+        sender: 'user',
+        content: userMessageContent,
+        timestamp: new Date()
     };
     messages = [...messages, userMessage];
     chatError = null;
     isLoadingAiResponse = true;
 
-    try {
-      if (!authToken) {
-        throw new Error("Authentication token not found.");
-      }
-
-      // Simple system prompt for chat. You can make this more sophisticated.
-      // If noteContext is provided, you can prepend it to the userPrompt or include in systemPrompt.
-      let systemPromptForChat = "You are Kairo, a helpful AI assistant. Be concise and helpful.";
-      let fullUserPrompt = userMessageContent;
-
-      if (noteContext && noteContext.trim().length > 0) {
-        // Example of incorporating note context. Adjust as needed.
-        // This might make the prompt very long. Consider summarizing noteContext or using a dedicated field if backend supports it.
-        // systemPromptForChat = `You are Kairo, an AI assistant helping a student with their note. Here is the note content for context: """${noteContext}""" Respond to the user's query.`;
-
-        // Or, append to user prompt if the AI handles context better this way:
-        fullUserPrompt = `Regarding my note (context: "${noteContext.substring(0, 500)}${noteContext.length > 500 ? '...' : ''}"), ${userMessageContent}`;
-
-      }
-
-
-      // Using fetchAIStream, assuming it's adapted to take a token and call the /api/ai/complete endpoint
-      // and its onChunk callback receives the full response string.
-      // The current fetchAIStream expects onChunk to handle streaming parts.
-      // For a simple, non-streaming response:
-      const response = await fetch('http://localhost:8080/api/ai/complete', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-        },
-        body: JSON.stringify({
-          systemPrompt: systemPromptForChat,
-          userPrompt: fullUserPrompt // Send the user's message
-        })
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`AI service error: ${response.status} ${errorText}`);
-      }
-
-      const aiResponseContent = await response.text();
-
-      const aiMessage: Message = {
-        id: crypto.randomUUID(),
+    const aiMessageId = crypto.randomUUID();
+    const initialAiMessage: Message = {
+        id: aiMessageId,
         sender: 'ai',
-        content: aiResponseContent,
+        content: "", 
         timestamp: new Date()
-      };
-      messages = [...messages, aiMessage];
+    };
+    messages = [...messages, initialAiMessage];
+
+    let currentAiContent = "";
+
+    try {
+        if (!authToken) {
+            throw new Error("Authentication token not found.");
+        }
+
+        await fetchAIStream(
+            userMessageContent,
+            (chunk: string) => { // onChunk
+              currentAiContent += chunk;
+                messages = messages.map(msg =>
+                    msg.id === aiMessageId ? { ...msg, content: marked.parse(currentAiContent) } as Message : msg
+                );
+            },
+            () => { // onComplete
+                isLoadingAiResponse = false;
+                messages = messages.map(msg =>
+                    msg.id === aiMessageId ? { ...msg, content: marked.parse(currentAiContent) } as Message : msg
+                );
+            },
+            (error: any) => { // onError
+                isLoadingAiResponse = false;
+                chatError = error.message || "Failed to get a response from Kairo.";
+                messages = messages.map(msg =>
+                    msg.id === aiMessageId ? { ...msg, content: `Error: ${chatError}`, sender: 'system' } : msg
+                );
+            },
+            authToken,
+            currentNoteId,
+            sourceIds
+        );
 
     } catch (error: any) {
-      console.error("Error getting AI response:", error);
-      chatError = error.message || "Failed to get a response from Kairo.";
-      const errorMessage: Message = {
-        id: crypto.randomUUID(),
-        sender: 'system', // Or 'ai' but styled as an error
-        content: `Error: ${chatError}`,
-        timestamp: new Date()
-      };
-      messages = [...messages, errorMessage];
-    } finally {
-      isLoadingAiResponse = false;
+        isLoadingAiResponse = false;
+        console.error("Error getting AI response for chat:", error);
+        chatError = error.message || "Failed to get a response from Kairo.";
+         messages = messages.map(msg =>
+            msg.id === aiMessageId ? { ...msg, content: `Error: ${chatError}`, sender: 'system' } : msg
+        );
     }
   }
 
   function handleClose() {
-    // Reset state if needed when overlay closes
-    // messages = [];
-    // chatError = null;
     onClose();
   }
 
@@ -164,18 +143,14 @@
           </div>
         {:else if msg.sender === 'system'}
            <div class="text-center my-2">
-            <span class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-full">{msg.content}</span>
+            <span class="px-3 py-1 text-xs bg-red-100 text-red-700 rounded-full">{@html msg.content}</span>
           </div>
         {/if}
       {/each}
 
-      {#if isLoadingAiResponse}
-        <div class="flex justify-start">
+      {#if isLoadingAiResponse && messages[messages.length -1]?.sender !== 'ai' } <div class="flex justify-start">
           <AiChatBubble message="Kairo is thinking..." />
         </div>
-      {/if}
-      {#if chatError && !isLoadingAiResponse}
-      <!-- TODO: Tratar erros aqui -->
       {/if}
     </div>
 
@@ -186,8 +161,7 @@
 {/if}
 
 <style>
-  /* Add any additional specific styles if needed */
   aside {
-    padding-top: 0; /* Header handles top padding */
+    padding-top: 0; 
   }
 </style>
