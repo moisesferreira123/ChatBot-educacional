@@ -10,7 +10,7 @@ public class FlashcardSummaryDTO {
 	private String front;
 	private String back;
 	private LocalDateTime createdAt;
-	private LocalDateTime lastReviewAt;
+	private LocalDateTime lastReviewedAt;
 	private LocalDateTime nextReview;
 	private int repetition;
 	private double easeFactor;
@@ -21,7 +21,7 @@ public class FlashcardSummaryDTO {
     this.front = flashcard.getFront();
     this.back = flashcard.getBack();
     this.createdAt = flashcard.getCreatedAt();
-    this.lastReviewAt = flashcard.getLastReviewedAt();
+    this.lastReviewedAt = flashcard.getLastReviewedAt();
     this.nextReview = flashcard.getNextReview();
     this.repetition = flashcard.getRepetition();
     this.easeFactor = flashcard.getEaseFactor();
@@ -64,12 +64,12 @@ public class FlashcardSummaryDTO {
 		this.createdAt = createdAt;
 	}
 	
-	public LocalDateTime getLastReviewAt() {
-		return lastReviewAt;
+	public LocalDateTime getLastReviewedAt() {
+		return lastReviewedAt;
 	}
 	
-	public void setLastReviewAt(LocalDateTime lastReviewAt) {
-		this.lastReviewAt = lastReviewAt;
+	public void setLastReviewedAt(LocalDateTime lastReviewAt) {
+		this.lastReviewedAt = lastReviewAt;
 	}
 	
 	public LocalDateTime getNextReview() {

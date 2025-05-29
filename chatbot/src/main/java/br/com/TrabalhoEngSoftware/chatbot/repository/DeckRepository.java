@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
 
 public interface DeckRepository extends JpaRepository<DeckEntity, Long>, JpaSpecificationExecutor<DeckEntity>{
-
+  void deleteByUserEntityId(Long userId);
 }

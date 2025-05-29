@@ -1,8 +1,6 @@
 <script lang='ts'>
-  import { fullName } from '$lib/stores/userDataStore.svelte';
   import { newNoteOverlay, newDeckOverlay } from '$lib/stores/overlayStore.svelte';
   // TODO: Colocar isso depois de integrar o banco de dados
-  let firstName = $derived($fullName.split(' ')[0]);
 
   type Props = {
     title: string;
@@ -15,8 +13,6 @@
   };
 
   let { title, subtitle, firstButtonIcon, firstButtonText, secondButtonIcon, secondButtonText, buttonClick1 } = $props();
-
-
 
   function handleClick() {
     if(buttonClick1 === "home") {

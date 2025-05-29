@@ -86,18 +86,42 @@ public class FlashcardController {
     flashcardService.deleteFlashcard(flashcardId, user.getId());
   }
 
-  @GetMapping("/next-due-flashcard")
-  public ResponseEntity<FlashcardSummaryDTO> getNextDueFlashcard(Long deckId, Authentication authentication) {
+  @GetMapping("/{flashcardId}")
+  public FlashcardSummaryDTO getFlashcardById(@PathVariable Long flashcardId, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
-    return flashcardService.getNextDueFlashcard(deckId, user.getId())
-        .map(ResponseEntity::ok)
-        .orElseGet(() -> ResponseEntity.noContent().build());
+    return flashcardService.getFlashcardById(flashcardId, user.getId());
   }
 
-  @PutMapping("apply-review-result/{flashcardId}")
-  public void applyReviewResult(@PathVariable Long flashcardId, int answer, Authentication authentication) {
+  @GetMapping("/next-due-flashcard-by-deck-id/{deckId}")
+  public ResponseEntity<FlashcardSummaryDTO> getNextDueFlashcardByDeckId(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getNextDueFlashcardByDeckId(deckId, user.getId())
+           .map(ResponseEntity::ok)
+           .orElseGet(() -> ResponseEntity.noContent().build());
+  }
+
+  @PutMapping("/apply-review-result/{flashcardId}/{answer}")
+  public void applyReviewResult(@PathVariable Long flashcardId, @PathVariable int answer, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
     flashcardService.applyReviewResult(flashcardId, answer, user.getId());
+  }
+
+  @GetMapping("/get-count-new-flashcards/{deckId}")
+  public long getCountNewFlashcards(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountNewFlashcards(deckId, user.getId());
+  }
+
+  @GetMapping("/get-count-learning-flashcards/{deckId}")
+  public long getCountLearningFlashcards(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountLearningFlashcards(deckId, user.getId());
+  }
+
+  @GetMapping("/get-count-review-flashcards/{deckId}")
+  public long getCountReviewFlashcards(@PathVariable Long deckId, Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountReviewFlashcards(deckId, user.getId());
   }
 
   @PostMapping("/generate-from-note/{noteId}/deck/{deckId}")

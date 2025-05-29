@@ -12,7 +12,16 @@ import org.springframework.data.repository.query.Param;
 import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
 
 public interface FlashcardRepository extends JpaRepository<FlashcardEntity, Long>, JpaSpecificationExecutor<FlashcardEntity>{
+  
   @Query("SELECT f FROM FlashcardEntity f WHERE f.deckEntity.id = :deckId AND f.deckEntity.userEntity.id = :userId AND f.nextReview < :tomorrow ORDER BY f.nextReview ASC")
   Page<FlashcardEntity> findNextDueFlashcard(@Param("deckId") Long deckId, @Param("userId") Long userId, @Param("tomorrow") LocalDateTime tomorrow, Pageable pageable);
 
+  @Query("SELECT COUNT(f) FROM FlashcardEntity f WHERE f.deckEntity.id = :deckId AND f.deckEntity.userEntity.id = :userId AND f.lastReviewedAt IS NULL")
+  long countNewFLashcards(@Param("deckId") Long deckId, @Param("userId") Long userId);
+
+  @Query("SELECT COUNT(f) FROM FlashcardEntity f WHERE f.deckEntity.id = :deckId  AND f.deckEntity.userEntity.id = :userId AND f.lastReviewedAt BETWEEN :startOfDay AND :endOfDay AND f.nextReview BETWEEN :startOfDay AND :endOfDay")
+  long countLearningFlashcards(@Param("deckId") Long deckId, @Param("userId") Long userId, @Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
+
+  @Query("SELECT COUNT(f) FROM FlashcardEntity f WHERE f.deckEntity.id = :deckId  AND f.deckEntity.userEntity.id = :userId AND f.lastReviewedAt < :startOfToday AND f.nextReview BETWEEN :startOfToday AND :endOfToday")
+  long countReviewFlashcards(@Param("deckId") Long deckId, @Param("userId") Long userId, @Param("startOfToday") LocalDateTime startOfToday, @Param("endOfToday") LocalDateTime endOfToday);
 }

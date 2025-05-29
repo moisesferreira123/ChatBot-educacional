@@ -18,5 +18,8 @@
   --color15: rgb(31,41,55);
   --color16: rgb(156 163 175 / 1);
   --color17: rgb(107, 114, 128);
+  --accent: hsl(240, 4.8%, 95.9%);
+  --border: hsl(240, 5.9%, 90%);
+  --bg-flashcard-review: #e8efff;
   --white: #fff;
 }

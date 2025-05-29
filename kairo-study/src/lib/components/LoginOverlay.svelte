@@ -1,9 +1,21 @@
-<script lang="ts">
+<script>
   import Overlay from "./Overlay.svelte";
 	import { goto } from "$app/navigation";
 	import { closeOverlay } from '$lib/stores/overlayStore.svelte';
+	import { fetchGetUserById } from "$lib/api/users";
+	import { userData } from "$lib/stores/userDataStore";
 
-	let email: string, password: string;
+	let email, password;
+
+	async function getUserById(token) {
+    try {
+      const user = await fetchGetUserById(token);
+			localStorage.setItem('userData', JSON.stringify(user));
+      userData.set({username: user.username, fullName: user.fullName, email: user.email});
+    } catch(e) {
+      alert(e.message);
+    }
+  }
 
 	async function handleLogin() {
 		const response = await fetch('http://localhost:8080/auth/login', {
@@ -22,8 +34,8 @@
 
 		if (response.ok) {
       const data = await response.json();
-      // Armazena o token no localStorage ou em um store
       localStorage.setItem('token', data.token);
+			await getUserById(data.token);
 			closeOverlay();
       goto('/home');
     } else {

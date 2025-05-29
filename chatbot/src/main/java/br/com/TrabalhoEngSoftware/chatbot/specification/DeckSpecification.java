@@ -53,10 +53,18 @@ public class DeckSpecification {
 
 	// Ordenação pela data de última revisão feita (mais recente)
 	public static Specification<DeckEntity> sortByLastReviewedAtDesc() {
-		return (root, query, criteriaBuilder) -> {
-			query.orderBy(criteriaBuilder.desc(root.get("lastReviewedAt")));
-			return null;
-		};
+	    return (root, query, criteriaBuilder) -> {
+	        Expression<Object> nullsLast = criteriaBuilder.selectCase()
+	            .when(criteriaBuilder.isNull(root.get("lastReviewedAt")), 1)
+	            .otherwise(0);
+
+	        query.orderBy(
+	            criteriaBuilder.asc(nullsLast),
+	            criteriaBuilder.desc(root.get("lastReviewedAt"))
+	        );
+
+	        return null;
+	    };
 	}
 
 	// Ordenação pela data de última revisão feita (mais antiga)

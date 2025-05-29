@@ -41,10 +41,13 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity register(@RequestBody @Valid  RegisterDTO data) {
+	public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
 		if(this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 		String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-		UserEntity newUser = new UserEntity(data.email(), data.fullName(), encryptedPassword);
+		if(data.fullName().trim().isEmpty()) throw new RuntimeException("Full name can't be empty");
+		String fullName = data.fullName().trim();
+		String[] username = fullName.split(" ");
+		UserEntity newUser = new UserEntity(data.email(), username[0], fullName, encryptedPassword);
 		this.userRepository.save(newUser);
 		String token = tokenService.generateToken(newUser);
 		return ResponseEntity.ok(new TokenDTO(token));

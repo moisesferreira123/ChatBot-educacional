@@ -2,6 +2,7 @@ package br.com.TrabalhoEngSoftware.chatbot.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.List;
@@ -28,7 +29,7 @@ import br.com.TrabalhoEngSoftware.chatbot.specification.FlashcardSpecificationBu
 public class FlashcardService {
 
   final int WRONG = 0;
-  final int HARD = 3;
+  final int HARD = 2;
   final int GOOD = 4;
   final int EASY = 5;
 
@@ -81,7 +82,7 @@ public class FlashcardService {
     } else if ("nextReviewAsc".equalsIgnoreCase(sortType)) {
       builder.sortByNextReviewAsc();
     } else if("nextReviewDesc".equalsIgnoreCase(sortType)) {
-      builder.sortByNextReviewAsc();
+      builder.sortByNextReviewDesc();
     } 
 
     Specification<FlashcardEntity> specification = builder.build(userId, deckId);
@@ -118,7 +119,18 @@ public class FlashcardService {
     // flashcardRepository.delete(flashcard);
   }
 
-  public Optional<FlashcardSummaryDTO> getNextDueFlashcard(Long deckId, Long userId) {
+  @Transactional
+  public FlashcardSummaryDTO getFlashcardById(Long flashcardId, Long userId) {
+    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
+    
+    if(!flashcard.getDeckEntity().getUserEntity().getId().equals(userId)) {
+      throw new RuntimeException("Unauthorized to get this flashcard");
+    }
+
+    return new FlashcardSummaryDTO(flashcard);
+  }
+
+  public Optional<FlashcardSummaryDTO> getNextDueFlashcardByDeckId(Long deckId, Long userId) {
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
     Page<FlashcardEntity> page = flashcardRepository.findNextDueFlashcard(deckId, userId, tomorrow, PageRequest.of(0, 1));
 
@@ -133,6 +145,8 @@ public class FlashcardService {
       throw new RuntimeException("Unauthorized to review this flashcard");
     }
 
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+
     double easeFactor = flashcard.getEaseFactor();
 
     if(answer != WRONG && answer != HARD && answer != GOOD && answer != EASY) {
@@ -141,18 +155,46 @@ public class FlashcardService {
 
     if(answer == WRONG) {
       flashcard.setRepetition(0);
-      flashcard.setNextReview(LocalDateTime.now().plusMinutes(10L));
+      if(LocalDateTime.now().plusMinutes(1L).isBefore(tomorrow)){
+        flashcard.setNextReview(LocalDateTime.now().plusMinutes(1L));
+      } else {
+        flashcard.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+      }
       flashcard.setInterval(1);
+      flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
     } else {
       flashcard.setRepetition(flashcard.getRepetition()+1);
       if(flashcard.getRepetition() == 1){
-        flashcard.setNextReview(LocalDateTime.now().plusMinutes(10L));
+        if(answer == HARD) {
+          if(LocalDateTime.now().plusMinutes(5L).isBefore(tomorrow)){
+            flashcard.setNextReview(LocalDateTime.now().plusMinutes(5L));
+          } else {
+            flashcard.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+          }
+          flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
+        }
+        if(answer == GOOD) { 
+          if(LocalDateTime.now().plusMinutes(10L).isBefore(tomorrow)){
+            flashcard.setNextReview(LocalDateTime.now().plusMinutes(10L));
+          } else {
+            flashcard.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+          }
+        }
+        if(answer == EASY) {
+          flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
+          flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        }
       } else {
-        flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        if(flashcard.getInterval() == 1) {
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        } else {
+          flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
+          flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        }
       }
-      flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
     }
-    flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
 
     flashcard.setLastReviewedAt(LocalDateTime.now());
     flashcard.getDeckEntity().setLastReviewedAt(LocalDateTime.now());
@@ -194,4 +236,35 @@ public class FlashcardService {
         }
         return createdFlashcards.stream().map(FlashcardSummaryDTO::new).collect(Collectors.toList());
     }
+
+  @Transactional
+  public long getCountNewFlashcards(Long deckId, Long userId) {
+    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+    if(!deck.getUserEntity().getId().equals(userId)) {
+      throw new RuntimeException("Unauthorized to count the learning flashcards this deck.");
+    }
+    return flashcardRepository.countNewFLashcards(deckId, userId);
+  }
+
+  @Transactional
+  public long getCountLearningFlashcards(Long deckId, Long userId) {
+    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+    if(!deck.getUserEntity().getId().equals(userId)) {
+      throw new RuntimeException("Unauthorized to count the learning flashcards this deck.");
+    }
+    LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+    LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
+    return flashcardRepository.countLearningFlashcards(deckId, userId, startOfToday, endOfToday);
+  }
+
+  @Transactional
+  public long getCountReviewFlashcards(Long deckId, Long userId) {
+    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+    if(!deck.getUserEntity().getId().equals(userId)) {
+      throw new RuntimeException("Unauthorized to count the learning flashcards this deck.");
+    }
+    LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+    LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
+    return flashcardRepository.countReviewFlashcards(deckId, userId, startOfToday, endOfToday);
+  }
 }

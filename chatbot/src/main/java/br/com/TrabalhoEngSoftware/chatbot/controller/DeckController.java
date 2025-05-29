@@ -66,7 +66,7 @@ public class DeckController {
   }
 
   @GetMapping("/get-flashcards-total/{deckId}")
-  public long geFlashcardsTotal(@PathVariable Long deckId, Authentication authentication) {
+  public long getFlashcardsTotal(@PathVariable Long deckId, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();
     return deckService.getFlashcardsTotal(deckId, user.getId());
   }
