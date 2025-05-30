@@ -50,8 +50,8 @@ export async function fetchCreateDeck(title, topic, token) {
     })
   });
   if(!response.ok){
-    const errorMessage = response.message || 'Unknown error creating deck';
-    throw new Error(errorMessage);
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
 }
 

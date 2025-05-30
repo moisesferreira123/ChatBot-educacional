@@ -17,7 +17,7 @@
       newDeckOverlay.set(false);
       createdDeck.set(true);
     } catch(e) {
-      alert(e.message);
+      alert(`${e.message}`);
     }
   }
 </script>

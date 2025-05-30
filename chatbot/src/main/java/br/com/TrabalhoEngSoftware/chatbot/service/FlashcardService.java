@@ -193,7 +193,7 @@ public class FlashcardService {
           flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
         }
       } else {
-        if(flashcard.getInterval() == 1) {
+        if(flashcard.getInterval() == 1 && flashcard.getRepetition() == 2) {
           flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
         } else {
           flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer));
