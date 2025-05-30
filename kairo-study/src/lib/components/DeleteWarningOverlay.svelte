@@ -1,10 +1,7 @@
 <script>
   import { X } from "@lucide/svelte";
 
-  export let alertTitle
-  export let alertMessage;
-  export let cancelButton;
-  export let deleteButton;
+  let { alertTitle, alertMessage, cancelButton, deleteButton } = $props();
 </script>
 
 <div class="fixed inset-0 bg-black/80 flex justify-center items-center z-51">

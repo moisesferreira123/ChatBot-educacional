@@ -1,77 +1,79 @@
 <script>
-	import { toggleOverlay, closeOverlay } from "$lib/stores/overlayStore.svelte";
-  import { goto } from '$app/navigation';
-	import Overlay from "./Overlay.svelte";
-	import { fetchGetUserById } from "$lib/api/users";
-	import { userData } from "$lib/stores/userDataStore";
-  
+	import { toggleOverlay, closeOverlay } from '$lib/stores/overlayStore.svelte';
+	import { goto } from '$app/navigation';
+	import Overlay from './abstract/Overlay.svelte';
+	import { fetchGetUserById } from '$lib/api/users';
+	import { userData } from '$lib/stores/userDataStore';
+	import { fetchAuthRegister } from '$lib/api/auth';
+
 	const id = 'sign-in';
-  const title = 'Get Started Today';
-  const subtitle = 'Create your account and start learning smarter';
+	const title = 'Get Started Today';
+	const subtitle = 'Create your account and start learning smarter';
 
-	let fullName, email, password;
+	let { fullName, email, password } = $state([ '', '', '' ]);
 
-	async function getUserById(token) {
-    try {
-      const user = await fetchGetUserById(token);
-			localStorage.setItem('userData', JSON.stringify(user));
-      userData.set({username: user.username, fullName: user.fullName, email: user.email});
-    } catch(e) {
-      alert(e.message);
-    }
-  }
-
-	async function handleSubmit(event) {
-		event.preventDefault();
-		const response = await fetch('http://localhost:8080/auth/register', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				fullName: fullName,
-				email: email,
-				password: password
-			})
-		});
-
-		if(response.ok) {
-			const data = await response.json();
-			localStorage.setItem('token', data.token);
-			await getUserById(data.token);
+	async function handleSignIn() {
+		//console.log({fullName, email, password});
+		let token = await fetchAuthRegister(fullName, email, password);
+		if (token !== '') {
+			localStorage.setItem('token', token);
+			try {
+				const user = await fetchGetUserById(token);
+				localStorage.setItem('userData', JSON.stringify(user));
+				userData.set({ username: user.username, fullName: user.fullName, email: user.email });
+			} catch (e) {
+				alert(e.message);
+			}
 			closeOverlay();
 			goto('/home');
-		} else {
-			alert('Error registering user. Email already registered.');
-			console.error( await response.text());
 		}
 	}
 </script>
 
 {#snippet form()}
-<form action="#" class="form-style" on:submit={handleSubmit}>
-  <label for="full-name">Full Name
-    <input type="text" bind:value={fullName} name="full-name" placeholder="Enter your name" required>
-  </label><br>
-  <label for="email">Email
-    <input type="email" bind:value={email} name="email" placeholder="Enter your email" required>
-  </label><br>
-  <label for="password">Password
-    <input type="password" bind:value={password} name="password" placeholder="Create a password" required>
-  </label><br>
-  <button type="submit" class="create-account">Create Account</button>
-</form>
+	<form action="#" class="form-style" onsubmit={handleSignIn}>
+		<label for="full-name"
+			>Full Name
+			<input
+				type="text"
+				bind:value={fullName}
+				name="full-name"
+				placeholder="Enter your name"
+				required
+			/>
+		</label><br />
+		<label for="email"
+			>Email
+			<input type="email" bind:value={email} name="email" placeholder="Enter your email" required />
+		</label><br />
+		<label for="password"
+			>Password
+			<input
+				type="password"
+				bind:value={password}
+				name="password"
+				placeholder="Create a password"
+				required
+			/>
+		</label><br />
+		<button type="submit" class="create-account">Create Account</button>
+	</form>
 {/snippet}
 {#snippet footer()}
-<p>
-  Already have an account? <a class="sign-in-from-get-started" on:click={() => {toggleOverlay('login')}}>Sign in</a>
-</p>
+	<p>
+		Already have an account? <a
+			class="sign-in-from-get-started"
+			onclick={() => {
+				toggleOverlay('login');
+			}}>Sign in</a
+		>
+	</p>
 {/snippet}
 
-<Overlay {id} {title} {subtitle} {form} {footer}/>
+<Overlay {id} {title} {subtitle} {form} {footer} />
 
 <style>
-  .sign-in-from-get-started {
+	.sign-in-from-get-started {
 		color: var(--color1);
 	}
 
@@ -80,7 +82,7 @@
 		cursor: pointer;
 	}
 
-  .form-style {
+	.form-style {
 		margin: 30px 30px;
 	}
 
@@ -116,7 +118,7 @@
 		background-color: var(--color6);
 	}
 
-  p {
+	p {
 		margin-top: -20px;
 		margin-bottom: 30px;
 		font-size: small;

@@ -4,11 +4,8 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
 
-  export let id;
-  export let title;
-  export let subtitle;
-  export let updatedAt;
-  export let onDelete;
+  let { id, title, subtitle, updatedAt, onDelete } = $props();
+
 
   let token;
 

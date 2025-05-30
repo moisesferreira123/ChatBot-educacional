@@ -2,7 +2,7 @@
   import { filterFlashcardsOverlay } from '$lib/stores/overlayStore.svelte';
 	import { clickOutsideFilter } from '$lib/actions/clickOutsideFIlter';
 
-  export let changeFilter;
+  let changeFilter = $props();
 
   function changeFilterOverlay(newFilter) {
     filterFlashcardsOverlay.set(false);

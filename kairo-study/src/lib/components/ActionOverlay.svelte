@@ -2,20 +2,7 @@
   import { actionOverlay } from "$lib/stores/overlayStore.svelte";
 	import { onMount } from "svelte";
   import { X } from "@lucide/svelte";
-
-  export let title;
-  export let textLabel1;
-  export let text1;
-  export let textLabel2;
-  export let text2;
-  export let actionButton;
-
-  let token;
-
-  onMount(() => {
-    token = localStorage.getItem("token");
-  });
-
+  let { title, textLabel1, text1, textLabel2, text2, actionButton } = $props();
 </script>
 
 <div class="fixed inset-0 bg-black/80 flex justify-center items-center z-50">

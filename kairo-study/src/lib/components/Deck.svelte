@@ -8,14 +8,11 @@
 	import { goto } from '$app/navigation';
 	import { flashcardReview } from '$lib/stores/flashcardStore';
 
-  export let id;
-  export let title;
-  export let topic;
-  export let lastReviewedAt;
+  let { id, title, topic, lastReviewedAt } = $props();
 
   let token;
-  let dueFlashcards = 0;
-  let masteryLevel = 0;
+  let dueFlashcards = $state(0);
+  let masteryLevel = $state(0);
 
   async function getDueFlashcardsTotal() {
     try {

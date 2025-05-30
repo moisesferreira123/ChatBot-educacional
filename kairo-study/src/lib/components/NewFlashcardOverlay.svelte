@@ -4,10 +4,10 @@
   import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay, newFlashcardOverlay } from "$lib/stores/overlayStore.svelte";
   import { X } from '@lucide/svelte';
 
-  export let deckId;
+  let deckId = $props();
 
-  let flashcardFront='';
-  let flashcardBack='';
+  let flashcardFront= $state('');
+  let flashcardBack= $state('');
 
   const token = localStorage.getItem("token");
 

@@ -1,13 +1,13 @@
 <script>
-	import { fetchGetFlashcardById } from "$lib/api/flashcards/fetchGetFlashcardById";
+		import { fetchGetFlashcardById } from "$lib/api/flashcards";
 	import { formatDate } from "$lib/stores/formatDate";
 	import { flashcardDetailsOverlay } from "$lib/stores/overlayStore.svelte";
   import { CalendarCheck2, CalendarClock, Check, X } from "@lucide/svelte";
 	import { onMount } from "svelte";
 
-  export let flashcardId;
+  let flashcardId = $props();
 
-  let flashcard;
+  let flashcard = $state();
   let token;
 
   async function getFlashcardById() {
