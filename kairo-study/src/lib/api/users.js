@@ -9,8 +9,8 @@ export async function fetchGetUserById(token) {
   return response.json();
 } 
 
-export async function fetchUpdateUserPersonalInformations(fullName, username, email, userId, token) {
-  const response = await fetch(`http://localhost:8080/api/users/update-user-informations/${userId}`, {
+export async function fetchUpdateUserPersonalInformations(fullName, username, email, token) {
+  const response = await fetch(`http://localhost:8080/api/users/update-user-informations`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -26,8 +26,8 @@ export async function fetchUpdateUserPersonalInformations(fullName, username, em
   return response.json();
 }
 
-export async function fetchUpdateUserPassword(currentPassword, newPassword, confirmNewPassword, userId, token) {
-  const response = await fetch(`http://localhost:8080/api/users/update-user-password/${userId}`, {
+export async function fetchUpdateUserPassword(currentPassword, newPassword, confirmNewPassword, token) {
+  const response = await fetch(`http://localhost:8080/api/users/update-user-password`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

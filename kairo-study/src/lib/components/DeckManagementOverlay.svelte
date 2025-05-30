@@ -13,14 +13,12 @@
 	import ActionOverlay from "./ActionOverlay.svelte";
 	import FlashcardDetails from "./FlashcardDetails.svelte";
   
-  export let id;
-  export let title;
-  export let topic;
+  let { id, title, topic } = $props();
 
-  let alertTitle = "Are you sure?";
-  let alertMessage = `This action cannot be undone. It will permanently delete the "${title}" deck and all of its flashcards.`;
+  const alertTitle = "Are you sure?";
+  const alertMessage = `This action cannot be undone. It will permanently delete the "${title}" deck and all of its flashcards.`;
   
-  let flashcards = 0;
+  let flashcards = $state(0);
   let token;
 
   function updateDeckTitleAndTopic(deckTitle, deckTopic) {

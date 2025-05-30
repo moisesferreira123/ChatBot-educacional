@@ -1,7 +1,7 @@
 <script lang='ts'>
 	import { menuStore } from "$lib/stores/mobileMenuStore.svelte";
-  import { toggleOverlay } from "$lib/stores/overlayStore.svelte";
-	import Overlay from "./Overlay.svelte";
+  	import { toggleOverlay } from "$lib/stores/overlayStore.svelte";
+	import Overlay from "./abstract/Overlay.svelte";
 </script>
 
 <div class="mobile-menu {menuStore.active ? 'active' : ''}">

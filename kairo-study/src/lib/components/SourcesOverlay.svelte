@@ -7,7 +7,6 @@
   // Props to control visibility and handle closing
   let {show = $bindable(), onClose, sources = $bindable()} = $props();
 
-  let loadingSources = $state(true);
   let uploading = $state(false);
   let uploadError: string | null = $state(null);
 
@@ -26,13 +25,11 @@
   let token: string | null;
 
   async function fetchSourcesForNote() {
-    loadingSources = true;
     uploadError = null; // Clear previous errors
     token = localStorage.getItem("token");
     if (!token) {
         // Handle missing token, maybe redirect to login
         console.error("Authentication token not found.");
-        loadingSources = false;
         return;
     }
     try {
@@ -41,8 +38,6 @@
       console.error("Error fetching sources:", error);
       // Handle error, maybe show a message to the user
       uploadError = "Failed to load sources.";
-    } finally {
-      loadingSources = false;
     }
   }
 

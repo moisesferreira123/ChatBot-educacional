@@ -6,9 +6,7 @@
   import { SquarePen, Trash2 } from "@lucide/svelte";
   import { onMount } from "svelte";
 
-  export let flashcardId;
-  export let front;
-  export let back;
+  let { flashcardId, front, back } = $props();
 
   let alertTitle = "Are you sure?";
   let alertMessage = `This action cannot be undone. It will permanently delete this flashcard.`;

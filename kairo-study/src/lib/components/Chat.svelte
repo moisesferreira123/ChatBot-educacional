@@ -2,8 +2,7 @@
 	import HeaderChat from "./HeaderChat.svelte";
 	import MessagesChat from "./MessagesChat.svelte";
 	import SendMessage from "./SendMessage.svelte";
-  export let title;
-
+	let title = $props();
 </script>
 
 <div class="chat-container">

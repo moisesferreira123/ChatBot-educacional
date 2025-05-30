@@ -1,5 +1,5 @@
 <script>
-	import Overlay from './Overlay.svelte';
+	import Overlay from './abstract/Overlay.svelte';
 	import { goto } from '$app/navigation';
 	import { closeOverlay } from '$lib/stores/overlayStore.svelte';
 	import { fetchGetUserById } from '$lib/api/users';
@@ -13,8 +13,8 @@
 	const title = 'Log in to your account';
 	const subtitle = 'Continue where you left off in your learning';
 
-	async function handleLogin(email, password) {
-		let token = fetchAuthLogin(email, password);
+	async function handleLogin() {
+		let token = await fetchAuthLogin(email, password);
 		if (token !== '') {
 			localStorage.setItem('token', token);
 			try {
@@ -49,7 +49,7 @@
 		<button
 			type="submit"
 			class="sign-in"
-			onclick={(email, password) => handleLogin(email, password)}>Sign in</button
+			onclick={handleLogin}>Sign in</button
 		>
 	</form>
 {/snippet}

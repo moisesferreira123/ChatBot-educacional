@@ -29,13 +29,13 @@ public class UserController {
 		return userService.getUserById(user.getId());
 	}
 
-	@PutMapping("/update-user-informations/{userId}")
+	@PutMapping("/update-user-informations")
 	public UserDTO updateUserPersonalInformations(@RequestBody UserDTO userDTO, Authentication authentication) {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
 		return userService.updateUserPersonalInformations(userDTO, user.getId());
 	}
 
-	@PutMapping("/update-user-password/{userId}")
+	@PutMapping("/update-user-password")
 	public void updateUserPassword(@RequestBody UpdatePasswordDTO updatePasswordDTO, Authentication authentication) {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
 		userService.updateUserPassword(updatePasswordDTO, user.getId());
