@@ -8,7 +8,6 @@
 	import { Camera, Lock, Save, Trash2, User } from "@lucide/svelte";
 	import { onMount } from "svelte";
   
-  let userId;
   let fullName = '';
   let username = '';
   let email = '';
@@ -23,7 +22,7 @@
 
   async function updateUserPersonalInformations() {
     try {
-      const userInformations = await fetchUpdateUserPersonalInformations(fullName, username, email, userId, token); 
+      const userInformations = await fetchUpdateUserPersonalInformations(fullName, username, email, token); 
       fullName = userInformations.fullName;
       username = userInformations.username;
       email = userInformations.email;
@@ -36,7 +35,7 @@
 
   async function updateUserPassword() {
     try {
-      await fetchUpdateUserPassword(currentPassword, newPassword, confirmNewPassword, userId, token);
+      await fetchUpdateUserPassword(currentPassword, newPassword, confirmNewPassword, token);
       currentPassword = '', newPassword = '', confirmNewPassword = '';
     } catch(e) {
       alert(e.message);
@@ -58,7 +57,6 @@
     fullName = $userData.fullName;
     username = $userData.username;
     email = $userData.email;
-    userId = localStorage.getItem("userId");
     token = localStorage.getItem("token");
   });
 </script>

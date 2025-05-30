@@ -10,12 +10,12 @@
 	import { flashcardsFilter } from "$lib/stores/filter";
 	import FilterFlashcardsOverlay from "./FilterFlashcardsOverlay.svelte";
 
-  export let deckId;
+  let deckId = $props();
 
-  let flashcards = [];
+  let flashcards = $state([]);
   let currentPage = 0;
   let pageSize = 10;
-  let wordFilter = "";
+  let wordFilter = $state("");
   let finished = false;
   let sentinel;
 

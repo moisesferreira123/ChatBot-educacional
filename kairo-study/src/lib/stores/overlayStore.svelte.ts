@@ -32,7 +32,3 @@ export function closeOverlay() {
   overlayStore.currentOverlay = null;
   updateBodyScroll();
 }
-
-export function goToHome() {
-  goto('/home');
-}

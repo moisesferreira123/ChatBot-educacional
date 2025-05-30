@@ -1,7 +1,7 @@
 <script>
 	import { toggleOverlay, closeOverlay } from '$lib/stores/overlayStore.svelte';
 	import { goto } from '$app/navigation';
-	import Overlay from './Overlay.svelte';
+	import Overlay from './abstract/Overlay.svelte';
 	import { fetchGetUserById } from '$lib/api/users';
 	import { userData } from '$lib/stores/userDataStore';
 	import { fetchAuthRegister } from '$lib/api/auth';
@@ -10,11 +10,10 @@
 	const title = 'Get Started Today';
 	const subtitle = 'Create your account and start learning smarter';
 
-	let fullName = $state();
-	let email = $state();
-	let password = $state();
+	let { fullName, email, password } = $state([ '', '', '' ]);
 
-	async function handleSignIn(fullName, email, password) {
+	async function handleSignIn() {
+		//console.log({fullName, email, password});
 		let token = await fetchAuthRegister(fullName, email, password);
 		if (token !== '') {
 			localStorage.setItem('token', token);
@@ -32,7 +31,7 @@
 </script>
 
 {#snippet form()}
-	<form action="#" class="form-style" onsubmit={(fullName, email, password) => handleSignIn(fullName, email, password)}>
+	<form action="#" class="form-style" onsubmit={handleSignIn}>
 		<label for="full-name"
 			>Full Name
 			<input
