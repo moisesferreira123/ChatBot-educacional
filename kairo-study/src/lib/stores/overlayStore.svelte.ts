@@ -14,6 +14,7 @@ export const deckManagementOverlay = writable(null);
 export const newFlashcardInDeckInterfaceOverlay = writable(null);
 export const flashcardDetailsOverlay = writable(null);
 export const filterFlashcardsOverlay = writable(null);
+export const filterDecksOverlay = writable(null);
 
 export const overlayStore = $state<{currentOverlay: string | null}>({ 
   currentOverlay: null

@@ -46,9 +46,9 @@
 
 <div class="rounded-lg border border-(--color13) bg-white text-card-foregraund hover:shadow-md transition-shador duration-300">
   <div class="flex flex-col space-y-1.5 p-6 pb-2">
-    <div class="flex justify-between items-start">
-      <div>
-        <h3 class="font-bold tracking-tight text-lg">{title}</h3>
+    <div class="flex justify-between items-start gap-2">
+      <div class="max-w-[calc(100%-101px)]">
+        <h3 class="w-full wrap-break-word font-bold tracking-tight text-lg">{title}</h3>
         <div class="flex items-center mt-1 text-sm font-normal text-gray-500">
           <Folder class="mr-1" size={16} color="var(--color17)"  />
           {topic}
@@ -58,7 +58,7 @@
         <div class="bg-gray-100 text-gray-700 text-sm font-medium px-2 py-1 rounded">
           {dueFlashcards} due cards
         </div>
-        <button onclick={() => {deckManagementOverlay.set({id, title, topic}); console.log($deckManagementOverlay);}} class="flex items-center justify-center cursor-pointer hover:bg-(--color8) h-7 w-7 rounded">
+        <button onclick={() => {deckManagementOverlay.set({id, title, topic}); console.log($deckManagementOverlay);}} class="flex items-center shrink-0 justify-center cursor-pointer hover:bg-(--color8) h-7 w-7 rounded">
           <Settings size={16} color="var(--color14)" />
         </button>
       </div>

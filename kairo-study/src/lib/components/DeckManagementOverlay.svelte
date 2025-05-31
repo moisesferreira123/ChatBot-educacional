@@ -109,15 +109,15 @@
       <button onclick={() => deckManagementOverlay.set(null)} class="absolute top-2.5 right-2.5 text-gray-500 hover:text-black transition-colors cursor-pointer">
         <X size={16} />
       </button>
-      <div class="flex flex-col space-y-1.5 text-center sm:text-left flex-shrink-0">
-        <div class="flex items-center justify-between">
-          <h2 class="font-bold tracking-tight text-xl text-(--color14)">{title}</h2>
-          <div class="flex gap-2">
-            <button onclick={() => actionOverlay.set({title: "Update Deck", textLabel1: "Deck Title", text1: title, textLabel2: "Topic", text2: topic, actionButton: updateDeck})} class="inline-flex items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
+      <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+        <div class="flex items-center justify-between gap-2">
+          <h2 style="max-width: calc(100% - 265px);" class="wrap-break-word font-bold text-wrap tracking-tight text-xl text-(--color14)">{title}</h2>
+          <div class="flex gap-2 ">
+            <button onclick={() => actionOverlay.set({title: "Update Deck", textLabel1: "Deck Title", text1: title, textLabel2: "Topic", text2: topic, actionButton: updateDeck})} class="inline-flex shrink-0 items-center justify-center text-(--color14) gap-2 text-sm font-semibold transition-colors border border-(--color13) hover:bg-(--color8) hover:cursor-pointer h-9 rounded-md px-3">
               <Settings size={16} color="var(--color14)" />
               Edit Deck
             </button>
-            <button onclick={() => deleteWarningOverlay.set({alertTitle, alertMessage, deleteButton: deleteDeck})} class="inline-flex items-center text-white bg-red-500 justify-center gap-2 text-sm font-semibold transition-colors hover:bg-red-500/85 hover:cursor-pointer h-9 rounded-md px-3">
+            <button onclick={() => deleteWarningOverlay.set({alertTitle, alertMessage, deleteButton: deleteDeck})} class="inline-flex shrink-0 items-center text-white bg-red-500 justify-center gap-2 text-sm font-semibold transition-colors hover:bg-red-500/85 hover:cursor-pointer h-9 rounded-md px-3">
               <Trash2 size={16}/>
               Delete Deck
             </button>

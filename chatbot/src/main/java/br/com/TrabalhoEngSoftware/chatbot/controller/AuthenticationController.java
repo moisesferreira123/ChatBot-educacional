@@ -35,15 +35,15 @@ public class AuthenticationController {
 	
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
-		if(data.email().isEmpty()) throw new InvalidObjectDataException("Email can't be empty");
-		if(data.password().isEmpty()) throw new InvalidObjectDataException("Password can't be empty");
+		if(data.email() == null || data.email().isEmpty()) throw new InvalidObjectDataException("Email can't be empty");
+		if(data.password() == null || data.password().isEmpty()) throw new InvalidObjectDataException("Password can't be empty");
 		try {
 			var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
 			var auth = this.authenticationManager.authenticate(usernamePassword);
 			var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
 			return ResponseEntity.ok(new TokenDTO(token));
 		} catch (Exception ex) {
-				throw new AuthenticationFailureException("Invalid username or password");
+			throw new AuthenticationFailureException("Invalid username or password");
     }
 	}
 	

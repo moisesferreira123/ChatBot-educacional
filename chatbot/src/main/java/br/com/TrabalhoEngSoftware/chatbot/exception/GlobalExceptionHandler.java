@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ObjectExceptionHandler {
+public class GlobalExceptionHandler {
   
   @ExceptionHandler(ObjectNotFoundException.class)
   public ResponseEntity<Map<String, String>> handleObjectNotFound(ObjectNotFoundException exception) {
@@ -80,5 +80,12 @@ public class ObjectExceptionHandler {
     Map<String, String> error = new HashMap<>();
     error.put("message", exception.getMessage());
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+  }
+
+  @ExceptionHandler(UnexpectedFailureException.class)
+  public ResponseEntity<Map<String, String>> handleUnexpectedFailure(UnexpectedFailureException exception) {
+    Map<String, String> error = new HashMap<>();
+    error.put("message", exception.getMessage());
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
   }
 }

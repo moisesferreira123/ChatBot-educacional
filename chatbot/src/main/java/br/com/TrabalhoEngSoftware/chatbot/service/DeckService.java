@@ -36,8 +36,8 @@ public class DeckService {
     if(deckDTO.getTitle() == null || deckDTO.getTitle().trim().isEmpty()) {
       throw new InvalidObjectDataException("Deck title can't be empty");
     }
-    deck.setTitle(deckDTO.getTitle());
-    deck.setTopic(deckDTO.getTopic());
+    deck.setTitle(deckDTO.getTitle().trim());
+    deck.setTopic(deckDTO.getTopic().trim());
     deck.setUserEntity(new UserEntity(userId));
     deckRepository.save(deck);
   }

@@ -29,7 +29,9 @@ public class DeckSpecification {
 		return (root, query, criteriaBuilder)-> {
 			Predicate topicPredicate = criteriaBuilder.conjunction();
 			if(topic != null && !topic.isEmpty()) {
-				topicPredicate = criteriaBuilder.equal(root.get("topic"), topic);
+				topicPredicate = criteriaBuilder.equal(criteriaBuilder.lower(root.get("topic")), topic.toLowerCase());
+			} else {
+				topicPredicate = criteriaBuilder.or(criteriaBuilder.isNull(root.get("topic")), criteriaBuilder.equal(root.get("topic"), ""));
 			}
 			return criteriaBuilder.and(topicPredicate);
 		};
