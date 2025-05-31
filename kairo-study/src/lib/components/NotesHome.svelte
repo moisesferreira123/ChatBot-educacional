@@ -18,7 +18,7 @@
       await fetchDeleteNote(id, token);
       onDelete(id);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 

@@ -19,11 +19,15 @@
 
   async function loadNotes() {
     if(!hasMore) return;
-    const data = await fetchListNotes(currentPage, pageSize, titleFilter, $sortTypeNotes, token);
-    allNotes = [...allNotes, ...data.content];
-    updateVisibleNotes();
-    hasMore = !data.last;
-    currentPage++;
+    try {
+      const data = await fetchListNotes(currentPage, pageSize, titleFilter, $sortTypeNotes, token);
+      allNotes = [...allNotes, ...data.content];
+      updateVisibleNotes();
+      hasMore = !data.last;
+      currentPage++;
+    } catch(e) {
+      alert(`Error: ${e.message}`);
+    }
   }
 
   function updateVisibleNotes() {

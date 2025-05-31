@@ -15,9 +15,8 @@ export async function fetchAuthRegister(fullName,email,password) {
 		const data = await response.json();
 		return data.token;
 	} else {
-		alert('Error registering user. Email already registered.');
-		console.error(await response.text());
-		return '';
+		const errorMessage = await response.json();
+		throw new Error(errorMessage.message);
 	}
 }
 
@@ -37,8 +36,7 @@ export async function fetchAuthLogin(email, password) {
 		const data = await response.json();
 		return data.token;
 	} else {
-		alert('Invalid email or password');
-        console.error(await response.text());
-        return '';
+		const errorMessage = await response.json();
+		throw new Error(errorMessage.message);
 	}
 }

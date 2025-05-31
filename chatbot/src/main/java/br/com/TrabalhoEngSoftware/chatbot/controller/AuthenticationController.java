@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +16,8 @@ import br.com.TrabalhoEngSoftware.chatbot.dto.AuthenticationDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.RegisterDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.TokenDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
+import br.com.TrabalhoEngSoftware.chatbot.exception.AuthenticationFailureException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.InvalidObjectDataException;
 import br.com.TrabalhoEngSoftware.chatbot.infra.security.TokenService;
 import br.com.TrabalhoEngSoftware.chatbot.repository.UserRepository;
 
@@ -34,17 +35,24 @@ public class AuthenticationController {
 	
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
-		var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-		var auth = this.authenticationManager.authenticate(usernamePassword);
-		var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
-		return ResponseEntity.ok(new TokenDTO(token));
+		if(data.email().isEmpty()) throw new InvalidObjectDataException("Email can't be empty");
+		if(data.password().isEmpty()) throw new InvalidObjectDataException("Password can't be empty");
+		try {
+			var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+			var auth = this.authenticationManager.authenticate(usernamePassword);
+			var token = tokenService.generateToken((UserEntity) auth.getPrincipal());
+			return ResponseEntity.ok(new TokenDTO(token));
+		} catch (Exception ex) {
+				throw new AuthenticationFailureException("Invalid username or password");
+    }
 	}
 	
 	@PostMapping("/register")
 	public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
 		if(this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
+		if(data.fullName().trim().isEmpty()) throw new InvalidObjectDataException("Full name can't be empty");
+		if(data.password().isEmpty()) throw new InvalidObjectDataException("Password can't be empty");
 		String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-		if(data.fullName().trim().isEmpty()) throw new RuntimeException("Full name can't be empty");
 		String fullName = data.fullName().trim();
 		String[] username = fullName.split(" ");
 		UserEntity newUser = new UserEntity(data.email(), username[0], fullName, encryptedPassword);

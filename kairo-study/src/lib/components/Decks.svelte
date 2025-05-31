@@ -24,11 +24,15 @@
 
   async function loadDecks() {
     if(!hasMore) return;
-    const data = await fetchListDecks(currentPage, pageSize, titleFilter, $topicFilter, $sortTypeDecks, token);
-    allDecks = [...allDecks, ...data.content];
-    updateVisibleDecks();
-    hasMore = !data.last;
-    currentPage++;
+    try {
+      const data = await fetchListDecks(currentPage, pageSize, titleFilter, $topicFilter, $sortTypeDecks, token);
+      allDecks = [...allDecks, ...data.content];
+      updateVisibleDecks();
+      hasMore = !data.last;
+      currentPage++;
+    } catch(e) {
+      alert(`Error: ${e.message}`);
+    }
   }
 
   function updateVisibleDecks() {
@@ -136,7 +140,7 @@
   <input class="w-full h-10 border border-(--color13) py-2 pl-10 pr-3 text-(--color14) font-medium rounded-md focus:outline-offset-2 focus:outline-black-500 focus:outline-2 bg-white" placeholder="Search decks..."
          bind:value={titleFilter} oninput={updateTitleFilter}>
 </div>
-<div class="flex justify-between items-center mb-8">
+<div class="flex justify-between items-center mb-6">
   <div class="inline-flex ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap justify-center items-center h-9 border-(--color13)">
     <p class="font-semibold text-sm text-(--color14) cursor-default">Decks</p>
   </div>

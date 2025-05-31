@@ -33,7 +33,7 @@
       updatedDeck.set(true);
       updateDeckTitleAndTopic(newTitle, newTopic);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 
@@ -44,7 +44,7 @@
       deckManagementOverlay.set(null);
       deletedDeck.set(true);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 
@@ -52,7 +52,7 @@
     try {
       flashcards = await fetchGetFlashcardsTotal(id, token);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 

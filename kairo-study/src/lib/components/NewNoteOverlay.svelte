@@ -19,7 +19,7 @@
       console.log(createdNoteId);
       goto(`/notes/${createdNoteId}`);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 </script>

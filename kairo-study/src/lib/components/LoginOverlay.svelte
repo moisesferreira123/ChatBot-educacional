@@ -14,18 +14,24 @@
 	const subtitle = 'Continue where you left off in your learning';
 
 	async function handleLogin() {
-		let token = await fetchAuthLogin(email, password);
+		let token;
+		try {
+			token = await fetchAuthLogin(email, password);
+		} catch(e) {
+			alert(`Error: ${e.message}`);
+			return;
+		}
 		if (token !== '') {
 			localStorage.setItem('token', token);
 			try {
 				const user = await fetchGetUserById(token);
 				localStorage.setItem('userData', JSON.stringify(user));
 				userData.set({ username: user.username, fullName: user.fullName, email: user.email });
+				closeOverlay();
+				goto('/home');
 			} catch (e) {
-				alert(e.message);
+				alert(`Error: ${e.message}`);
 			}			
-			closeOverlay();
-			goto('/home');
 		}
 	}
 </script>

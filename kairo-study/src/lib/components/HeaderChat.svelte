@@ -1,5 +1,5 @@
 <script>
-  let title = $props();
+  let  { title } = $props();
 </script>
 
 <section>

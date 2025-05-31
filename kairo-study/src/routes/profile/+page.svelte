@@ -29,7 +29,7 @@
       localStorage.setItem('userData', JSON.stringify(userInformations));
       userData.set({username, fullName, email});
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 
@@ -38,7 +38,7 @@
       await fetchUpdateUserPassword(currentPassword, newPassword, confirmNewPassword, token);
       currentPassword = '', newPassword = '', confirmNewPassword = '';
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 
@@ -49,7 +49,7 @@
       localStorage.clear();
       goto("/");
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 

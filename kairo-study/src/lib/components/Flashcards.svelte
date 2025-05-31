@@ -10,7 +10,7 @@
 	import { flashcardsFilter } from "$lib/stores/filter";
 	import FilterFlashcardsOverlay from "./FilterFlashcardsOverlay.svelte";
 
-  let deckId = $props();
+  let { deckId } = $props();
 
   let flashcards = $state([]);
   let currentPage = 0;
@@ -32,7 +32,7 @@
         ++currentPage;
       }
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 

@@ -11,8 +11,8 @@ export async function fetchCreateNote(title, subtitle, token) {
     })
   });
   if(!response.ok){
-    const errorMessage = response.message || 'Unknown error creating note';
-    throw new Error(errorMessage);
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
   return response.json();
 }
@@ -25,7 +25,8 @@ export async function fetchDeleteNote(noteId, token) {
     }
   });
   if(!response.ok){
-    throw new Error("Error deleting note");
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
 }
 
@@ -36,7 +37,10 @@ export async function fetchGetNoteById(noteId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting note by Id");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -47,7 +51,10 @@ export async function fetchListNotes(page, pageSize, title, sortType, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error('Error fetching notes');
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -64,6 +71,9 @@ export async function fetchUpdateNote(noteId, title, subtitle, content, token) {
       content: content
     })
   });
-  if(!response.ok) throw new Error("Error updating note");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }

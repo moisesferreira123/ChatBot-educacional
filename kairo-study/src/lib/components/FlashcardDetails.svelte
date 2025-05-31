@@ -5,7 +5,7 @@
   import { CalendarCheck2, CalendarClock, Check, X } from "@lucide/svelte";
 	import { onMount } from "svelte";
 
-  let flashcardId = $props();
+  let { flashcardId } = $props();
 
   let flashcard = $state();
   let token;
@@ -14,7 +14,7 @@
     try {
       flashcard = await fetchGetFlashcardById(flashcardId, token);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
       flashcardDetailsOverlay.set(null);
     }
   }

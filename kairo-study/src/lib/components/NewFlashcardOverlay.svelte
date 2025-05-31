@@ -4,8 +4,8 @@
   import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay, newFlashcardOverlay } from "$lib/stores/overlayStore.svelte";
   import { X } from '@lucide/svelte';
 
-  let deckId = $props();
-
+  let { deckId } = $props();
+   
   let flashcardFront= $state('');
   let flashcardBack= $state('');
 
@@ -21,7 +21,7 @@
       newFlashcardOverlay.set(false);
       newFlashcardInDeckInterfaceOverlay.set(null);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 </script>

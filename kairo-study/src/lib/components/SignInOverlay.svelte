@@ -13,19 +13,23 @@
 	let { fullName, email, password } = $state([ '', '', '' ]);
 
 	async function handleSignIn() {
-		//console.log({fullName, email, password});
-		let token = await fetchAuthRegister(fullName, email, password);
+		let token;
+		try {
+			token = await fetchAuthRegister(fullName, email, password);
+		} catch(e) {
+			alert(`Error: ${e.message}`);
+		}
 		if (token !== '') {
-			localStorage.setItem('token', token);
-			try {
-				const user = await fetchGetUserById(token);
-				localStorage.setItem('userData', JSON.stringify(user));
-				userData.set({ username: user.username, fullName: user.fullName, email: user.email });
-			} catch (e) {
-				alert(e.message);
-			}
-			closeOverlay();
-			goto('/home');
+		localStorage.setItem('token', token);
+		try {
+			const user = await fetchGetUserById(token);
+			localStorage.setItem('userData', JSON.stringify(user));
+			userData.set({ username: user.username, fullName: user.fullName, email: user.email });
+		} catch (e) {
+			alert(`Error: ${e.message}`);
+		}
+		closeOverlay();
+		goto('/home');
 		}
 	}
 </script>

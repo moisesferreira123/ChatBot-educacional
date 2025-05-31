@@ -18,7 +18,7 @@
     try {
       dueFlashcards = await fetchGetDueFlashcardsTotal(id, token);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 
@@ -26,7 +26,7 @@
     try {
       masteryLevel = await fetchGetMasteryLevel(id, token);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 

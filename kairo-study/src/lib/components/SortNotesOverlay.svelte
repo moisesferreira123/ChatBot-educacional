@@ -2,7 +2,7 @@
   import { sortNotesOverlay } from '$lib/stores/overlayStore.svelte';
   import { clickOutside } from '$lib/actions/clickOutside';
 
-  let changeSort = $props();
+  let { changeSort }  = $props();
 
   function changeSortOverlay(newSort) {
     sortNotesOverlay.set(false);

@@ -34,16 +34,9 @@ export async function uploadSource(noteId: string, formData: FormData, token: st
     body: formData
   });
 
-  if (!response.ok) {
-     // Try to parse the error response from the backend
-     let errorMessage = 'Failed to upload file';
-     try {
-       const error = await response.json();
-       errorMessage = error.message || error.error || errorMessage;
-     } catch (e) {
-       // Ignore if response is not JSON
-     }
-     throw new Error(errorMessage);
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
 
   return response.json();
@@ -58,15 +51,9 @@ export async function deleteSource(noteId: string, sourceId: number, token: stri
         }
     });
 
-    if (!response.ok) {
-        let errorMessage = 'Failed to delete source';
-        try {
-          const error = await response.json();
-          errorMessage = error.message || error.error || errorMessage;
-        } catch (e) {
-          // Ignore if response is not JSON
-        }
-        throw new Error(errorMessage);
+    if(!response.ok){
+      const errorMessage = await response.json();
+      throw new Error(errorMessage.message);
     }
 
     // No content expected for a successful DELETE

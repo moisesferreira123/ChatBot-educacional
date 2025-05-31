@@ -6,7 +6,8 @@ export async function fetchDeleteDeck(deckId, token) {
     }
   });
   if(!response.ok){
-    throw new Error("Error deleting deck");
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
 }
 
@@ -17,7 +18,10 @@ export async function fetchGetFlashcardsTotal(deckId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting flashcards total by deck Id");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -33,7 +37,10 @@ export async function fetchUpdateDeck(deckId, title, topic, token) {
       topic: topic
     })
   });
-  if(!response.ok) throw new Error("Error updating deck");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -62,7 +69,10 @@ export async function fetchGetDueFlashcardsTotal(deckId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting due flashcards total by deck Id");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -73,7 +83,10 @@ export async function fetchGetMasteryLevel(deckId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting mastery level by deck Id");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -84,6 +97,9 @@ export async function fetchListDecks(page, pageSize, title, topic, sortType, tok
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error('Error fetching decks');
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }

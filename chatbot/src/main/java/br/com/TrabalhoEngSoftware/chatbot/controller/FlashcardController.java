@@ -133,6 +133,7 @@ public class FlashcardController {
 
     NoteDTO note = noteService.getNoteById(noteId, currentUser.getId());
     if (note.getContent() == null || note.getContent().trim().isEmpty()) {
+      // TODO: Colocar a exceção da nota
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Note content is empty, cannot generate flashcards.");
     }
 

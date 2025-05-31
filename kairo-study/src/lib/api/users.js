@@ -5,7 +5,10 @@ export async function fetchGetUserById(token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting user by Id");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 } 
 
@@ -22,7 +25,10 @@ export async function fetchUpdateUserPersonalInformations(fullName, username, em
       email: email
     })
   });
-  if(!response.ok) throw new Error("Error updating personal informations user");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -39,7 +45,10 @@ export async function fetchUpdateUserPassword(currentPassword, newPassword, conf
       confirmNewPassword: confirmNewPassword
     })
   });
-  if(!response.ok) throw new Error("Error updating password user");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
 }
 
 export async function fetchDeleteUser(token) {
@@ -49,5 +58,8 @@ export async function fetchDeleteUser(token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error deleting user");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
 }

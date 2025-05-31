@@ -11,8 +11,8 @@ export async function fetchCreateFlashcard(front, back, deckId, token) {
     })
   });
   if(!response.ok){
-    const errorMessage = response.message || 'Unknown error creating flashcard';
-    throw new Error(errorMessage);
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
 }
 
@@ -24,7 +24,8 @@ export async function fetchDeleteFlashcard(flashcardId, token) {
     }
   });
   if(!response.ok){
-    throw new Error("Error deleting deck");
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
 }
 
@@ -35,7 +36,10 @@ export async function fetchListFlashcards(page, pageSize, word, flashcardFilter,
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error('Error fetching flashcards');
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -51,7 +55,10 @@ export async function fetchUpdateFlashcard(flashcardId, front, back, token) {
       back: back
     })
   });
-  if(!response.ok) throw new Error("Error updating flashcard");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
 }
 
 export async function fetchGetNextDueFlashcardByDeckId(deckId, token) {
@@ -64,7 +71,10 @@ export async function fetchGetNextDueFlashcardByDeckId(deckId, token) {
   if(response.status === 204) {
     console.log("There are no more cards to review.");
     return null;
-  } else if(!response.ok) throw new Error("Error getting next due flashcard by id");
+  } else if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -76,7 +86,10 @@ export async function fetchApplyReviewResult(flashcardId, answer, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error appling review result");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
 }
 
 export async function fetchGetCountNewFlashcards(deckId, token) {
@@ -86,7 +99,10 @@ export async function fetchGetCountNewFlashcards(deckId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting number of new flashcards");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -97,7 +113,10 @@ export async function fetchGetCountLearningFlashcards(deckId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting number of learning flashcards");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -108,7 +127,10 @@ export async function fetchGetCountReviewFlashcards(deckId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if(!response.ok) throw new Error("Error getting number of review flashcards");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }
 
@@ -121,9 +143,13 @@ export async function fetchGenerateFlashcardsFromNote(noteId, deckId, count, tok
     },
     body: JSON.stringify({ count: count })
   });
-  if (!response.ok) {
-    const errorData = await response.text();
-    throw new Error(`Error generating flashcards: ${response.status} ${errorData}`);
+  //if (!response.ok) {
+  //  const errorData = await response.text();
+  //  throw new Error(`Error generating flashcards: ${response.status} ${errorData}`);
+  //}
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
   }
   return response.json();
 }
@@ -134,6 +160,9 @@ export async function fetchGetFlashcardById(flashcardId, token) {
       'Authorization': `Bearer ${token}`
     }
   });
-  if (!response.ok) throw new Error("Error getting flashcard by Id");
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
   return response.json();
 }

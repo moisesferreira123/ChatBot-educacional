@@ -3,6 +3,11 @@ package br.com.TrabalhoEngSoftware.chatbot.service;
 import br.com.TrabalhoEngSoftware.chatbot.dto.SourceDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.SourceEntity;
+import br.com.TrabalhoEngSoftware.chatbot.exception.FileStorageException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.ObjectDeletionException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.ObjectNotFoundException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.StorageInitializationException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.UnauthorizedObjectAccessException;
 import br.com.TrabalhoEngSoftware.chatbot.repository.NoteRepository;
 import br.com.TrabalhoEngSoftware.chatbot.repository.SourceRepository;
 import org.apache.tika.Tika;
@@ -40,16 +45,17 @@ public class SourceService {
         } catch (IOException e) {
             // Tratamento básico de erro
             e.printStackTrace();
+            throw new StorageInitializationException("Failed to initialize storage directory");
         }
     }
 
     @Transactional
     public SourceDTO uploadSource(Long noteId, Long userId, MultipartFile file) {
         NoteEntity note = noteRepository.findById(noteId)
-                .orElseThrow(() -> new RuntimeException("Note not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Note not found"));
 
         if (!note.getUserEntity().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized to add source to this note");
+            throw new UnauthorizedObjectAccessException("Unauthorized to add source to this note");
         }
 
         try {
@@ -78,17 +84,17 @@ public class SourceService {
             return new SourceDTO(savedSource);
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload file", e);
+            throw new FileStorageException("Failed to upload file");
         }
     }
 
     @Transactional(readOnly = true)
     public List<SourceDTO> getSourcesByNoteId(Long noteId, Long userId) {
         NoteEntity note = noteRepository.findById(noteId)
-                .orElseThrow(() -> new RuntimeException("Note not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Note not found"));
 
         if (!note.getUserEntity().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized to view sources for this note");
+            throw new UnauthorizedObjectAccessException("Unauthorized to view sources for this note");
         }
 
         List<SourceEntity> sources = sourceRepository.findByNoteEntityId(noteId);
@@ -100,10 +106,10 @@ public class SourceService {
     @Transactional
     public void deleteSource(Long sourceId, Long userId) {
         SourceEntity source = sourceRepository.findById(sourceId)
-                .orElseThrow(() -> new RuntimeException("Source not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("Source not found"));
 
         if (!source.getNoteEntity().getUserEntity().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized to delete this source");
+            throw new UnauthorizedObjectAccessException("Unauthorized to delete this source");
         }
 
         try {
@@ -111,7 +117,7 @@ public class SourceService {
             Files.deleteIfExists(filePath);
             sourceRepository.delete(source);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to delete file", e);
+            throw new ObjectDeletionException("Failed to delete file " + source.getFileName());
         }
     }
 }

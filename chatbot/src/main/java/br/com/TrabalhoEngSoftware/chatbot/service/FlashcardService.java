@@ -21,6 +21,10 @@ import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSuggestionDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSummaryDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
+import br.com.TrabalhoEngSoftware.chatbot.exception.InvalidObjectDataException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.ObjectNotFoundException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.UnauthorizedObjectAccessException;
+import br.com.TrabalhoEngSoftware.chatbot.exception.UnexpectedResponseException;
 import br.com.TrabalhoEngSoftware.chatbot.repository.DeckRepository;
 import br.com.TrabalhoEngSoftware.chatbot.repository.FlashcardRepository;
 import br.com.TrabalhoEngSoftware.chatbot.specification.FlashcardSpecificationBuilder;
@@ -49,7 +53,7 @@ public class FlashcardService {
   public void createFlashcard(FlashcardDTO flashcardDTO, Long deckId) {
     FlashcardEntity flashcard = new FlashcardEntity();
     if(flashcardDTO.getFront() == null || flashcardDTO.getFront().trim().isEmpty()) {
-      throw new IllegalArgumentException("Flashcard front can't be empty");
+      throw new InvalidObjectDataException("Flashcard front can't be empty");
     }
     
     DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Flashcard deck not found"));
@@ -99,14 +103,14 @@ public class FlashcardService {
 
   @Transactional
   public void updateFlashcard(Long flashcardId, FlashcardSummaryDTO flashcardSummaryDTO, Long userId) {
-    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
+    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new ObjectNotFoundException("Flashcard not found"));
 
     if(!flashcard.getDeckEntity().getUserEntity().getId().equals(userId)) {
-      throw new RuntimeException("Unauthorized to edit this flashcard");
+      throw new UnauthorizedObjectAccessException("Unauthorized to edit this flashcard");
     }
 
     if(flashcardSummaryDTO.getFront() == null || flashcardSummaryDTO.getFront().trim().isEmpty()) {
-      throw new IllegalArgumentException("Front flashcard can't be empty");
+      throw new InvalidObjectDataException("Front flashcard can't be empty");
     }
     flashcard.setFront(flashcardSummaryDTO.getFront());
 
@@ -117,10 +121,10 @@ public class FlashcardService {
 
   @Transactional
   public void deleteFlashcard(Long flashcardId, Long userId) {
-    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
+    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new ObjectNotFoundException("Flashcard not found"));
     
     if(!flashcard.getDeckEntity().getUserEntity().getId().equals(userId)) {
-      throw new RuntimeException("Unauthorized to edit this flashcard");
+      throw new UnauthorizedObjectAccessException("Unauthorized to edit this flashcard");
     }
     
     flashcard.getDeckEntity().getFlashcards().remove(flashcard);
@@ -128,10 +132,10 @@ public class FlashcardService {
 
   @Transactional
   public FlashcardSummaryDTO getFlashcardById(Long flashcardId, Long userId) {
-    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
+    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new ObjectNotFoundException("Flashcard not found"));
     
     if(!flashcard.getDeckEntity().getUserEntity().getId().equals(userId)) {
-      throw new RuntimeException("Unauthorized to get this flashcard");
+      throw new UnauthorizedObjectAccessException("Unauthorized to get this flashcard");
     }
 
     return new FlashcardSummaryDTO(flashcard);
@@ -146,10 +150,10 @@ public class FlashcardService {
 
   @Transactional
   public void applyReviewResult(Long flashcardId, int answer, Long userId) {
-    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new RuntimeException("Flashcard not found"));
+    FlashcardEntity flashcard = flashcardRepository.findById(flashcardId).orElseThrow(() -> new ObjectNotFoundException("Flashcard not found"));
 
     if(!flashcard.getDeckEntity().getUserEntity().getId().equals(userId)) {
-      throw new RuntimeException("Unauthorized to review this flashcard");
+      throw new UnauthorizedObjectAccessException("Unauthorized to review this flashcard");
     }
 
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
@@ -157,7 +161,7 @@ public class FlashcardService {
     double easeFactor = flashcard.getEaseFactor();
 
     if(answer != WRONG && answer != HARD && answer != GOOD && answer != EASY) {
-      throw new RuntimeException("Unexpected response");
+      throw new UnexpectedResponseException("Unexpected response");
     }
 
     if(answer == WRONG) {
@@ -216,10 +220,10 @@ public class FlashcardService {
   @Transactional
     public List<FlashcardSummaryDTO> createFlashcardsFromSuggestions(List<FlashcardSuggestionDTO> suggestions, Long deckId, Long userId) {
         DeckEntity deck = deckRepository.findById(deckId)
-                .orElseThrow(() -> new RuntimeException("Deck not found with ID: " + deckId));
+                .orElseThrow(() -> new ObjectNotFoundException("Deck not found with ID: " + deckId));
 
         if (!deck.getUserEntity().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized: Deck does not belong to user " + userId);
+            throw new UnauthorizedObjectAccessException("Unauthorized: Deck does not belong to user " + userId);
         }
 
         List<FlashcardEntity> createdFlashcards = new ArrayList<>();
@@ -246,18 +250,18 @@ public class FlashcardService {
 
   @Transactional
   public long getCountNewFlashcards(Long deckId, Long userId) {
-    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new ObjectNotFoundException("Deck not found"));
     if(!deck.getUserEntity().getId().equals(userId)) {
-      throw new RuntimeException("Unauthorized to count the learning flashcards this deck.");
+      throw new UnauthorizedObjectAccessException("Unauthorized to count the learning flashcards this deck.");
     }
     return flashcardRepository.countNewFLashcards(deckId, userId);
   }
 
   @Transactional
   public long getCountLearningFlashcards(Long deckId, Long userId) {
-    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new ObjectNotFoundException("Deck not found"));
     if(!deck.getUserEntity().getId().equals(userId)) {
-      throw new RuntimeException("Unauthorized to count the learning flashcards this deck.");
+      throw new UnauthorizedObjectAccessException("Unauthorized to count the learning flashcards this deck.");
     }
     LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
     LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
@@ -266,9 +270,9 @@ public class FlashcardService {
 
   @Transactional
   public long getCountReviewFlashcards(Long deckId, Long userId) {
-    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new RuntimeException("Deck not found"));
+    DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new ObjectNotFoundException("Deck not found"));
     if(!deck.getUserEntity().getId().equals(userId)) {
-      throw new RuntimeException("Unauthorized to count the learning flashcards this deck.");
+      throw new UnauthorizedObjectAccessException("Unauthorized to count the learning flashcards this deck.");
     }
     LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
     LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);

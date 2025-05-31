@@ -19,7 +19,7 @@
       actionOverlay.set(null);
       updatedFlashcard.set(true);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 
@@ -29,7 +29,7 @@
       deleteWarningOverlay.set(null);
       deletedFlashcard.set(true);
     } catch(e) {
-      alert(e.message);
+      alert(`Error: ${e.message}`);
     }
   }
 
