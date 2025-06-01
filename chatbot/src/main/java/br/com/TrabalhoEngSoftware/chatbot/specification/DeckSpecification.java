@@ -28,10 +28,8 @@ public class DeckSpecification {
 	public static Specification<DeckEntity> filterByTopic(String topic) {
 		return (root, query, criteriaBuilder)-> {
 			Predicate topicPredicate = criteriaBuilder.conjunction();
-			if(topic != null && !topic.isEmpty()) {
+			if(topic != null && !topic.isEmpty() && !topic.equals("No filter")) {
 				topicPredicate = criteriaBuilder.equal(criteriaBuilder.lower(root.get("topic")), topic.toLowerCase());
-			} else {
-				topicPredicate = criteriaBuilder.or(criteriaBuilder.isNull(root.get("topic")), criteriaBuilder.equal(root.get("topic"), ""));
 			}
 			return criteriaBuilder.and(topicPredicate);
 		};

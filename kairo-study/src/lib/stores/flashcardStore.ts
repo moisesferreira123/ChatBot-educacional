@@ -5,3 +5,4 @@ export const createdFlashcardInManagement = writable(false);
 export const deletedFlashcard = writable(false);
 export const updatedFlashcard = writable(false);
 export const flashcardReview = writable(null);
+export const allDueFlashcards = writable(false);

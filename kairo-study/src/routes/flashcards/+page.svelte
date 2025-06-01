@@ -14,7 +14,7 @@
     firstButtonIcon="/images/icons8-plus-math-16.png"
     firstButtonText="Create New Deck"
     secondButtonIcon="/images/icons8-view-16.png"
-    secondButtonText="Start Review"
+    secondButtonText="Study All Due Cards"
     buttonClick1="flashcards"
   />
   {#if $newDeckOverlay}

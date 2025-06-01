@@ -166,3 +166,62 @@ export async function fetchGetFlashcardById(flashcardId, token) {
   }
   return response.json();
 }
+
+export async function fetchGetNextDueFlashcard(token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/next-due-flashcard`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(response.status === 204) {
+    console.log("There are no more cards to review.");
+    return null;
+  } else if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
+  return response.json();
+}
+
+export async function fetchGetCountAllNewFlashcards(token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/get-count-all-new-flashcards`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
+  return response.json();
+}
+
+export async function fetchGetCountAllLearningFlashcards(token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/get-count-all-learning-flashcards`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
+  return response.json();
+}
+
+export async function fetchGetCountAllReviewFlashcards(token) {
+  const response = await fetch(`http://localhost:8080/api/flashcards/get-count-all-review-flashcards`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if(!response.ok){
+    const errorMessage = await response.json();
+    throw new Error(errorMessage.message);
+  }
+  return response.json();
+}

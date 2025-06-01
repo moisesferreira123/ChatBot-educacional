@@ -143,7 +143,7 @@ public class FlashcardService {
 
   public Optional<FlashcardSummaryDTO> getNextDueFlashcardByDeckId(Long deckId, Long userId) {
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
-    Page<FlashcardEntity> page = flashcardRepository.findNextDueFlashcard(deckId, userId, tomorrow, PageRequest.of(0, 1));
+    Page<FlashcardEntity> page = flashcardRepository.findNextDueFlashcardByDeckId(deckId, userId, tomorrow, PageRequest.of(0, 1));
 
     return page.stream().findFirst().map(FlashcardSummaryDTO::new);
   }
@@ -254,7 +254,7 @@ public class FlashcardService {
     if(!deck.getUserEntity().getId().equals(userId)) {
       throw new UnauthorizedObjectAccessException("Unauthorized to count the learning flashcards this deck.");
     }
-    return flashcardRepository.countNewFLashcards(deckId, userId);
+    return flashcardRepository.countNewFlashcards(deckId, userId);
   }
 
   @Transactional
@@ -277,5 +277,31 @@ public class FlashcardService {
     LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
     LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
     return flashcardRepository.countReviewFlashcards(deckId, userId, startOfToday, endOfToday);
+  }
+
+  public Optional<FlashcardSummaryDTO> getNextDueFlashcard(Long userId) {
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+    Page<FlashcardEntity> page = flashcardRepository.findNextDueFlashcard(userId, tomorrow, PageRequest.of(0, 1));
+
+    return page.stream().findFirst().map(FlashcardSummaryDTO::new);
+  }
+
+  @Transactional
+  public long getCountAllNewFlashcards(Long userId) {
+    return flashcardRepository.countAllNewFlashcards(userId);
+  }
+
+  @Transactional
+  public long getCountAllLearningFlashcards(Long userId) {
+    LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+    LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
+    return flashcardRepository.countAllLearningFlashcards(userId, startOfToday, endOfToday);
+  }
+
+  @Transactional
+  public long getCountAllReviewFlashcards(Long userId) {
+    LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+    LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
+    return flashcardRepository.countAllReviewFlashcards(userId, startOfToday, endOfToday);
   }
 }

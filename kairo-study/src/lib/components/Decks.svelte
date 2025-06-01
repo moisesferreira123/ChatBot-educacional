@@ -5,12 +5,13 @@
   import { topicFilter } from '$lib/stores/filter';
   import { sortTypeDecks } from '$lib/stores/sortType';
   import { createdDeck, deletedDeck, updatedDeck } from '$lib/stores/deckStore';
-  import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay, sortDecksOverlay } from '$lib/stores/overlayStore.svelte';
+  import { deckManagementOverlay, filterDecksOverlay, newFlashcardInDeckInterfaceOverlay, sortDecksOverlay } from '$lib/stores/overlayStore.svelte';
 	import { createdFlashcard, deletedFlashcard } from '$lib/stores/flashcardStore';
   import Deck from './Deck.svelte';
   import DeckManagementOverlay from './DeckManagementOverlay.svelte';
 	import SortDecksOverlay from './SortDecksOverlay.svelte';
 	import NewFlashcardOverlay from './NewFlashcardOverlay.svelte';
+	import FilterDecksOverlay from './FilterDecksOverlay.svelte';
 
   let allDecks = [];
   let visibleDecks = [];
@@ -53,9 +54,11 @@
   }
 
   function changeSort(newSort) {
-    sortTypeDecks.set(newSort);
-    resetPages();
-    loadDecks();
+    if($sortTypeDecks !== newSort) {
+      sortTypeDecks.set(newSort);
+      resetPages();
+      loadDecks();
+    }
   }
 
   function updateTitleFilter(event) {
@@ -144,20 +147,29 @@
   <div class="inline-flex ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap justify-center items-center h-9 border-(--color13)">
     <p class="font-semibold text-sm text-(--color14) cursor-default">Decks</p>
   </div>
-  <div class="relative">
-    <button filter-button onclick={() => filterTopicOverlay.update(open => !open)} class="inline-flex mr-1 transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
-      <Funnel size={16} color="var(--color14)" />
-      <p class="font-semibold text-sm text-(--color14)">Filter</p>
-    </button>
-    <button data-user-button onclick={() => sortDecksOverlay.update(open => !open)} class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
-      <ArrowUpDown size={16} color="var(--color14)" />
-      <p class="font-semibold text-sm text-(--color14)">Sort</p>
-    </button>
-    {#if $sortDecksOverlay}
-      <SortDecksOverlay
-        changeSort={(newSort) => changeSort(newSort)}
-      />
-    {/if}
+  <div class="flex gap-1">
+    <div class="relative">
+      <button filter-button onclick={() => filterDecksOverlay.update(open => !open)} class="inline-flex mr-1 transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
+        <Funnel size={16} color="var(--color14)" />
+        <p class="font-semibold text-sm text-(--color14)">Filter</p>
+      </button>
+      {#if $filterDecksOverlay}
+        <FilterDecksOverlay
+          changeFilter={(newFilter) => changeTopicFilter(newFilter)}
+        />
+      {/if}
+    </div>
+    <div class="relative">
+      <button data-user-button onclick={() => sortDecksOverlay.update(open => !open)} class="inline-flex transition-colors ring-offset-background px-3 bg-white border border-input rounded-md whitespace-nowrap gap-2 justify-center items-center h-9 cursor-pointer border-(--color13) hover:bg-(--color8)">
+        <ArrowUpDown size={16} color="var(--color14)" />
+        <p class="font-semibold text-sm text-(--color14)">Sort</p>
+      </button>
+      {#if $sortDecksOverlay}
+        <SortDecksOverlay
+          changeSort={(newSort) => changeSort(newSort)}
+        />
+      {/if}
+    </div>
   </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

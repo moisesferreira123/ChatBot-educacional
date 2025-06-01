@@ -23,30 +23,24 @@ public class TopicService {
 
   public void addTopic(String topic) {
     if(topic == null || topic.trim().isEmpty()) {
-      if(exists("None")) topics.put("None", topics.get("None")+1);
-      else topics.put("None", 0L);
+      return;
     } else {
       String capitalizedTopic = capitalizeFirstLetter(topic);
       if(exists(capitalizedTopic)) {
-        topics.put(capitalizedTopic, topics.get("None")+1); 
+        topics.put(capitalizedTopic, topics.get(capitalizedTopic)+1); 
       } else {
-        topics.put(capitalizedTopic, 0L);
+        topics.put(capitalizedTopic, 1L);
       }
     }
   }
 
   public void removeTopic(String topic) {
     if(topic == null || topic.trim().isEmpty()) {
-      if(exists("None")) {
-        topics.put("None", topics.get("None")-1);
-        if(topics.get("None") == 0) topics.remove("None");
-      } else {
-        throw new UnexpectedFailureException("Error removing topic when it is empty or null");
-      }
+      return;
     } else {
       String capitalizedTopic = capitalizeFirstLetter(topic);
       if(exists(capitalizedTopic)) {
-        topics.put(capitalizedTopic, topics.get("None")-1);
+        topics.put(capitalizedTopic, topics.get(capitalizedTopic)-1);
         if(topics.get(capitalizedTopic) == 0) topics.remove(capitalizedTopic);
       } else {
         throw new UnexpectedFailureException("Error removing topic");

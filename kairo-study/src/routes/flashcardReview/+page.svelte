@@ -1,10 +1,11 @@
 <script>
-	import { fetchApplyReviewResult, fetchGetCountLearningFlashcards, fetchGetCountNewFlashcards, fetchGetCountReviewFlashcards, fetchGetNextDueFlashcardByDeckId } from "$lib/api/flashcards";
+	import { fetchApplyReviewResult, fetchGetCountAllLearningFlashcards, fetchGetCountAllNewFlashcards, fetchGetCountAllReviewFlashcards, fetchGetCountLearningFlashcards, fetchGetCountNewFlashcards, fetchGetCountReviewFlashcards, fetchGetNextDueFlashcard, fetchGetNextDueFlashcardByDeckId } from "$lib/api/flashcards";
 	import { ArrowLeft } from "@lucide/svelte";
   import { flashcardReview } from '$lib/stores/flashcardStore';
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
 	import { formatDate } from "$lib/stores/formatDate";
+  import { allDueFlashcards } from "$lib/stores/flashcardStore";
 
 
   let flipped = false;
@@ -25,9 +26,10 @@
     EASY: 5
   }
 
-  async function getNextDueFlashcardByDeckId() {
+  async function getNextDueFlashcard() {
     try {
-      flashcard = await fetchGetNextDueFlashcardByDeckId($flashcardReview.id, token);
+      if($allDueFlashcards) flashcard = await fetchGetNextDueFlashcard(token);
+      else flashcard = await fetchGetNextDueFlashcardByDeckId($flashcardReview.id, token);
       // TODO: Mandar menssagem que revisou tudo.
       if(flashcard === null) {
         goto("/flashcards");
@@ -49,7 +51,8 @@
 
   async function getCountNewFlashcards() {
     try {
-      newFlashcards = await fetchGetCountNewFlashcards($flashcardReview.id, token);
+      if($allDueFlashcards) newFlashcards = await fetchGetCountAllNewFlashcards(token);
+      else newFlashcards = await fetchGetCountNewFlashcards($flashcardReview.id, token);
     } catch(e) {
       alert(e.message);
     }
@@ -57,7 +60,8 @@
 
   async function getCountLearningFlashcards() {
     try {
-      learningFlashcards = await fetchGetCountLearningFlashcards($flashcardReview.id, token);
+      if($allDueFlashcards) learningFlashcards = await fetchGetCountAllLearningFlashcards(token);
+      else learningFlashcards = await fetchGetCountLearningFlashcards($flashcardReview.id, token);
     } catch(e) {
       alert(e.message);
     }
@@ -65,7 +69,8 @@
 
   async function getCountReviewFlashcards() {
     try {
-      reviewFlashcards = await fetchGetCountReviewFlashcards($flashcardReview.id, token);
+      if($allDueFlashcards) reviewFlashcards = await fetchGetCountAllReviewFlashcards(token);
+      else reviewFlashcards = await fetchGetCountReviewFlashcards($flashcardReview.id, token);
     } catch(e) {
       alert(e.message);
     }
@@ -74,7 +79,7 @@
   async function applyReviewResult(answer) {
     try {
       await fetchApplyReviewResult(flashcard.id, answer, token);
-      getNextDueFlashcardByDeckId();
+      getNextDueFlashcard();
     } catch(e) {
       alert(e.message);
     }
@@ -169,7 +174,7 @@
 
   onMount(() => {
     token = localStorage.getItem("token");
-    getNextDueFlashcardByDeckId();
+    getNextDueFlashcard();
     getCountNewFlashcards();
     getCountLearningFlashcards();
     getCountReviewFlashcards();
@@ -184,7 +189,7 @@
         <div class="flex items-center gap-4">
           <button onclick = {() => goto("/flashcards")} class="flex items-center justify-center gap-2 whitespace-nowrap text-gray-600 font-medium text-sm py-2 px-4 rounded-md h-10 cursor-pointer hover:text-gray-900 hover:bg-(--accent)">
             <ArrowLeft class="mr-2" size={16} />
-            Voltar
+            Return
           </button>
           <div class="h-6 w-[1px] bg-gray-300"></div>
           <div class="text-xl font-semibold text-gray-900">Flashcard Review</div>

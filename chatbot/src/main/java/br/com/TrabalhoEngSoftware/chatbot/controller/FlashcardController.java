@@ -123,6 +123,32 @@ public class FlashcardController {
     return flashcardService.getCountReviewFlashcards(deckId, user.getId());
   }
 
+  @GetMapping("/next-due-flashcard")
+  public ResponseEntity<FlashcardSummaryDTO> getNextDueFlashcard(Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getNextDueFlashcard(user.getId())
+           .map(ResponseEntity::ok)
+           .orElseGet(() -> ResponseEntity.noContent().build());
+  }
+
+  @GetMapping("/get-count-all-new-flashcards")
+  public long getCountAllNewFlashcards(Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountAllNewFlashcards(user.getId());
+  }
+
+  @GetMapping("/get-count-all-learning-flashcards")
+  public long getCountAllLearningFlashcards(Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountAllLearningFlashcards(user.getId());
+  }
+
+  @GetMapping("/get-count-all-review-flashcards")
+  public long getCountAllReviewFlashcards(Authentication authentication) {
+    UserEntity user = (UserEntity) authentication.getPrincipal();
+    return flashcardService.getCountAllReviewFlashcards(user.getId());
+  }
+
   @PostMapping("/generate-from-note/{noteId}/deck/{deckId}")
   public ResponseEntity<List<FlashcardSummaryDTO>> generateFlashcardsFromNote(
       @PathVariable Long noteId,

@@ -6,7 +6,7 @@
 	import { fetchGetMasteryLevel } from '$lib/api/decks';
   import { deckManagementOverlay, newFlashcardInDeckInterfaceOverlay } from '$lib/stores/overlayStore.svelte';
 	import { goto } from '$app/navigation';
-	import { flashcardReview } from '$lib/stores/flashcardStore';
+	import { allDueFlashcards, flashcardReview } from '$lib/stores/flashcardStore';
 
   let { id, title, topic, lastReviewedAt } = $props();
 
@@ -32,7 +32,8 @@
 
   function toGoReview() {
     if(dueFlashcards === 0) alert("There are no cards to review.");
-    flashcardReview.set({id}); 
+    flashcardReview.set({id});
+    allDueFlashcards.set(false);
     goto("/flashcardReview");
   }
 

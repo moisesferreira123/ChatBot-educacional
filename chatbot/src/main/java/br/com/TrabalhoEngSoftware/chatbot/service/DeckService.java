@@ -26,12 +26,16 @@ public class DeckService {
   @Autowired
   private DeckRepository deckRepository;
 
+  @Autowired
+  private TopicService topics;
+
   public DeckService (DeckRepository deckRepository) {
     this.deckRepository = deckRepository;
   }
 
   @Transactional
   public void createDeck(DeckDTO deckDTO, Long userId) {
+    topics.addTopic(deckDTO.getTopic().trim());
     DeckEntity deck = new DeckEntity();
     if(deckDTO.getTitle() == null || deckDTO.getTitle().trim().isEmpty()) {
       throw new InvalidObjectDataException("Deck title can't be empty");
@@ -73,6 +77,8 @@ public class DeckService {
   public DeckSummaryDTO updateDeck(Long deckId, DeckSummaryDTO deckSummaryDTO, Long userId) {
     DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new ObjectNotFoundException("Deck not found"));
     
+    topics.updateTopic(deck.getTopic(), deckSummaryDTO.getTopic());
+
     if(!deck.getUserEntity().getId().equals(userId)) {
       throw new UnauthorizedObjectAccessException("Unauthorized to edit this deck");
     }
@@ -94,6 +100,7 @@ public class DeckService {
   @Transactional
   public void deleteDeck(Long deckId, Long userId) {
 		DeckEntity deck = deckRepository.findById(deckId).orElseThrow(() -> new ObjectNotFoundException("Deck not found"));
+    topics.removeTopic(deck.getTopic().trim());
 		if(!deck.getUserEntity().getId().equals(userId)) {
 			throw new UnauthorizedObjectAccessException("Unauthorized to delete this deck");
 		}
