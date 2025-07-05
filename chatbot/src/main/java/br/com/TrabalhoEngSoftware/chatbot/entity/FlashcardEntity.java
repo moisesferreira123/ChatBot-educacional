@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardDTO;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.DeckEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
