@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.beans.BeanUtils;
 
-import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
-import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.NoteEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.UserEntity;
 
 public class NoteDTO {
 

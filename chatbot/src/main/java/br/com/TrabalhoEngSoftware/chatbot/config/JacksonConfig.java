@@ -1,0 +1,32 @@
+package br.com.TrabalhoEngSoftware.chatbot.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import br.com.TrabalhoEngSoftware.chatbot.dto.StandardFlashcardDTO;
+import br.com.TrabalhoEngSoftware.chatbot.dto.StandardUserAnswerDTO;
+
+@Configuration
+public class JacksonConfig {
+
+  @Bean
+  public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    SimpleModule module = new SimpleModule();
+
+    module.registerSubtypes(
+      new NamedType(StandardFlashcardDTO.class, "STANDARD_FLASHCARD")
+    );
+
+    module.registerSubtypes(
+      new NamedType(StandardUserAnswerDTO.class, "STANDARD_USER_ANSWER")
+    );
+
+    objectMapper.registerModule(module);
+    return objectMapper;
+  }
+}

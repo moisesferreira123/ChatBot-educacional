@@ -25,7 +25,7 @@ import br.com.TrabalhoEngSoftware.chatbot.dto.NoteDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSummaryDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
-import br.com.TrabalhoEngSoftware.chatbot.service.FlashcardService;
+import br.com.TrabalhoEngSoftware.chatbot.service.FlashcardAppService;
 import br.com.TrabalhoEngSoftware.chatbot.service.AiService;
 import br.com.TrabalhoEngSoftware.chatbot.service.NoteService;
 
@@ -34,7 +34,7 @@ import br.com.TrabalhoEngSoftware.chatbot.service.NoteService;
 public class FlashcardController {
 
   @Autowired
-  private FlashcardService flashcardService;
+  private FlashcardAppService flashcardService;
   @Autowired
   private AiService aiService;
   @Autowired

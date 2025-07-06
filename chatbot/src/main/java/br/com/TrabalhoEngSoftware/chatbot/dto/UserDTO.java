@@ -1,6 +1,6 @@
 package br.com.TrabalhoEngSoftware.chatbot.dto;
 
-import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.UserEntity;
 
 public class UserDTO {
 	

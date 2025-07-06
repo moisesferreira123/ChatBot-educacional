@@ -16,21 +16,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardDTO;
-import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSuggestionDTO;
-import br.com.TrabalhoEngSoftware.chatbot.dto.FlashcardSummaryDTO;
-import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
-import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
-import br.com.TrabalhoEngSoftware.chatbot.exception.InvalidObjectDataException;
-import br.com.TrabalhoEngSoftware.chatbot.exception.ObjectNotFoundException;
-import br.com.TrabalhoEngSoftware.chatbot.exception.UnauthorizedObjectAccessException;
-import br.com.TrabalhoEngSoftware.chatbot.exception.UnexpectedResponseException;
+import br.com.TrabalhoEngSoftware.chatbot.dto.StandardFlashcardDTO;
+import br.com.TrabalhoEngSoftware.chatbot.entity.StandardFlashcardEntity;
 import br.com.TrabalhoEngSoftware.chatbot.repository.DeckRepository;
 import br.com.TrabalhoEngSoftware.chatbot.repository.FlashcardRepository;
 import br.com.TrabalhoEngSoftware.chatbot.specification.FlashcardSpecificationBuilder;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.DeckEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.exception.InvalidObjectDataException;
 
 @Service
-public class FlashcardService {
+public class FlashcardAppService {
 
   final int WRONG = 0;
   final int HARD = 2;
@@ -44,14 +39,14 @@ public class FlashcardService {
   @Autowired
   private DeckRepository deckRepository;
 
-  public FlashcardService(FlashcardRepository flashcardRepository, DeckRepository deckRepository) {
+  public FlashcardAppService(FlashcardRepository flashcardRepository, DeckRepository deckRepository) {
     this.flashcardRepository = flashcardRepository;
     this.deckRepository = deckRepository;
   }
 
   @Transactional
-  public void createFlashcard(FlashcardDTO flashcardDTO, Long deckId) {
-    FlashcardEntity flashcard = new FlashcardEntity();
+  public void createFlashcard(StandardFlashcardDTO flashcardDTO, Long deckId) {
+    StandardFlashcardEntity flashcard = new StandardFlashcardEntity();
     if(flashcardDTO.getFront() == null || flashcardDTO.getFront().trim().isEmpty()) {
       throw new InvalidObjectDataException("Flashcard front can't be empty");
     }
@@ -68,7 +63,7 @@ public class FlashcardService {
     flashcard.getDeckEntity().getFlashcards().add(flashcard);
   }
 
-  public Page<FlashcardSummaryDTO> listFlashcards(String word, String flashcardFilter, Long userId, Long deckId, String sortType, Pageable pageable) {
+  public Page<StandardFlashcardDTO> listFlashcards(String word, String flashcardFilter, Long userId, Long deckId, String sortType, Pageable pageable) {
     FlashcardSpecificationBuilder builder = new FlashcardSpecificationBuilder().filterByWord(word);
 
     if(flashcardFilter.equalsIgnoreCase("dominatedFlashcards")) {

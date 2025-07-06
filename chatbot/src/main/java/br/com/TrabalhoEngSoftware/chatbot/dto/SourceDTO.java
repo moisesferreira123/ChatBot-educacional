@@ -1,7 +1,8 @@
 package br.com.TrabalhoEngSoftware.chatbot.dto;
 
-import br.com.TrabalhoEngSoftware.chatbot.entity.SourceEntity;
 import java.time.LocalDateTime;
+
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.SourceEntity;
 
 public class SourceDTO {
 

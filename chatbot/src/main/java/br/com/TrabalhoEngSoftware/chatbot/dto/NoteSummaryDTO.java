@@ -2,7 +2,7 @@ package br.com.TrabalhoEngSoftware.chatbot.dto;
 
 import java.time.LocalDateTime;
 
-import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.NoteEntity;
 
 public class NoteSummaryDTO {
 	private Long id;

@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import br.com.TrabalhoEngSoftware.chatbot.entity.DeckEntity;
-import br.com.TrabalhoEngSoftware.chatbot.entity.FlashcardEntity;
-import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.DeckEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.FlashcardEntity;
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.UserEntity;
 
 public class DeckDTO {
 	
