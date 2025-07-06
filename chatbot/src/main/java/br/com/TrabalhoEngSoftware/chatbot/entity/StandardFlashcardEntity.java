@@ -38,7 +38,7 @@ public class StandardFlashcardEntity extends FlashcardEntity {
 
   public StandardFlashcardEntity() {
     super();
-    super.setType("STANDARD_FLASHCARD");
+    super.setFlashcardType("STANDARD_FLASHCARD");
   }
 
   public String getFront() {

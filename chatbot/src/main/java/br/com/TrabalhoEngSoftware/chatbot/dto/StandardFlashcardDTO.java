@@ -15,7 +15,7 @@ public class StandardFlashcardDTO extends FlashcardDTO {
 	
 	public StandardFlashcardDTO() {
 		super();
-		super.setType("STANDARD_FLASHCARD");
+		super.setFlashcardType("STANDARD_FLASHCARD");
 	}
 
 	public String getFront() {
