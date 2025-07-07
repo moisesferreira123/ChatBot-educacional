@@ -18,28 +18,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.TrabalhoEngSoftware.chatbot.dto.StandardFlashcardDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.StandardFlashcardEntity;
-import br.com.TrabalhoEngSoftware.chatbot.repository.DeckRepository;
-import br.com.TrabalhoEngSoftware.chatbot.repository.FlashcardRepository;
-import br.com.TrabalhoEngSoftware.chatbot.specification.FlashcardSpecificationBuilder;
+import br.com.TrabalhoEngSoftware.chatbot.repository.FlashcardAppRepository;
 import br.com.TrabalhoEngSoftwareFramework.framework.entity.DeckEntity;
 import br.com.TrabalhoEngSoftwareFramework.framework.exception.InvalidObjectDataException;
+import br.com.TrabalhoEngSoftwareFramework.framework.repository.DeckRepository;
 
 @Service
 public class FlashcardAppService {
-
-  final int WRONG = 0;
-  final int HARD = 2;
-  final int GOOD = 4;
-  final int EASY = 5;
-
-  final double MIN_EASE_FACTOR = 1.3;
   
   @Autowired
-  private FlashcardRepository flashcardRepository;
+  private FlashcardAppRepository flashcardRepository;
   @Autowired
   private DeckRepository deckRepository;
 
-  public FlashcardAppService(FlashcardRepository flashcardRepository, DeckRepository deckRepository) {
+  public FlashcardAppService(FlashcardAppRepository flashcardRepository, DeckRepository deckRepository) {
     this.flashcardRepository = flashcardRepository;
     this.deckRepository = deckRepository;
   }

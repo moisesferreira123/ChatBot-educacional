@@ -7,6 +7,8 @@ public class Constants {
   public static int GOOD = 4;
   public static int EASY = 5;
 
+  public static double MIN_EASE_FACTOR = 1.3;
+
   private Constants() {
     
   }

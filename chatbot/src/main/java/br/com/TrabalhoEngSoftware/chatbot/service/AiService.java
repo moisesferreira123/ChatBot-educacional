@@ -6,8 +6,9 @@ import java.util.List;
 
 import br.com.TrabalhoEngSoftware.chatbot.entity.NoteEntity;
 import br.com.TrabalhoEngSoftware.chatbot.entity.SourceEntity;
-import br.com.TrabalhoEngSoftware.chatbot.repository.NoteRepository;
 import br.com.TrabalhoEngSoftware.chatbot.repository.SourceRepository;
+import br.com.TrabalhoEngSoftwareFramework.framework.repository.NoteRepository;
+
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.SystemMessage;

@@ -21,7 +21,7 @@ import br.com.TrabalhoEngSoftware.chatbot.repository.DeckRepository;
 import br.com.TrabalhoEngSoftware.chatbot.specification.DeckSpecificationBuilder;
 
 @Service
-public class DeckService {
+public class DeckAppService {
   
   @Autowired
   private DeckRepository deckRepository;
@@ -29,12 +29,13 @@ public class DeckService {
   @Autowired
   private TopicService topics;
 
-  public DeckService (DeckRepository deckRepository) {
+  public DeckAppService (DeckRepository deckRepository) {
     this.deckRepository = deckRepository;
   }
 
   @Transactional
   public void createDeck(DeckDTO deckDTO, Long userId) {
+    import org.springframework.data.jpa.domain.Specification;
     topics.addTopic(deckDTO.getTopic().trim());
     DeckEntity deck = new DeckEntity();
     if(deckDTO.getTitle() == null || deckDTO.getTitle().trim().isEmpty()) {

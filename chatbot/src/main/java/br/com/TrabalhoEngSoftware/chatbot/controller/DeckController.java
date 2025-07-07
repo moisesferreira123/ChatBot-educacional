@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.DeckSummaryDTO;
 import br.com.TrabalhoEngSoftware.chatbot.entity.UserEntity;
-import br.com.TrabalhoEngSoftware.chatbot.service.DeckService;
+import br.com.TrabalhoEngSoftware.chatbot.service.DeckAppService;
 
 @RestController
 @RequestMapping("api/decks")
 public class DeckController {
 
   @Autowired
-  private DeckService deckService;
+  private DeckAppService deckService;
 
   @GetMapping
   public Page<DeckSummaryDTO> listDecks (
