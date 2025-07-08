@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.TrabalhoEngSoftware.chatbot.service.DeckAppService;
+import br.com.TrabalhoEngSoftwareFramework.framework.controller.DeckController;
 import br.com.TrabalhoEngSoftwareFramework.framework.entity.UserEntity;
 
 @RestController
 @RequestMapping("api/decks")
-public class DeckAppController {
+public class DeckAppController extends DeckController {
 
   @Autowired
   private DeckAppService deckService;
