@@ -76,9 +76,9 @@
     }
   }
 
-  async function applyReviewResult(answer) {
+  async function applyReviewResult(type, answer) {
     try {
-      await fetchApplyReviewResult(flashcard.id, answer, token);
+      await fetchApplyReviewResult(flashcard.id, type, answer, token);
       getNextDueFlashcard();
     } catch(e) {
       alert(e.message);
@@ -99,7 +99,7 @@
       reviewFlashcards--;
       learningFlashcards++;
     }
-    applyReviewResult(Answer.WRONG);
+    applyReviewResult(flashcard.flashcardType, Answer.WRONG);
   }
 
   function hardAnswer() {
@@ -111,7 +111,7 @@
     } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) === formatDate(new Date())) {
       learningFlashcards--;
     }
-    applyReviewResult(Answer.HARD);
+    applyReviewResult(flashcard.flashcardType, Answer.HARD);
   }
 
   function goodAnswer() {
@@ -123,7 +123,7 @@
     } else if(flashcard.repetition > 0 && formatDate(new Date(flashcard.lastReviewedAt)) === formatDate(new Date())) {
       learningFlashcards--;
     }
-    applyReviewResult(Answer.GOOD);
+    applyReviewResult(flashcard.flashcardType, Answer.GOOD);
   }
 
   function easyAnswer() {
@@ -136,7 +136,7 @@
     } else if(flashcard.repetition === 0) {
       learningFlashcards--;
     }
-    applyReviewResult(Answer.EASY);
+    applyReviewResult(flashcard.flashcardType, Answer.EASY);
   }
 
     function calculateEaseFactor(easeFactor, answer) {

@@ -1,7 +1,9 @@
 package br.com.TrabalhoEngSoftware.chatbot.repository;
 
-import br.com.TrabalhoEngSoftware.chatbot.entity.SourceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import br.com.TrabalhoEngSoftwareFramework.framework.entity.SourceEntity;
+
 import java.util.List;
 
 public interface SourceRepository extends JpaRepository<SourceEntity, Long> {
