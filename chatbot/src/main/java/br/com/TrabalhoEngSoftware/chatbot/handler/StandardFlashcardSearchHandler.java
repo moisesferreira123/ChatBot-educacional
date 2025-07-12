@@ -1,5 +1,7 @@
 package br.com.TrabalhoEngSoftware.chatbot.handler;
 
+import org.springframework.stereotype.Component;
+
 import br.com.TrabalhoEngSoftware.chatbot.entity.StandardFlashcardEntity;
 import br.com.TrabalhoEngSoftwareFramework.framework.entity.FlashcardEntity;
 import br.com.TrabalhoEngSoftwareFramework.framework.handler.FlashcardTypeSearchHandler;
@@ -7,6 +9,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
+@Component
 public class StandardFlashcardSearchHandler implements FlashcardTypeSearchHandler {
   
   @Override

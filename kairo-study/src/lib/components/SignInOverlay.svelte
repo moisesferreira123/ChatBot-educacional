@@ -18,6 +18,7 @@
 			token = await fetchAuthRegister(fullName, email, password);
 		} catch(e) {
 			alert(`Error: ${e.message}`);
+			return;
 		}
 		if (token !== '') {
 		localStorage.setItem('token', token);

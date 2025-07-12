@@ -1,4 +1,4 @@
-export async function fetchCreateFlashcard(front, back, deckId, token) {
+export async function fetchCreateFlashcard(type, front, back, flashcardType, deckId, token) {
   const response = await fetch(`http://localhost:8080/api/flashcards/${deckId}`, {
     method: 'POST',
     headers: {
@@ -6,8 +6,10 @@ export async function fetchCreateFlashcard(front, back, deckId, token) {
       'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({
+        type: type, 
         front: front,
-        back: back
+        back: back,
+        flashcardType: flashcardType
     })
   });
   if(!response.ok){
@@ -43,7 +45,7 @@ export async function fetchListFlashcards(page, pageSize, word, flashcardFilter,
   return response.json();
 }
 
-export async function fetchUpdateFlashcard(flashcardId, front, back, token) {
+export async function fetchUpdateFlashcard(flashcardId, type, front, back, flashcardType, token) {
   const response = await fetch(`http://localhost:8080/api/flashcards/${flashcardId}`, {
     method: 'PUT',
     headers: {
@@ -51,8 +53,10 @@ export async function fetchUpdateFlashcard(flashcardId, front, back, token) {
       'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({
+      type: type,
       front: front,
-      back: back
+      back: back,
+      flashcardType: flashcardType
     })
   });
   if(!response.ok){

@@ -2,6 +2,8 @@ package br.com.TrabalhoEngSoftware.chatbot.handler;
 
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
 import br.com.TrabalhoEngSoftware.chatbot.config.Constants;
 import br.com.TrabalhoEngSoftware.chatbot.dto.StandardFlashcardDTO;
 import br.com.TrabalhoEngSoftware.chatbot.dto.StandardUserAnswerDTO;
@@ -10,6 +12,7 @@ import br.com.TrabalhoEngSoftwareFramework.framework.exception.InvalidObjectData
 import br.com.TrabalhoEngSoftwareFramework.framework.exception.UnexpectedResponseException;
 import br.com.TrabalhoEngSoftwareFramework.framework.handler.FlashcardTypeHandler;
 
+@Component
 public class StandardFlashcardHandler implements FlashcardTypeHandler<StandardFlashcardDTO, StandardFlashcardEntity, StandardUserAnswerDTO> {
   
   @Override
@@ -19,6 +22,10 @@ public class StandardFlashcardHandler implements FlashcardTypeHandler<StandardFl
 
   @Override
   public StandardFlashcardEntity createFlashcard(StandardFlashcardDTO dto) {
+    if(dto.getFront() == null || dto.getFront().trim().isEmpty()) {
+      throw new InvalidObjectDataException("Front flashcard can't be empty");
+    }
+
     StandardFlashcardEntity flashcard = new StandardFlashcardEntity();
     flashcard.setFront(dto.getFront());
     flashcard.setBack(dto.getBack());
@@ -54,6 +61,7 @@ public class StandardFlashcardHandler implements FlashcardTypeHandler<StandardFl
   @Override
   public StandardFlashcardDTO entityToDTO(StandardFlashcardEntity flashcard) {
     StandardFlashcardDTO dto = new StandardFlashcardDTO();
+    dto.setId(flashcard.getId());
     dto.setFront(flashcard.getFront());
     dto.setBack(flashcard.getBack());
     dto.setCreatedAt(flashcard.getCreatedAt());

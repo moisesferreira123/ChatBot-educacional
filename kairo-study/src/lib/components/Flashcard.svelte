@@ -15,7 +15,7 @@
 
   async function updateFlashcard(newFront, newBack) {
     try {
-      await fetchUpdateFlashcard(flashcardId, newFront, newBack, token);
+      await fetchUpdateFlashcard(flashcardId, "STANDARD_FLASHCARD", newFront, newBack, "STANDARD_FLASHCARD", token);
       actionOverlay.set(null);
       updatedFlashcard.set(true);
     } catch(e) {

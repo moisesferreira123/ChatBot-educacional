@@ -33,11 +33,12 @@ public class FlashcardAppService extends FlashcardService {
     super();
   }
 
+  @SuppressWarnings("unchecked")
   public Optional<FlashcardDTO> getNextDueFlashcardByDeckId(Long deckId, Long userId) {
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
     Page<FlashcardEntity> page = flashcardAppRepository.findNextDueFlashcardByDeckId(deckId, userId, tomorrow, PageRequest.of(0, 1));
     return page.stream().findFirst().map(flashcardEntity -> {
-      FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO> handler = handlerRegistry.getHandler(flashcardEntity.getFlashcardType());
+      FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO> handler = (FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO>) handlerRegistry.getHandler(flashcardEntity.getFlashcardType());
       return handler.entityToDTO(flashcardEntity);
     });
   }
@@ -96,12 +97,13 @@ public class FlashcardAppService extends FlashcardService {
     return flashcardAppRepository.countReviewFlashcards(deckId, userId, startOfToday, endOfToday);
   }
 
+  @SuppressWarnings("unchecked")
   public Optional<FlashcardDTO> getNextDueFlashcard(Long userId) {
     LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
     Page<FlashcardEntity> page = flashcardAppRepository.findNextDueFlashcard(userId, tomorrow, PageRequest.of(0, 1));
 
     return page.stream().findFirst().map(flashcardEntity -> {
-      FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO> handler = handlerRegistry.getHandler(flashcardEntity.getFlashcardType());
+      FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO> handler = ( FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO>) handlerRegistry.getHandler(flashcardEntity.getFlashcardType());
       return handler.entityToDTO(flashcardEntity);
     });
   }

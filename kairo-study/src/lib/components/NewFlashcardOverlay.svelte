@@ -13,7 +13,7 @@
 
   async function createFlashcard() {
     try {
-      await fetchCreateFlashcard(flashcardFront, flashcardBack, deckId, token);
+      await fetchCreateFlashcard("STANDARD_FLASHCARD", flashcardFront, flashcardBack, "STANDARD_FLASHCARD", deckId, token);
       flashcardFront = '';
       flashcardBack = '';
       if($deckManagementOverlay !== null) createdFlashcardInManagement.set(true);
