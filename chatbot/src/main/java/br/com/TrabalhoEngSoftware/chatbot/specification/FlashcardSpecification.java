@@ -10,7 +10,10 @@ public class FlashcardSpecification extends FlashcardSpecificationBuilder {
   
 	public FlashcardSpecification(FlashcardTypeSearchRegistry searchRegistry) {
 		super(searchRegistry);
+	}
 
+	@Override
+	protected void registerAllSpecifications() {
 		buildSpecification("dominatedFlashcards", (root, query, criteriaBuilder) -> {
 			int repetitionMastery = 4;
       return criteriaBuilder.greaterThanOrEqualTo(root.get("repetition"), repetitionMastery); 

@@ -12,19 +12,19 @@
   const sortTypes = [
     {
       sortTitle: "Update date (recent)",
-      sortType: "UpdatedAtDesc"
+      sortType: "updatedAtDesc"
     },
     {
       sortTitle: "Update date (old)",
-      sortType: "UpdatedAtAsc"
+      sortType: "updatedAtAsc"
     },
     {
       sortTitle: "Creation date (recent)",
-      sortType: "CreatedAtDesc"
+      sortType: "createdAtDesc"
     },
     {
       sortTitle: "Creation date (old)",
-      sortType: "CreatedAtAsc"
+      sortType: "createdAtAsc"
     }
   ];
 

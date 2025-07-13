@@ -7,13 +7,15 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.TrabalhoEngSoftware.chatbot.config.Constants;
-import br.com.TrabalhoEngSoftware.chatbot.entity.StandardFlashcardEntity;
 import br.com.TrabalhoEngSoftware.chatbot.repository.FlashcardAppRepository;
+import br.com.TrabalhoEngSoftware.chatbot.specification.FlashcardSpecification;
 import br.com.TrabalhoEngSoftwareFramework.framework.dto.FlashcardDTO;
 import br.com.TrabalhoEngSoftwareFramework.framework.dto.UserAnswerDTO;
 import br.com.TrabalhoEngSoftwareFramework.framework.entity.DeckEntity;
@@ -21,6 +23,7 @@ import br.com.TrabalhoEngSoftwareFramework.framework.entity.FlashcardEntity;
 import br.com.TrabalhoEngSoftwareFramework.framework.exception.ObjectNotFoundException;
 import br.com.TrabalhoEngSoftwareFramework.framework.exception.UnauthorizedObjectAccessException;
 import br.com.TrabalhoEngSoftwareFramework.framework.handler.FlashcardTypeHandler;
+import br.com.TrabalhoEngSoftwareFramework.framework.handler.FlashcardTypeSearchRegistry;
 import br.com.TrabalhoEngSoftwareFramework.framework.service.FlashcardService;
 
 @Service
@@ -29,8 +32,33 @@ public class FlashcardAppService extends FlashcardService {
   @Autowired
   private FlashcardAppRepository flashcardAppRepository;
 
+  @Autowired 
+  private FlashcardTypeSearchRegistry flashcardTypeSearchRegistry;
+
   public FlashcardAppService() {
     super();
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Page<FlashcardDTO> listFlashcards(String word, String flashcardFilter, Long userId, Long deckId, String sortType, Pageable pageable) {
+    FlashcardSpecification flashcardSpecification = new FlashcardSpecification(flashcardTypeSearchRegistry);
+    flashcardSpecification.addWordFilter(word);
+
+    if(flashcardFilter != null && !flashcardFilter.trim().isEmpty()) {
+      flashcardSpecification.addDesiredSpecification(flashcardFilter); // Adiciona o filtro nomeado
+    }
+
+    if(sortType != null && !sortType.trim().isEmpty()) {
+      flashcardSpecification.addDesiredSpecification(sortType); // Adiciona a ordenação nomeada
+    }
+
+    Specification<FlashcardEntity> specification = flashcardSpecification.build(deckId, "deckEntity");
+    
+    return flashcardRepository.findAll(specification, pageable).map(flashcardEntity -> {
+      FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO> handler = (FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO>) handlerRegistry.getHandler(flashcardEntity.getFlashcardType());
+      return handler.entityToDTO(flashcardEntity);
+    });
   }
 
   @SuppressWarnings("unchecked")
@@ -41,24 +69,6 @@ public class FlashcardAppService extends FlashcardService {
       FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO> handler = (FlashcardTypeHandler<FlashcardDTO, FlashcardEntity, UserAnswerDTO>) handlerRegistry.getHandler(flashcardEntity.getFlashcardType());
       return handler.entityToDTO(flashcardEntity);
     });
-  }
-
-  @Transactional
-  public void applyReviewResult(Long flashcardId, UserAnswerDTO userAnswer, Long userId) {
-    FlashcardEntity flashcard = flashcardAppRepository.findById(flashcardId).orElseThrow(() -> new ObjectNotFoundException("Flashcard not found"));
-
-    if(!flashcard.getDeckEntity().getUserEntity().getId().equals(userId)) {
-      throw new UnauthorizedObjectAccessException("Unauthorized to review this flashcard");
-    }
-
-    int answer = evaluateAnswer(flashcardId, userAnswer, userId);
-    
-    if(flashcard.getFlashcardType().equals("STANDARD_FLASHCARD")) {
-      StandardFlashcardService standardFlashcard = new StandardFlashcardService();
-      standardFlashcard.applyReview((StandardFlashcardEntity) flashcard, answer);
-    }
-
-    flashcardRepository.save(flashcard);
   }
 
   protected double calculateEaseFactor(double easeFactor, int answer) {

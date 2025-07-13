@@ -5,15 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.TrabalhoEngSoftware.chatbot.service.FlashcardAppService;
 import br.com.TrabalhoEngSoftwareFramework.framework.controller.FlashcardController;
 import br.com.TrabalhoEngSoftwareFramework.framework.dto.FlashcardDTO;
-import br.com.TrabalhoEngSoftwareFramework.framework.dto.UserAnswerDTO;
 import br.com.TrabalhoEngSoftwareFramework.framework.entity.UserEntity;
 
 @RestController
@@ -41,12 +38,6 @@ public class FlashcardAppController extends FlashcardController {
     return flashcardService.getNextDueFlashcardByDeckId(deckId, user.getId())
            .map(ResponseEntity::ok)
            .orElseGet(() -> ResponseEntity.noContent().build());
-  }
-
-  @PutMapping("/apply-review-result/{flashcardId}")
-  public void applyReviewResult(@PathVariable Long flashcardId, @RequestBody UserAnswerDTO answer, Authentication authentication) {
-    UserEntity user = (UserEntity) authentication.getPrincipal();
-    flashcardService.applyReviewResult(flashcardId, answer, user.getId());
   }
 
   @GetMapping("/get-count-new-flashcards/{deckId}")

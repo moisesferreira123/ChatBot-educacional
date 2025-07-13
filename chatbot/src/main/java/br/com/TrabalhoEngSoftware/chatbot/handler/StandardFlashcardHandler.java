@@ -1,6 +1,8 @@
 package br.com.TrabalhoEngSoftware.chatbot.handler;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 
@@ -50,12 +52,65 @@ public class StandardFlashcardHandler implements FlashcardTypeHandler<StandardFl
   }
 
   @Override
-  public int evaluateAnswer(StandardFlashcardEntity flashcard, StandardUserAnswerDTO answer) {
-    int[] possiblesAnswer = {Constants.WRONG, Constants.HARD, Constants.GOOD, Constants.EASY};
-    for(int possibleAnswer : possiblesAnswer){
-      if(answer.getAnswer() == possibleAnswer) return answer.getAnswer();
+  public void evaluateAnswer(StandardFlashcardEntity flashcard, StandardUserAnswerDTO answer) {
+    LocalDateTime tomorrow = LocalDate.now().plusDays(1).atStartOfDay();
+
+    double easeFactor = flashcard.getEaseFactor();
+
+    if(answer.getAnswer() != Constants.WRONG && answer.getAnswer() != Constants.HARD && answer.getAnswer() != Constants.GOOD && answer.getAnswer() != Constants.EASY) {
+      throw new UnexpectedResponseException("Unexpected response");
     }
-    throw new UnexpectedResponseException("This response is invalid.");
+
+    if(answer.getAnswer() == Constants.WRONG) {
+      flashcard.setRepetition(0);
+      if(LocalDateTime.now().plusMinutes(1L).isBefore(tomorrow)){
+        flashcard.setNextReview(LocalDateTime.now().plusMinutes(1L));
+      } else {
+        flashcard.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+      }
+      flashcard.setInterval(1);
+      flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer.getAnswer()));
+    } else {
+      flashcard.setRepetition(flashcard.getRepetition()+1);
+      if(flashcard.getRepetition() == 1){
+        if(answer.getAnswer() == Constants.HARD) {
+          if(LocalDateTime.now().plusMinutes(5L).isBefore(tomorrow)){
+            flashcard.setNextReview(LocalDateTime.now().plusMinutes(5L));
+          } else {
+            flashcard.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+          }
+          flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer.getAnswer()));
+        }
+        if(answer.getAnswer() == Constants.GOOD) { 
+          if(LocalDateTime.now().plusMinutes(10L).isBefore(tomorrow)){
+            flashcard.setNextReview(LocalDateTime.now().plusMinutes(10L));
+          } else {
+            flashcard.setNextReview(LocalDate.now().atTime(LocalTime.MAX));
+          }
+        }
+        if(answer.getAnswer() == Constants.EASY) {
+          flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer.getAnswer()));
+          flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        }
+      } else {
+        if(flashcard.getInterval() == 1 && flashcard.getRepetition() == 2) {
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        } else {
+          flashcard.setEaseFactor(calculateEaseFactor(easeFactor, answer.getAnswer()));
+          flashcard.setInterval((int) Math.ceil(flashcard.getInterval()*flashcard.getEaseFactor()));
+          flashcard.setNextReview(LocalDateTime.now().plusDays(flashcard.getInterval()));
+        }
+      }
+    }
+
+    flashcard.setLastReviewedAt(LocalDateTime.now());
+    flashcard.getDeckEntity().setLastReviewedAt(LocalDateTime.now());
+  }
+
+  private double calculateEaseFactor(double easeFactor, int answer) {
+    double easeFactorTemp = easeFactor - 0.8 + (0.28*answer) - (0.02*Math.pow(answer,2));
+    return Math.max(Constants.MIN_EASE_FACTOR, easeFactorTemp);
   }
 
   @Override

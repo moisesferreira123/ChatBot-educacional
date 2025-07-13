@@ -83,7 +83,7 @@ export async function fetchGetNextDueFlashcardByDeckId(deckId, token) {
 }
 
 export async function fetchApplyReviewResult(flashcardId, flashcardType, answer, token) {
-  const response = await fetch(`http://localhost:8080/api/flashcards/apply-review-result/${flashcardId}`, {
+  const response = await fetch(`http://localhost:8080/api/flashcards/evaluate-answer/${flashcardId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

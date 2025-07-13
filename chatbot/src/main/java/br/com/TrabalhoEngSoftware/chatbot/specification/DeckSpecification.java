@@ -15,7 +15,10 @@ public class DeckSpecification extends DeckSpecificationBuilder {
 	
 	public DeckSpecification(String title, String topic) {
 		super(title, topic);
+	}
 
+	@Override
+	protected void registerAllSpecifications() {
 		buildSpecification("totalDueFlashcardsDesc", (root, query, criteriaBuilder) -> {
 			ListJoin<DeckEntity, FlashcardEntity> flashcardJoin = root.joinList("flashcards", JoinType.LEFT);
 
