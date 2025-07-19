@@ -142,25 +142,6 @@ export async function fetchGetCountReviewFlashcards(deckId, token) {
   return response.json();
 }
 
-export async function fetchGenerateFlashcardsFromNote(noteId, deckId, count, token) {
-  const response = await fetch(`http://localhost:8080/api/flashcards/generate-from-note/${noteId}/deck/${deckId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify({ count: count })
-  });
-  //if (!response.ok) {
-  //  const errorData = await response.text();
-  //  throw new Error(`Error generating flashcards: ${response.status} ${errorData}`);
-  //}
-  if(!response.ok){
-    const errorMessage = await response.json();
-    throw new Error(errorMessage.message);
-  }
-  return response.json();
-}
 export async function fetchGetFlashcardById(flashcardId, token) {
   const response = await fetch(`http://localhost:8080/api/flashcards/${flashcardId}`, {
     method: 'GET',

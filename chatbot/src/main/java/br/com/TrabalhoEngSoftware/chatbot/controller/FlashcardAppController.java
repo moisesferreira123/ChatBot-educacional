@@ -20,18 +20,6 @@ public class FlashcardAppController extends FlashcardController {
   @Autowired
   private FlashcardAppService flashcardService;
 
-  public static class GenerateFlashcardsRequest {
-    private int count = 5; // Default count
-
-    public int getCount() {
-      return count;
-    }
-
-    public void setCount(int count) {
-      this.count = count;
-    }
-  }
-
   @GetMapping("/next-due-flashcard-by-deck-id/{deckId}")
   public ResponseEntity<FlashcardDTO> getNextDueFlashcardByDeckId(@PathVariable Long deckId, Authentication authentication) {
     UserEntity user = (UserEntity) authentication.getPrincipal();

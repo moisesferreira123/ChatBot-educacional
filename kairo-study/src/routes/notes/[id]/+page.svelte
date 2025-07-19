@@ -129,7 +129,7 @@
         <div class="w-full">
         <WYSIWYGEditor content={note.content} onContentChange={autoSave} token={token} bind:sources={sources}/>
       </div>
-      <FlashcardsOverlay bind:show={showFlashcardsOverlay} onClose={() => {showFlashcardsOverlay = false}} />
+      <FlashcardsOverlay bind:show={showFlashcardsOverlay} onClose={() => {showFlashcardsOverlay = false}} bind:sources={sources} />
       <ChatOverlay bind:show={showChatOverlay} onClose={() => {showChatOverlay = false}} noteContext={note?.content || ''} bind:sources={sources}/>
       </div>
         <footer class="bottom-0 z-5 0 w-screen bg-white border-t border-neutral-300 p-2 flex items-center justify-around">

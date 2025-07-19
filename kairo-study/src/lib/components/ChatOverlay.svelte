@@ -4,7 +4,7 @@
   import AiChatBubble from './AIChatBubble.svelte';
   import UserChatBubble from './UserChatBubble.svelte';
   import { onMount, onDestroy } from 'svelte';
-  import { fetchAIStream } from '$lib/actions/AiResponses.svelte';
+    import { fetchAICompletion } from '$lib/api/ai';
   import { marked } from 'marked';
   import { page } from '$app/state'; // Import page store for noteId
 
@@ -73,7 +73,7 @@
             throw new Error("Authentication token not found.");
         }
 
-        await fetchAIStream(
+        await fetchAICompletion(
             userMessageContent,
             (chunk: string) => { // onChunk
               currentAiContent += chunk;

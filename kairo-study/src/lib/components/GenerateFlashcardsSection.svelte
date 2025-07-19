@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { fetchListDecks } from '$lib/api/decks';
-  import { fetchGenerateFlashcardsFromNote } from '$lib/api/flashcards';
+  import { fetchGenerateFlashcards } from '$lib/api/ai';
   import { page } from '$app/state';
-
+  
   interface DeckSummary {
     id: number;
     title: string;
@@ -17,6 +17,9 @@
   let isLoadingGeneration = $state(false);
   let errorMessage = $state<string | null>(null);
   let successMessage = $state<string | null>(null);
+
+  let {sources = $bindable()} = $props();
+  let sourceIds = $derived(sources.map(source => source.id));
 
   const currentNoteId = $derived(Number(page.params.id));
 
@@ -61,7 +64,8 @@
     successMessage = null;
 
     try {
-      const generatedFlashcards = await fetchGenerateFlashcardsFromNote(currentNoteId, selectedDeckId, flashcardCount, token);
+      //TODO: Criar uma store ou mandar uma prop com os sourceids
+      const generatedFlashcards = await fetchGenerateFlashcards(currentNoteId, sourceIds, selectedDeckId, flashcardCount, token);
       const targetDeck = decks.find(d => d.id === selectedDeckId);
       successMessage = `Successfully generated ${generatedFlashcards.length} flashcards in deck "${targetDeck?.title || 'selected deck'}"!`;
     } catch (e: any) {

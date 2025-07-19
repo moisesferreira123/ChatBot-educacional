@@ -3,7 +3,7 @@
 	import GenerateFlashcardsSection from './GenerateFlashcardsSection.svelte';
 
 	// Props to control visibility and handle closing
-	let { show = $bindable(), onClose } = $props();
+	let { show = $bindable(), onClose, sources = $bindable() } = $props();
 </script>
 
 {#if show}
@@ -29,7 +29,7 @@
 				</p>
 			</div>
 
-			<GenerateFlashcardsSection />
+			<GenerateFlashcardsSection bind:sources={sources}/>
 		</div>
 	</aside>
 {/if}
